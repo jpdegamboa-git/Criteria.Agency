@@ -35,4 +35,7 @@ export const config = {
     proEarlyPriceId: process.env.STRIPE_PRO_EARLY_PRICE_ID ?? "",
     proYearlyPriceId: process.env.STRIPE_PRO_YEARLY_PRICE_ID ?? "",
   },
+
+  // Anthropic (Claude API)
+  anthropicApiKey: process.env.ANTHROPIC_API_KEY ?? "",
 };
