@@ -13,6 +13,8 @@ import type { ProjectType } from "../shared/types.js";
 import { reviewRoutes } from "./review-routes.js";
 import { checkoutRoutes } from "./checkout-routes.js";
 import { financeRoutes } from "./finance-routes.js";
+import { copilotRoutes } from "./copilot-routes.js";
+import { contentRoutes } from "./content-routes.js";
 
 export const app = new Hono();
 
@@ -20,6 +22,7 @@ export const app = new Hono();
 app.route("/", reviewRoutes);
 app.route("/", checkoutRoutes);
 app.route("/", financeRoutes);
+app.route("/", copilotRoutes);
 
 // Health
 app.get("/health", (c) => c.json({ status: "ok", version: "0.1.0" }));
