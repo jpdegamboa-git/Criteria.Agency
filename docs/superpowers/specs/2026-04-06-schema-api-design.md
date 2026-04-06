@@ -98,6 +98,7 @@ updatedAt       TIMESTAMP NOT NULL
 - Our Drizzle schema references `user.id` via foreign keys but does not define the `user` table
 - Session management uses HTTP-only cookies with automatic rotation
 - Email/password provider enabled by default; OAuth providers added later
+- **Signup hook:** Better Auth's `afterSignUp` callback creates an `organization` (name = user's name + "'s Org", slug auto-generated) and a `membership` (role = 'owner'). This ensures every user has at least one org.
 
 ---
 
@@ -128,7 +129,7 @@ Links users to organizations with role-based access.
 id              UUID PK DEFAULT gen_random_uuid()
 userId          TEXT NOT NULL FK -> user.id ON DELETE CASCADE
 organizationId  UUID NOT NULL FK -> organizations.id ON DELETE CASCADE
-role            VARCHAR(20) NOT NULL DEFAULT 'member'  -- 'owner' | 'admin' | 'editor' | 'viewer'
+role            VARCHAR(20) NOT NULL DEFAULT 'viewer'  -- 'owner' | 'admin' | 'editor' | 'viewer'
 createdAt       TIMESTAMP NOT NULL DEFAULT now()
 
 UNIQUE(userId, organizationId)
@@ -177,7 +178,7 @@ status          VARCHAR(50) NOT NULL DEFAULT 'draft'  -- current pipeline step, 
 currentGate     VARCHAR(10)                    -- 'g1', 'g2', etc. NULL when not at a gate
 brief           JSONB NOT NULL DEFAULT '{}'    -- structured brief data
 metadata        JSONB NOT NULL DEFAULT '{}'    -- motor-specific metadata
-createdBy       TEXT FK -> user.id             -- user who created the project
+createdBy       TEXT FK -> user.id ON DELETE SET NULL  -- user who created the project
 deletedAt       TIMESTAMP                      -- soft delete (NULL = active)
 createdAt       TIMESTAMP NOT NULL DEFAULT now()
 updatedAt       TIMESTAMP NOT NULL DEFAULT now()
@@ -202,7 +203,7 @@ Generated outputs at each pipeline step. Versioned.
 ```sql
 id              UUID PK DEFAULT gen_random_uuid()
 projectId       UUID NOT NULL FK -> projects.id ON DELETE CASCADE
-organizationId  UUID NOT NULL FK -> organizations.id  -- denormalized for tenant queries
+organizationId  UUID NOT NULL FK -> organizations.id ON DELETE CASCADE  -- denormalized for tenant queries
 step            VARCHAR(50) NOT NULL           -- pipeline step (varies per motor)
 artifactType    VARCHAR(30) NOT NULL           -- 'document', 'image', 'video', 'audio', 'subtitle', 'package'
 name            VARCHAR(255) NOT NULL
@@ -224,7 +225,7 @@ Quality gate evaluation records.
 ```sql
 id              UUID PK DEFAULT gen_random_uuid()
 projectId       UUID NOT NULL FK -> projects.id ON DELETE CASCADE
-organizationId  UUID NOT NULL FK -> organizations.id  -- denormalized
+organizationId  UUID NOT NULL FK -> organizations.id ON DELETE CASCADE  -- denormalized
 gate            VARCHAR(10) NOT NULL           -- 'g1', 'g2', 'g3', etc.
 iteration       INTEGER NOT NULL DEFAULT 1
 decision        VARCHAR(10) NOT NULL           -- 'pass' | 'fail'
@@ -244,7 +245,7 @@ Audit trail of every agent invocation.
 ```sql
 id              UUID PK DEFAULT gen_random_uuid()
 projectId       UUID NOT NULL FK -> projects.id ON DELETE CASCADE
-organizationId  UUID NOT NULL FK -> organizations.id  -- denormalized
+organizationId  UUID NOT NULL FK -> organizations.id ON DELETE CASCADE  -- denormalized
 agentId         VARCHAR(30) NOT NULL
 step            VARCHAR(50) NOT NULL
 attempt         INTEGER NOT NULL DEFAULT 1
@@ -297,6 +298,7 @@ id              UUID PK DEFAULT gen_random_uuid()
 motor           VARCHAR(50) NOT NULL UNIQUE    -- 'video', 'design', 'ads', etc.
 steps           JSONB NOT NULL                 -- ordered array of step definitions
 gates           JSONB NOT NULL                 -- gate definitions
+validProjectTypes JSONB NOT NULL DEFAULT '[]'  -- allowed projectType values: ['corporate', 'documentary', ...]
 metadata        JSONB NOT NULL DEFAULT '{}'    -- motor-level config
 createdAt       TIMESTAMP NOT NULL DEFAULT now()
 updatedAt       TIMESTAMP NOT NULL DEFAULT now()
@@ -407,7 +409,8 @@ POST   /api/auth/reset-password               — Complete password reset
 
 ### Organization Routes
 ```
-POST   /api/organizations                           — Create organization
+GET    /api/organizations                            — List user's organizations (from memberships)
+POST   /api/organizations                            — Create organization (user becomes owner)
 GET    /api/organizations/:orgId                     — Get org details
 PATCH  /api/organizations/:orgId                     — Update org (name, brandAssets, settings)
 GET    /api/organizations/:orgId/members             — List members
@@ -468,13 +471,22 @@ POST   /api/organizations/:orgId/projects/:projectId/resume    — Resume projec
 }
 ```
 
+**Create project validation (server-side):**
+1. Validate `motor` has a `pipelineDefinitions` entry → 400 if missing
+2. Validate `motor` is enabled for the org in `motors` table → 403 if disabled
+3. Validate `projectType` is in `pipelineDefinitions.validProjectTypes` → 400 if invalid
+4. Set initial `status` to the first pipeline step's `id`
+
 **List projects query params:**
 ```
 ?motor=video             — Filter by motor
 ?status=concept          — Filter by status
 ?page=1&limit=20         — Pagination
 ?sort=createdAt&order=desc  — Sorting
+?includeDeleted=true     — Include soft-deleted projects (owner/admin only)
 ```
+
+**Soft delete:** `GET` list filters `WHERE deletedAt IS NULL` by default. `DELETE` sets `deletedAt = now()` instead of hard deleting.
 
 **Permissions:**
 | Action | owner | admin | editor | viewer |
@@ -714,6 +726,7 @@ const gateOverrideSchema = z.object({
 const listProjectsSchema = z.object({
   motor: z.string().optional(),
   status: z.string().optional(),
+  includeDeleted: z.coerce.boolean().default(false),
   page: z.coerce.number().min(1).default(1),
   limit: z.coerce.number().min(1).max(100).default(20),
   sort: z.enum(['createdAt', 'updatedAt', 'name']).default('createdAt'),
