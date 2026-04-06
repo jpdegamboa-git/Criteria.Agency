@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { db, schema } from "../db/index.js";
 import { eq, desc, sql } from "drizzle-orm";
 import { learnFromCorrection } from "../services/categorizer.js";
+import { addEntityPattern } from "../services/entity-matcher.js";
 import { applyReconciliation } from "../services/reconciler.js";
 import {
   checkExpiringTrials,
@@ -49,7 +50,7 @@ financeRoutes.get("/api/transactions/:id", async (c) => {
 financeRoutes.patch("/api/transactions/:id", async (c) => {
   const id = c.req.param("id");
   const body = await c.req.json();
-  const { category, subcategory, type, notes } = body;
+  const { category, subcategory, type, notes, entityId } = body;
 
   const [existing] = await db
     .select()
@@ -63,6 +64,7 @@ financeRoutes.patch("/api/transactions/:id", async (c) => {
   if (subcategory !== undefined) updates.subcategory = subcategory;
   if (type !== undefined) updates.type = type;
   if (notes !== undefined) updates.notes = notes;
+  if (entityId !== undefined) updates.entityId = entityId;
 
   if (Object.keys(updates).length === 0) {
     return c.json({ error: "No fields to update" }, 400);
@@ -82,6 +84,12 @@ financeRoutes.patch("/api/transactions/:id", async (c) => {
       subcategory ?? existing.subcategory ?? null,
       type ?? existing.type ?? "expense",
     );
+  }
+
+  // Learn entity pattern from counterparty/description
+  if (entityId) {
+    const patternSource = existing.counterpartyName ?? existing.description;
+    await addEntityPattern(entityId, patternSource);
   }
 
   return c.json(updated);

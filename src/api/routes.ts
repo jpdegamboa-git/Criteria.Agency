@@ -15,6 +15,8 @@ import { checkoutRoutes } from "./checkout-routes.js";
 import { financeRoutes } from "./finance-routes.js";
 import { copilotRoutes } from "./copilot-routes.js";
 import { contentRoutes } from "./content-routes.js";
+import { entityRoutes } from "./entity-routes.js";
+import { invoiceRoutes } from "./invoice-routes.js";
 
 export const app = new Hono();
 
@@ -24,6 +26,8 @@ app.route("/", checkoutRoutes);
 app.route("/", financeRoutes);
 app.route("/", copilotRoutes);
 app.route("/", contentRoutes);
+app.route("/", entityRoutes);
+app.route("/", invoiceRoutes);
 
 // Health
 app.get("/health", (c) => c.json({ status: "ok", version: "0.1.0" }));
