@@ -12,12 +12,14 @@ import { getArtifacts, readArtifact } from "../storage/artifacts.js";
 import type { ProjectType } from "../shared/types.js";
 import { reviewRoutes } from "./review-routes.js";
 import { checkoutRoutes } from "./checkout-routes.js";
+import { financeRoutes } from "./finance-routes.js";
 
 export const app = new Hono();
 
 // Mount feature routes
 app.route("/", reviewRoutes);
 app.route("/", checkoutRoutes);
+app.route("/", financeRoutes);
 
 // Health
 app.get("/health", (c) => c.json({ status: "ok", version: "0.1.0" }));
