@@ -23,6 +23,7 @@ app.route("/", reviewRoutes);
 app.route("/", checkoutRoutes);
 app.route("/", financeRoutes);
 app.route("/", copilotRoutes);
+app.route("/", contentRoutes);
 
 // Health
 app.get("/health", (c) => c.json({ status: "ok", version: "0.1.0" }));
