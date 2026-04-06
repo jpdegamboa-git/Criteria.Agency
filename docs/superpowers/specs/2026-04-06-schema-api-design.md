@@ -23,7 +23,6 @@ This spec defines the first schema + API increment for criteria.agency:
 - Billing/Stripe (subscriptions, invoices)
 - Content & Distribution tables (campaigns, channels, contentCalendar)
 - Analytics tables (metrics, reports)
-- Brand DNA table
 - Non-video motor agent registries
 
 ### Approach: Clean Slate
@@ -111,7 +110,6 @@ id              UUID PK DEFAULT gen_random_uuid()
 name            VARCHAR(255) NOT NULL
 slug            VARCHAR(100) NOT NULL UNIQUE    -- URL-safe: criteria.agency/org/{slug}
 plan            VARCHAR(20) NOT NULL DEFAULT 'free'  -- 'free' | 'pro' | 'enterprise'
-brandAssets     JSONB NOT NULL DEFAULT '{}'     -- { logo, colors, fonts, guidelines }
 settings        JSONB NOT NULL DEFAULT '{}'     -- org-level preferences
 createdAt       TIMESTAMP NOT NULL DEFAULT now()
 updatedAt       TIMESTAMP NOT NULL DEFAULT now()
@@ -120,7 +118,7 @@ updatedAt       TIMESTAMP NOT NULL DEFAULT now()
 **Notes:**
 - `slug` is auto-generated from name on creation, editable by owner
 - `plan` is manually set for now; Stripe webhook will update it in future increment
-- `brandAssets` migrates the concept from the old `clients.brandAssets` column
+- Brand data lives in the `brandDna` table, not in organizations
 - A new user registration auto-creates an organization with the user as owner
 
 ### `memberships`
@@ -287,6 +285,32 @@ CREATE INDEX idx_model_configs_org_motor ON modelConfigs(organizationId, motor);
 CREATE UNIQUE INDEX idx_model_configs_default ON modelConfigs(organizationId, motor, taskType) WHERE isDefault = true;
 ```
 
+### `brandDna`
+Brand identity documents per tenant. Versioned to support Brand Builder workflow.
+```sql
+id              UUID PK DEFAULT gen_random_uuid()
+organizationId  UUID NOT NULL FK -> organizations.id ON DELETE CASCADE
+version         INTEGER NOT NULL DEFAULT 1
+status          VARCHAR(20) NOT NULL DEFAULT 'draft'  -- 'draft' | 'active' | 'archived'
+content         JSONB NOT NULL DEFAULT '{}'    -- { mission, vision, values, positioning, audiences, tone, personality, visualIdentity, verbalIdentity }
+createdBy       TEXT FK -> user.id ON DELETE SET NULL
+createdAt       TIMESTAMP NOT NULL DEFAULT now()
+updatedAt       TIMESTAMP NOT NULL DEFAULT now()
+```
+
+**Indexes:**
+```sql
+CREATE INDEX idx_brand_dna_org ON brandDna(organizationId);
+CREATE UNIQUE INDEX idx_brand_dna_active ON brandDna(organizationId) WHERE status = 'active';
+```
+
+**Notes:**
+- Only one `active` Brand DNA per org (enforced by partial unique index)
+- Previous versions become `archived` when a new version is activated
+- `content` JSONB replaces `organizations.brandAssets` for structured brand data
+- `organizations.brandAssets` is removed — brand data lives here
+- All motors that need brand context query the `active` Brand DNA for the org
+
 ---
 
 ## 5. Pipeline Configuration Table
@@ -412,7 +436,7 @@ POST   /api/auth/reset-password               — Complete password reset
 GET    /api/organizations                            — List user's organizations (from memberships)
 POST   /api/organizations                            — Create organization (user becomes owner)
 GET    /api/organizations/:orgId                     — Get org details
-PATCH  /api/organizations/:orgId                     — Update org (name, brandAssets, settings)
+PATCH  /api/organizations/:orgId                     — Update org (name, settings)
 GET    /api/organizations/:orgId/members             — List members
 POST   /api/organizations/:orgId/members             — Invite member (email + role)
 PATCH  /api/organizations/:orgId/members/:memberId   — Update member role
@@ -538,6 +562,17 @@ GET    /api/organizations/:orgId/projects/:projectId/executions               �
 ?status=running          — Filter by status
 ```
 
+### Brand DNA Routes
+```
+GET    /api/organizations/:orgId/brand-dna                  — Get active Brand DNA
+GET    /api/organizations/:orgId/brand-dna/versions         — List all versions
+POST   /api/organizations/:orgId/brand-dna                  — Create new version (draft)
+PATCH  /api/organizations/:orgId/brand-dna/:id              — Update draft
+POST   /api/organizations/:orgId/brand-dna/:id/activate     — Activate version (archives previous)
+```
+
+**Permissions:** owner and admin can create/edit. All roles can read.
+
 ### Model Config Routes
 ```
 GET    /api/organizations/:orgId/models                     — List model configs
@@ -604,14 +639,14 @@ Tables `artifacts`, `gateReviews`, and `agentExecutions` include `organizationId
 └──────────────────┘       │  brandAssets      │
                            └──────┬────────────┘
                                   │ 1:N
-                    ┌─────────────┼─────────────┐
-                    ▼             ▼              ▼
-              ┌──────────┐ ┌──────────┐  ┌──────────────┐
-              │  motors  │ │ projects │  │ modelConfigs │
-              │  (motor, │ │ (motor,  │  │ (motor,      │
-              │  enabled,│ │  status, │  │  taskType,   │
-              │  autonomy│ │  brief)  │  │  modelName)  │
-              │  Mode)   │ └────┬─────┘  └──────────────┘
+                    ┌─────────────┼─────────────┬────────────┐
+                    ▼             ▼              ▼            ▼
+              ┌──────────┐ ┌──────────┐  ┌────────────┐ ┌─────────┐
+              │  motors  │ │ projects │  │modelConfigs│ │brandDna │
+              │  (motor, │ │ (motor,  │  │ (motor,    │ │(version,│
+              │  enabled,│ │  status, │  │  taskType, │ │ status, │
+              │  autonomy│ │  brief)  │  │  modelName)│ │ content)│
+              │  Mode)   │ └────┬─────┘  └────────────┘ └─────────┘
               └──────────┘      │ 1:N
                           ┌─────┼──────────┐
                           ▼     ▼          ▼
@@ -649,6 +684,8 @@ Tables `artifacts`, `gateReviews`, and `agentExecutions` include `organizationId
 | agentExecutions | (agentId, status) | INDEX | Agent monitoring |
 | modelConfigs | (organizationId, motor) | INDEX | Motor model lookup |
 | modelConfigs | (organizationId, motor, taskType) WHERE isDefault | UNIQUE | One default per task type |
+| brandDna | organizationId | INDEX | Org's brand versions |
+| brandDna | organizationId WHERE status='active' | UNIQUE | One active per org |
 | pipelineDefinitions | motor | UNIQUE | Motor lookup |
 
 ---
@@ -699,7 +736,6 @@ const createProjectSchema = z.object({
 // Update org
 const updateOrgSchema = z.object({
   name: z.string().min(1).max(255).optional(),
-  brandAssets: z.record(z.unknown()).optional(),
   settings: z.record(z.unknown()).optional(),
 });
 
@@ -743,8 +779,9 @@ const listProjectsSchema = z.object({
 | Auth | 4 (user, session, account, verification) | Better Auth |
 | Multi-tenancy | 3 (organizations, memberships, motors) | Us |
 | Core platform | 5 (projects, artifacts, gateReviews, agentExecutions, modelConfigs) | Us |
+| Brand | 1 (brandDna) | Us |
 | Pipeline config | 1 (pipelineDefinitions) | Us |
-| **Total** | **13 tables** | 4 BA + 9 ours |
+| **Total** | **14 tables** | 4 BA + 10 ours |
 
 ---
 

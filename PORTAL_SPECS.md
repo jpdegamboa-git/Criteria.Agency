@@ -56,6 +56,35 @@ criteria.agency is a platform of 24 specialized motors sharing a common orchestr
 
 ---
 
+## 1.1 Authentication Screens (shared across portals)
+
+All portals share the same auth flow powered by Better Auth.
+
+### Screens
+
+| Screen | URL | Elements |
+|--------|-----|----------|
+| **Sign Up** | /auth/signup | Name, email, password, "Create account" CTA. Auto-creates an organization (name = "{User}'s Org"). |
+| **Sign In** | /auth/signin | Email, password, "Remember me", "Forgot password?" link, "Create account" link |
+| **Forgot Password** | /auth/forgot-password | Email input, "Send reset link" CTA |
+| **Reset Password** | /auth/reset-password | New password, confirm password |
+| **Org Selector** | /auth/select-org | Shown after login if user belongs to 2+ orgs. List of orgs with role badge. "Create new organization" option. |
+
+### Flow
+```
+Sign In → (1 org?) → Dashboard
+Sign In → (2+ orgs?) → Org Selector → Dashboard
+Sign Up → Auto-create org → Dashboard (onboarding state)
+```
+
+### First-time Admin Experience
+When the admin portal loads with zero data (fresh install or new org):
+1. **Welcome screen** with setup checklist: Create Brand DNA, Configure motors, Create first project
+2. Each item links to the relevant screen
+3. Checklist persists in org `settings` JSONB until dismissed
+
+---
+
 ## 2. Public Portal
 
 **Purpose:** Marketing site for criteria.agency as a SaaS platform. Acquire new clients.
@@ -116,7 +145,7 @@ Visitor → Landing → Engines/Pricing → Signup (Free tier)
 ### 3.1 Layout
 
 - **Sidebar:** 6 Spaces (icons + labels), collapsible
-- **Header:** criteria.agency logo + notifications bell + global search (Cmd+K) + user avatar + plan badge
+- **Header:** criteria.agency logo + org switcher dropdown (if user belongs to 2+ orgs) + notifications bell + global search (Cmd+K) + user avatar + plan badge
 - **Theme:** Light mode default, dark mode toggle
 - **Responsive:** Optimized for 768px+ (tablet and desktop). Mobile: simplified view with bottom navigation.
 
@@ -236,7 +265,7 @@ Client clicks yellow cell → sees performance detail + AI recommendations:
 
 | Screen | Purpose |
 |--------|---------|
-| **Brand DNA** | Full brand document: mission, vision, values, positioning, audiences, tone, personality. Editable (triggers Brand Guardian re-validation). |
+| **Brand DNA** | Full brand document: mission, vision, values, positioning, audiences, tone, personality. Versioned (stored in `brandDna` table). Editing creates a new draft version; activating archives previous. Edits trigger Brand Guardian re-validation. |
 | **Visual Identity** | Colors (with hex/RGB), typography, logo versions, imagery style, do's and don'ts. Asset download. |
 | **Verbal Identity** | Tone of voice, vocabulary, key phrases, messaging framework, what the brand says and doesn't say. |
 | **Brand Health** | Brand Guardian report: consistency score across all recent outputs, violations flagged, trends. |
@@ -267,12 +296,26 @@ New client with no Brand DNA:
 |--------|---------|
 | **Plan** | Current subscription tier, included features, usage metrics, upgrade CTA |
 | **Billing** | Invoices, payment methods, billing history. Stripe customer portal integration. |
-| **Team** | Team members with roles (owner, admin, editor, viewer). Invite new members. Permissions per Space. |
+| **Team** | Team members with roles (owner, admin, editor, viewer). Invite new members. Roles apply globally across all Spaces — no per-Space permissions. |
 | **Providers** | Contracted providers from Marketplace: active contracts, history, ratings, spend. |
-| **Settings** | Notifications preferences, language, timezone, autonomy level (AI decides vs AI recommends), connected accounts (social, ads, email). |
+| **Settings** | Notifications preferences, language, timezone, connected accounts (social, ads, email). |
+| **Motor Settings** | Per-motor autonomy toggle (AI decides vs AI recommends). Enable/disable motors available in plan. Motor-specific preferences. |
 | **Help** | AI chat support (powered by support agent), help center, contact human support (Pro/Enterprise). |
 
-### 3.3 AI Copilot (transversal)
+### 3.3 Tier Gating (hybrid approach)
+
+All 6 Spaces are always visible regardless of plan. Within each Space:
+
+| Element | Free | Pro | Enterprise |
+|---------|------|-----|-----------|
+| Space navigation | Visible | Visible | Visible |
+| Motors within Space | Available motors shown; unavailable motors show card with "Upgrade to Pro/Enterprise" + feature preview | All motors active | All motors + dedicated AE |
+| Advanced features | Locked with upgrade badge (e.g., "A/B testing — Pro", "Custom dashboards — Enterprise") | Unlocked | Unlocked + custom |
+| Usage limits | Soft limits with counter ("3/5 projects this month") | Higher or no limits | No limits |
+
+**Upgrade prompts:** Non-intrusive. Shown inline where the feature would appear, not as popups. Include: feature name, which plan unlocks it, one-line benefit, "Upgrade" CTA linking to Cuenta > Plan.
+
+### 3.4 AI Copilot (transversal)
 
 A persistent AI assistant available across all Spaces via a chat bubble or Cmd+K:
 
@@ -284,7 +327,7 @@ A persistent AI assistant available across all Spaces via a chat bubble or Cmd+K
 
 The copilot's proactiveness depends on the autonomy setting (AI decides vs AI recommends).
 
-### 3.4 Account Executive view (Enterprise tier)
+### 3.5 Account Executive view (Enterprise tier)
 
 Enterprise clients have a dedicated Account Executive (human). The AE uses the **same client portal** but with additional capabilities:
 
@@ -375,7 +418,8 @@ TRANSVERSAL
 SYSTEM
   ├── Agent Dashboard          All ~125 agents, status, performance, costs
   ├── Model Dashboard          AI models, usage, costs, benchmarks
-  ├── Clients                  Client accounts, subscriptions, health
+  ├── Pipeline Definitions     Pipeline steps, gates, agents per motor (read-only view of pipelineDefinitions table)
+  ├── Organizations            Tenant orgs, plans, members, motors
   └── Settings                 Platform config, thresholds, notifications
 
 BACKOFFICE (admin role only)
@@ -536,14 +580,14 @@ Accessed from any gate in any motor's pipeline:
 | **Infrastructure** | SSL cert expiry timeline, backup status (last backup + restore test), uptime metrics, DDoS alerts. |
 | **Security Events** | Chronological feed of all security events. Severity-coded. Links to affected resources. |
 
-### 4.11 Clients Management (SYSTEM)
+### 4.11 Organizations Management (SYSTEM)
 
 | Section | Content |
 |---------|---------|
-| **Client list** | All client accounts: name, plan (Free/Pro/Enterprise), MRR, active projects, active campaigns, health score, AE assigned |
-| **Client detail** | Account info, subscription history, Brand DNA link, project history, campaign history, usage metrics, billing, team members, satisfaction metrics |
+| **Organization list** | All tenant organizations: name, slug, plan (Free/Pro/Enterprise), MRR, active projects, active campaigns, health score, motors enabled, members count |
+| **Organization detail** | Account info, plan history, Brand DNA (active version), enabled motors with autonomy settings, project history, campaign history, usage metrics, team members with roles |
 | **Subscriptions** | Active subscriptions by plan. Upgrades/downgrades trend. Churn tracking. |
-| **Roles & Permissions** | User management: who has access to what, role assignments, invitation management |
+| **Members & Roles** | User management across all orgs: who has access to what, role assignments (owner/admin/editor/viewer), invitation management |
 
 ### 4.12 BACKOFFICE Modules (admin role only)
 
@@ -647,7 +691,23 @@ Alerts are global and surface across both portals (admin sees all, client sees o
 | **Email** | Critical alerts only (future, not MVP) | Admin |
 | **In-context badge** | On the motor/project where alert originated | Both portals |
 
-### 5.3 Alert anatomy
+### 5.3 Notifications (distinct from alerts)
+
+Notifications are user-facing messages about actions completed or requiring attention. They are NOT system alerts.
+
+| Notification | Recipient | Trigger |
+|-------------|-----------|---------|
+| "Your project '{name}' was delivered" | Project creator | Project reaches 'delivered' status |
+| "{User} invited you to {org}" | Invited user | Member invite sent |
+| "{User} joined your organization" | Org owner/admin | Invited user accepts |
+| "Gate {gate} passed for '{project}'" | Project creator | Gate review passes |
+| "Gate {gate} needs your review" | Owner/admin (ai_recommends mode) | Gate ready for human review |
+| "Your Brand DNA was updated" | All org members | Brand DNA version activated |
+| "New version of '{artifact}' available" | Project creator | Artifact re-generated after iteration |
+
+**Delivery:** Same bell icon as alerts, but in a separate "Notifications" tab within the slide-out panel. Unread count badge includes both alerts + notifications.
+
+### 5.4 Alert anatomy
 
 ```
 [severity icon] [timestamp] [motor badge]
@@ -655,6 +715,28 @@ Alert title
 Brief description with context
 [Link to relevant screen] [Mark as read] [Snooze]
 ```
+
+---
+
+## 5.4 Global Search (Cmd+K)
+
+Both admin and client portals include a global search accessible via keyboard shortcut (Cmd+K / Ctrl+K) or the search icon in the header.
+
+**Searchable entities:**
+
+| Portal | Searchable | Result format |
+|--------|-----------|---------------|
+| Admin | Projects (by name, type, motor), Organizations (by name, slug), Agents (by name, ID), Motors, Alerts, Pipeline steps | Icon + type badge + name + status + link |
+| Client | Projects (by name), Campaigns, Brand DNA, Team members, Help articles | Icon + type badge + name + status + link |
+
+**Behavior:**
+- Opens centered modal overlay with search input
+- Results appear as-you-type (debounced 200ms)
+- Grouped by entity type
+- Max 5 results per group, "Show all" link
+- Recent searches shown when input is empty
+- Keyboard navigable (arrow keys + Enter)
+- Escape closes
 
 ---
 
@@ -789,6 +871,19 @@ Lucide icons throughout. Consistent use:
 | Public | 375px (mobile-first) | All devices |
 | Client | 768px (tablet+) | Desktop, with tablet support |
 | Admin | 1280px (desktop) | Desktop only |
+
+### 7.8 UI States
+
+Every screen must handle these states:
+
+| State | Pattern |
+|-------|---------|
+| **Loading** | Skeleton screens (gray shimmer blocks matching the layout shape). No spinners except for inline actions. |
+| **Empty** | Illustration + message + primary CTA. Example: "No projects yet" + "Create your first project" button. Motor-specific empty states. |
+| **Error (network)** | Inline banner: "Couldn't load data. [Retry]". No full-page error screens for recoverable errors. |
+| **Error (permission)** | "You don't have access to this resource. Contact your organization admin." No retry. |
+| **Error (not found)** | "This [project/artifact/etc.] doesn't exist or was deleted." Link back to list view. |
+| **Partial load** | If one section fails but others succeed, show the successful sections + error banner on the failed section only. |
 
 ---
 
