@@ -13,11 +13,11 @@ import { config } from "../shared/config.js";
 
 // ── Model-ID Mapping (catalog → Google API) ───────────────────
 const MODEL_ID_MAP: Record<string, string> = {
-  "gemini-2.5-pro": "gemini-2.5-pro-preview-06-05",
-  "gemini-2.5-flash": "gemini-2.5-flash-preview-05-20",
-  "gemini-imagen-3": "imagen-3.0-generate-002",
-  "veo-3": "veo-3.0-generate-preview",
-  "gemini-2.5-pro-audio": "gemini-2.5-pro-preview-06-05",
+  "gemini-2.5-pro": "gemini-2.5-pro",
+  "gemini-2.5-flash": "gemini-2.5-flash",
+  "gemini-imagen-3": "imagen-4.0-generate-001",
+  "veo-3": "veo-3.0-generate-001",
+  "gemini-2.5-pro-audio": "gemini-2.5-pro-preview-tts",
 };
 
 function resolveModelId(catalogId: string): string {

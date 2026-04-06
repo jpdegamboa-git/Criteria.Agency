@@ -3,17 +3,17 @@
 
 export const MODEL_DEFAULTS: Record<string, string> = {
   // Top-level evaluators (complex reasoning)
-  "TL-002": "claude-opus-4",
-  "XF-001": "claude-opus-4",
+  "TL-002": "gemini-2.5-flash",
+  "XF-001": "gemini-2.5-flash",
 
   // Text-heavy agents (standard reasoning)
-  "T1-L": "claude-sonnet-4",
-  "T2-L": "claude-sonnet-4",
-  "T2-002": "claude-sonnet-4",
-  "T2-006": "claude-sonnet-4",
-  "T7-L": "claude-sonnet-4",
-  "TL-001": "claude-sonnet-4",
-  "TL-003": "claude-sonnet-4",
+  "T1-L": "gemini-2.5-flash",
+  "T2-L": "gemini-2.5-flash",
+  "T2-002": "gemini-2.5-flash",
+  "T2-006": "gemini-2.5-flash",
+  "T7-L": "gemini-2.5-flash",
+  "TL-001": "gemini-2.5-flash",
+  "TL-003": "gemini-2.5-flash",
 
   // Image generation
   "T3-003:storyboard": "gemini-imagen-3",
@@ -33,7 +33,7 @@ export const MODEL_DEFAULTS: Record<string, string> = {
   "T9-005": "gemini-2.5-flash",
 };
 
-const DEFAULT_FALLBACK = "claude-sonnet-4";
+const DEFAULT_FALLBACK = "gemini-2.5-flash";
 
 /**
  * Get the default model for a given agent and optional step.
