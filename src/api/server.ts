@@ -1,6 +1,6 @@
 import { serve } from "@hono/node-server";
 import { app } from "./routes.js";
-import { config } from "../shared/config.js";
+import { config, auditConfig } from "../shared/config.js";
 import cron from "node-cron";
 import {
   checkExpiringTrials,
@@ -10,6 +10,9 @@ import {
   createRecurringPayments,
   sendEarlyAdopterTransitionNotice,
 } from "../services/subscription-manager.js";
+
+// Security audit on startup
+auditConfig();
 
 // Start HTTP server
 serve({ fetch: app.fetch, port: config.port }, (info) => {

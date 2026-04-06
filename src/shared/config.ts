@@ -45,3 +45,38 @@ export const config = {
   // PiAPI (Kling, Seedance)
   piapiApiKey: process.env.PIAPI_API_KEY ?? "",
 };
+
+// ── Startup security audit ──
+export function auditConfig(): void {
+  const warnings: string[] = [];
+  const configured: string[] = [];
+
+  // Required
+  if (!config.databaseUrl) warnings.push("DATABASE_URL not set");
+
+  // Optional services — report status
+  if (config.anthropicApiKey) configured.push("Anthropic (Claude)");
+  else warnings.push("ANTHROPIC_API_KEY empty — text agents will use mock mode");
+
+  if (config.googleAiApiKey) configured.push("Google AI (Gemini/Imagen/Veo)");
+  else warnings.push("GOOGLE_AI_API_KEY empty — image/video/audio agents will use mock mode");
+
+  if (config.piapiApiKey) configured.push("PiAPI (Kling/Seedance)");
+  else warnings.push("PIAPI_API_KEY empty — PiAPI video models unavailable");
+
+  if (config.stripeSecretKey) configured.push("Stripe");
+  else warnings.push("STRIPE_SECRET_KEY empty — checkout will use mock mode");
+
+  if (config.resendApiKey) configured.push("Resend (email)");
+  else warnings.push("RESEND_API_KEY empty — emails will log to console");
+
+  // Report
+  if (configured.length > 0) {
+    console.log(`[CONFIG] Services configured: ${configured.join(", ")}`);
+  }
+  if (warnings.length > 0) {
+    for (const w of warnings) {
+      console.warn(`[CONFIG] ${w}`);
+    }
+  }
+}
