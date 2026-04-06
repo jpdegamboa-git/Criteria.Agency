@@ -171,6 +171,18 @@ export const copilotPhaseEnum = pgEnum("copilot_phase", [
   "confirm",
 ]);
 
+export const entityTypeEnum = pgEnum("entity_type", [
+  "client", "vendor", "personal", "bank", "government", "unknown",
+]);
+
+export const invoiceDirectionEnum = pgEnum("invoice_direction", [
+  "issued", "received",
+]);
+
+export const invoiceStatusEnum = pgEnum("invoice_status", [
+  "pending", "partial", "paid", "overdue", "canceled",
+]);
+
 // ── Tables ──
 
 export const clients = pgTable("clients", {
@@ -306,6 +318,7 @@ export const transactions = pgTable("transactions", {
   reconciled: integer("reconciled").default(0).notNull(),
   reconciledWithId: uuid("reconciled_with_id"),
   clientId: uuid("client_id").references(() => clients.id),
+  entityId: uuid("entity_id"),
   notes: text("notes"),
   metadata: jsonb("metadata").default({}),
   createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -387,4 +400,41 @@ export const copilotSessions = pgTable("copilot_sessions", {
   generatedBrief: jsonb("generated_brief"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// ── Business Entities & Invoices ──
+
+export const businessEntities = pgTable("business_entities", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  name: varchar("name", { length: 255 }).notNull(),
+  type: entityTypeEnum("type").default("unknown").notNull(),
+  clientId: uuid("client_id").references(() => clients.id),
+  patterns: jsonb("patterns").default([]).notNull(),
+  defaultCategory: varchar("default_category", { length: 50 }),
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const invoices = pgTable("invoices", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  direction: invoiceDirectionEnum("direction").notNull(),
+  entityId: uuid("entity_id").references(() => businessEntities.id).notNull(),
+  invoiceNumber: varchar("invoice_number", { length: 100 }),
+  amount: numeric("amount", { precision: 12, scale: 2 }).notNull(),
+  currency: varchar("currency", { length: 3 }).default("USD").notNull(),
+  issueDate: timestamp("issue_date").notNull(),
+  dueDate: timestamp("due_date"),
+  status: invoiceStatusEnum("status").default("pending").notNull(),
+  filePath: text("file_path"),
+  notes: text("notes"),
+  metadata: jsonb("metadata").default({}),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const transactionInvoices = pgTable("transaction_invoices", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  transactionId: uuid("transaction_id").references(() => transactions.id).notNull(),
+  invoiceId: uuid("invoice_id").references(() => invoices.id).notNull(),
+  amount: numeric("amount", { precision: 12, scale: 2 }).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
 });
