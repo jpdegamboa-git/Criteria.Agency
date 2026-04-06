@@ -109,6 +109,68 @@ export const subscriptionStatusEnum = pgEnum("subscription_status", [
   "canceled",
 ]);
 
+export const transactionTypeEnum = pgEnum("transaction_type", [
+  "income",
+  "expense",
+  "transfer",
+  "fee",
+]);
+
+export const transactionSourceEnum = pgEnum("transaction_source", [
+  "csv_import",
+  "conexion_bg",
+  "stripe",
+  "manual",
+]);
+
+export const expectedPaymentStatusEnum = pgEnum("expected_payment_status", [
+  "pending",
+  "reconciled",
+  "overdue",
+  "canceled",
+]);
+
+export const ruleMatchTypeEnum = pgEnum("rule_match_type", [
+  "contains",
+  "exact",
+  "regex",
+]);
+
+export const ruleSourceEnum = pgEnum("rule_source", ["auto", "manual"]);
+
+export const syncStatusEnum = pgEnum("sync_status", [
+  "completed",
+  "failed",
+  "partial",
+]);
+
+export const contentTypeEnum = pgEnum("content_type", [
+  "linkedin_post",
+  "email_nurture",
+  "blog_article",
+  "social_caption",
+  "landing_copy",
+]);
+
+export const contentStatusEnum = pgEnum("content_status", [
+  "draft",
+  "review",
+  "approved",
+  "published",
+]);
+
+export const copilotSessionStatusEnum = pgEnum("copilot_session_status", [
+  "active",
+  "completed",
+  "abandoned",
+]);
+
+export const copilotPhaseEnum = pgEnum("copilot_phase", [
+  "understand",
+  "define",
+  "confirm",
+]);
+
 // ── Tables ──
 
 export const clients = pgTable("clients", {
@@ -223,4 +285,106 @@ export const comments = pgTable("comments", {
   authorName: varchar("author_name", { length: 255 }),
   text: text("text").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// ── Financial Module ──
+
+export const transactions = pgTable("transactions", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  bankAccountId: varchar("bank_account_id", { length: 50 }).default("main").notNull(),
+  externalId: varchar("external_id", { length: 255 }).unique(),
+  date: timestamp("date").notNull(),
+  amount: numeric("amount", { precision: 12, scale: 2 }).notNull(),
+  currency: varchar("currency", { length: 3 }).default("USD").notNull(),
+  description: text("description").notNull(),
+  counterpartyName: varchar("counterparty_name", { length: 255 }),
+  reference: varchar("reference", { length: 255 }),
+  category: varchar("category", { length: 50 }),
+  subcategory: varchar("subcategory", { length: 50 }),
+  type: transactionTypeEnum("type"),
+  source: transactionSourceEnum("source").notNull(),
+  reconciled: integer("reconciled").default(0).notNull(),
+  reconciledWithId: uuid("reconciled_with_id"),
+  clientId: uuid("client_id").references(() => clients.id),
+  notes: text("notes"),
+  metadata: jsonb("metadata").default({}),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const expectedPayments = pgTable("expected_payments", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  clientId: uuid("client_id")
+    .references(() => clients.id)
+    .notNull(),
+  amount: numeric("amount", { precision: 12, scale: 2 }).notNull(),
+  currency: varchar("currency", { length: 3 }).default("USD").notNull(),
+  description: varchar("description", { length: 255 }).notNull(),
+  dueDate: timestamp("due_date").notNull(),
+  status: expectedPaymentStatusEnum("status").default("pending").notNull(),
+  reconciledTransactionId: uuid("reconciled_transaction_id"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const clientAliases = pgTable("client_aliases", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  clientId: uuid("client_id")
+    .references(() => clients.id)
+    .notNull(),
+  alias: varchar("alias", { length: 255 }).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const categorizationRules = pgTable("categorization_rules", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  pattern: varchar("pattern", { length: 255 }).notNull(),
+  matchType: ruleMatchTypeEnum("match_type").default("contains").notNull(),
+  category: varchar("category", { length: 50 }).notNull(),
+  subcategory: varchar("subcategory", { length: 50 }),
+  transactionType: transactionTypeEnum("transaction_type").notNull(),
+  source: ruleSourceEnum("source").default("manual").notNull(),
+  priority: integer("priority").default(0).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const bankSyncLog = pgTable("bank_sync_log", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  provider: varchar("provider", { length: 50 }).notNull(),
+  startedAt: timestamp("started_at").defaultNow().notNull(),
+  completedAt: timestamp("completed_at"),
+  transactionsFound: integer("transactions_found").default(0).notNull(),
+  transactionsNew: integer("transactions_new").default(0).notNull(),
+  transactionsReconciled: integer("transactions_reconciled").default(0).notNull(),
+  status: syncStatusEnum("status").notNull(),
+  error: text("error"),
+});
+
+// ── Content Module ──
+
+export const contentPieces = pgTable("content_pieces", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  type: contentTypeEnum("type").notNull(),
+  status: contentStatusEnum("status").default("draft").notNull(),
+  brief: jsonb("brief").default({}),
+  content: text("content"),
+  title: varchar("title", { length: 255 }),
+  meta: jsonb("meta").default({}),
+  version: integer("version").default(1).notNull(),
+  revisionNotes: text("revision_notes"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// ── Copilot Module ──
+
+export const copilotSessions = pgTable("copilot_sessions", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  clientId: uuid("client_id").references(() => clients.id),
+  status: copilotSessionStatusEnum("status").default("active").notNull(),
+  projectType: varchar("project_type", { length: 50 }),
+  currentPhase: copilotPhaseEnum("current_phase").default("understand").notNull(),
+  currentQuestion: integer("current_question").default(1).notNull(),
+  answers: jsonb("answers").default({}),
+  generatedBrief: jsonb("generated_brief"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
