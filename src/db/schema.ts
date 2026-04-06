@@ -84,13 +84,44 @@ export const taskTypeEnum = pgEnum("task_type", [
   "audio_sfx",
 ]);
 
+export const deliveryStatusEnum = pgEnum("delivery_status", [
+  "draft",
+  "delivered",
+  "in_review",
+  "revision_requested",
+  "approved",
+]);
+
+export const commentAuthorEnum = pgEnum("comment_author", [
+  "client",
+  "criteria",
+]);
+
+export const subscriptionTierEnum = pgEnum("subscription_tier", [
+  "starter",
+  "pro",
+]);
+
+export const subscriptionStatusEnum = pgEnum("subscription_status", [
+  "trialing",
+  "active",
+  "past_due",
+  "canceled",
+]);
+
 // ── Tables ──
 
 export const clients = pgTable("clients", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: varchar("name", { length: 255 }).notNull(),
   email: varchar("email", { length: 255 }).notNull(),
+  company: varchar("company", { length: 255 }),
   brandAssets: jsonb("brand_assets").default({}),
+  stripeCustomerId: varchar("stripe_customer_id", { length: 255 }),
+  subscriptionTier: subscriptionTierEnum("subscription_tier"),
+  subscriptionStatus: subscriptionStatusEnum("subscription_status"),
+  trialEndsAt: timestamp("trial_ends_at"),
+  earlyAdopterEndsAt: timestamp("early_adopter_ends_at"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -103,6 +134,9 @@ export const projects = pgTable("projects", {
   type: projectTypeEnum("type").notNull(),
   status: projectStatusEnum("status").default("brief").notNull(),
   currentGate: gateTypeEnum("current_gate"),
+  deliveryStatus: deliveryStatusEnum("delivery_status").default("draft").notNull(),
+  currentVersion: integer("current_version").default(1).notNull(),
+  videoUrl: text("video_url"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
@@ -163,5 +197,30 @@ export const modelConfigs = pgTable("model_configs", {
   recommendedBy: varchar("recommended_by", { length: 20 }).notNull(),
   parameters: jsonb("parameters").default({}),
   costEstimate: numeric("cost_estimate", { precision: 10, scale: 2 }),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// ── Review & Delivery ──
+
+export const reviewTokens = pgTable("review_tokens", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  projectId: uuid("project_id")
+    .references(() => projects.id)
+    .notNull(),
+  token: varchar("token", { length: 64 }).notNull().unique(),
+  clientEmail: varchar("client_email", { length: 255 }).notNull(),
+  expiresAt: timestamp("expires_at").notNull(),
+  lastAccessedAt: timestamp("last_accessed_at").defaultNow().notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const comments = pgTable("comments", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  projectId: uuid("project_id")
+    .references(() => projects.id)
+    .notNull(),
+  author: commentAuthorEnum("author").notNull(),
+  authorName: varchar("author_name", { length: 255 }),
+  text: text("text").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });

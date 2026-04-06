@@ -7,7 +7,8 @@
     "cli": "tsx src/cli/index.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "tsx src/db/migrate.ts",
-    "db:seed": "tsx src/db/seed.ts"
+    "db:seed": "tsx src/db/seed.ts",
+    "stripe:setup": "tsx src/scripts/setup-stripe.ts"
   },
   "bin": {
     "criteriafilms": "./src/cli/index.ts"
@@ -19,6 +20,8 @@
     "drizzle-orm": "^0.38.0",
     "hono": "^4.7.0",
     "postgres": "^3.4.0",
+    "resend": "^6.10.0",
+    "stripe": "^22.0.0",
     "uuid": "^11.1.0",
     "zod": "^3.24.0"
   },
