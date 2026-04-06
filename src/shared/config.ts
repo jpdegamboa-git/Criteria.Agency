@@ -38,4 +38,10 @@ export const config = {
 
   // Anthropic (Claude API)
   anthropicApiKey: process.env.ANTHROPIC_API_KEY ?? "",
+
+  // Google AI (Gemini, Imagen, Veo)
+  googleAiApiKey: process.env.GOOGLE_AI_API_KEY ?? "",
+
+  // PiAPI (Kling, Seedance)
+  piapiApiKey: process.env.PIAPI_API_KEY ?? "",
 };
