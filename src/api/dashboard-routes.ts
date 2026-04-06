@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { db, schema } from "../db/index.js";
 import { sql, and, gte, lt, eq, desc } from "drizzle-orm";
 import { layout } from "../views/layout.js";
+import { renderFinanceImport } from "../views/finance-import.js";
 import { importCSV, previewCSV } from "../services/bank-sync.js";
 
 export const dashboardRoutes = new Hono();
@@ -67,10 +68,8 @@ dashboardRoutes.get("/admin/finances/reconciliation", (c) => {
   );
 });
 
-dashboardRoutes.get("/admin/finances/import", (c) => {
-  return c.html(
-    layout("Import", "<h1>CSV Import</h1><p>Coming soon</p>"),
-  );
+dashboardRoutes.get("/admin/finances/import", async (c) => {
+  return c.html(await renderFinanceImport());
 });
 
 // ── Import API ──
