@@ -353,7 +353,7 @@ export async function getSubscriptionSummary() {
         sql`${schema.clients.id} NOT IN (
           SELECT DISTINCT ${schema.projects.clientId}
           FROM ${schema.projects}
-          WHERE ${schema.projects.createdAt} > ${thirtyDaysAgo}
+          WHERE ${schema.projects.createdAt} > ${thirtyDaysAgo.toISOString()}
         )`
       )
     );
