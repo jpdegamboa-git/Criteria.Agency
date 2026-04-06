@@ -1,125 +1,157 @@
-# CriteriaFilms.com — Project vision
+# criteria.agency — Project Vision
 
-> Last updated: April 5, 2026
-> Status: Active — Foundation phase
+> Last updated: April 6, 2026
+> Status: Active — Specification phase
 
 ---
 
 ## Identity
 
-- **Name:** CriteriaFilms.com
-- **Type:** AI-powered film and video production studio
-- **Core promise:** Fully agentic production, controlled by expert humans
-- **Parent ecosystem:** criteria.agency (marketing agency — shared services in future)
-- **Domain:** criteriafilms.com
+- **Name:** criteria.agency
+- **Type:** AI-powered marketing agency platform (SaaS)
+- **Core promise:** Complete marketing automation through specialized AI agents, controlled by human experts
+- **Target market:** Small-to-medium businesses in Latin America
+- **Domain:** criteria.agency
 
 ---
 
 ## Mission
 
-Build a fully automated film and video production system powered by hyper-specialized AI agents, where every step of the production pipeline — from brief to final delivery — is orchestrated by AI but always controllable and overridable by human experts, especially in creative areas.
+Build a fully automated marketing agency platform powered by ~125 hyper-specialized AI agents organized in 24 motors, where every marketing function — from brand strategy to content creation to distribution to measurement — is orchestrated by AI but always controllable and overridable by human experts.
 
 ---
 
-## 3 Business models (execution priority order)
+## Platform Structure
 
-### 1. Production service (Priority 1 — active, 20 years experience)
+### 24 Motors in 6 Categories
 
-Video production for businesses. Corporate videos, explainers, commercials, social media content. The client pays per project or package. The agentic pipeline accelerates production while maintaining expert human control.
+| Category | Motors | What They Do |
+|----------|--------|-------------|
+| **Creation** | Video, Design, Web, Audio, Events, Print Production | Produce all types of content and experiences |
+| **Strategy** | Brand Builder, Strategist | Define brands from scratch and plan marketing strategies |
+| **Intelligence** | Brand Listener, Culture Listener, Industry Listener, Competition Listener + Opportunity Agent | Monitor everything, detect communication opportunities |
+| **Distribution** | Ads, Community Management, Email Marketing, SEO/Content | Distribute content across all channels (paid, owned, earned) |
+| **Operation** | Sales/CRM, Analytics | Manage leads and measure everything |
+| **Transversal** | Brand Guardian, Financial Agent, Channel Manager, Media Scout, Marketplace, Security Team | Cross-motor services supporting the entire platform |
 
-Revenue models: per-project, packages, retainer.
-
-### 2. Own productions (Priority 2)
-
-Films, documentaries and short films for specific niches. The agentic system allows production at lower cost and higher speed.
-
-Revenue models: distribution, festivals, licenses, platforms.
-
-### 3. AI filmmaking school (Priority 3)
-
-Teach people to produce their own films and tell their own stories using AI tools. Courses, workshops, tutorials.
-
-Revenue models: courses, workshops, subscription.
+### Shared Orchestration Framework
+All motors share the same orchestration framework but define their own:
+- Pipeline steps and quality gates
+- Agent teams and roles
+- Escalation rules (3+3 rule: 3 attempts → leader adjusts → 3 more → human)
+- Lifecycle mode (Project, Continuous, or Hybrid)
+- Configurable autonomy level
 
 ---
 
-## Key performance indicators
+## Business Units
 
-### Production service
+### criteria.agency (the platform)
+The SaaS product itself. Sells access to AI marketing motors via subscription tiers (Free/Pro/Enterprise).
+
+### CriteriaFilms.com (first client)
+AI-powered film and video production studio. Uses criteria.agency's Video motor + Marketing motors. CriteriaFilms.com is a marketing asset produced by the platform's Web motor — it has its own domain but lives internally as a campaign asset.
+
+**CriteriaFilms business models:**
+1. **Production service** (Priority 1) — Video production for businesses. 20 years experience.
+2. **Own productions** (Priority 2) — Films and documentaries for specific niches.
+3. **AI filmmaking school** (Priority 3) — Teach people to produce films with AI.
+
+### criteria.agency as its own client (dogfooding)
+Uses Marketing + Sales motors to market itself and acquire new SaaS clients.
+
+---
+
+## SaaS Business Model
+
+### Subscription Tiers
+
+| Tier | Access | Support | Price Range |
+|------|--------|---------|-------------|
+| **Free** | Limited motors, basic features, AI Copilot | Self-service | $0 |
+| **Pro** | All motors, full features, AI Copilot | Self-service + priority support | $500-$5,000/month |
+| **Enterprise** | All motors + human Account Executive + custom integrations | Dedicated support | Custom |
+
+### 6 Client Spaces (outcome-based navigation)
+Clients navigate by outcomes, not by the 24 motors underneath:
+
+| Space | Outcome | Motors Behind |
+|-------|---------|--------------|
+| **Crear** | "I need content" | Video, Design, Web, Audio, Events, Print |
+| **Comunicar** | "I need to reach people" | Ads, Community Management, Email, SEO/Content |
+| **Entender** | "I need to understand my market" | 4 Listeners, Opportunity Agent, Analytics |
+| **Vender** | "I need to sell" | Sales/CRM |
+| **Mi Marca** | "I need my brand defined/protected" | Brand Builder, Brand Guardian |
+| **Cuenta** | "I need to manage my account" | Settings, billing, team, integrations |
+
+---
+
+## Key Performance Indicators
+
+### Platform (criteria.agency)
+- Monthly Recurring Revenue (MRR)
+- Active clients by tier
+- Client retention rate (monthly/annual)
+- Motor utilization rate (which motors are most used)
+- Agent execution cost vs revenue ratio
+- Client satisfaction (NPS)
+
+### Per Client
 - Projects completed per month
 - Average brief-to-delivery time
-- First-attempt client approval rate
-- Average cost per video minute
-- Gate pass rate (% of gates passed on first attempt)
-
-### Own productions
-- Pieces produced per quarter
-- Festival/platform acceptance rate
-- Revenue per piece
-
-### AI filmmaking school
-- Active students
-- Course completion rate
-- Net Promoter Score (NPS)
+- First-attempt approval rate (gate pass rate)
+- Cost per deliverable
+- Channel performance (by funnel stage)
+- ROI on marketing spend
 
 ---
 
-## Competitive positioning
+## Competitive Positioning
 
-| vs. | CriteriaFilms advantage |
-|-----|------------------------|
-| Traditional production houses | Same cinematic quality at fraction of time and cost. AI pipeline produces in days what takes weeks. |
-| Pure AI video tools (Runway, Sora, etc.) | Structured pipeline with 5 quality gates + human oversight. Not just generation — full production from brief to delivery. |
-| Freelancers using AI | Integrated team of 47 specialized agents + quality gates + scalability. Not one person doing everything — a system. |
+| vs. | criteria.agency Advantage |
+|-----|--------------------------|
+| Traditional agencies | Same quality at fraction of time and cost. AI motors work 24/7, no human bottlenecks. |
+| Pure AI tools (ChatGPT, Canva AI, etc.) | Structured pipelines with quality gates + human oversight. Not just generation — full agency service from strategy to measurement. |
+| Marketing automation (HubSpot, Mailchimp) | AI agents that CREATE content, not just distribute it. Full creative + strategic + distribution stack. |
+| Freelancer marketplaces (Fiverr, Upwork) | Integrated system of ~125 specialized agents + quality gates + scalability. Not individual freelancers — a system. |
 
 ---
 
 ## 3 Portals
 
-### Public portal
+### Public Portal
+criteria.agency marketing site: landing page, motor/feature overview, pricing, onboarding.
+CriteriaFilms.com: marketing asset generated by web motor, separate domain.
 
-Landing page, portfolio, service information, blog/school, new client onboarding and registration.
+### Client Portal
+6 outcome-based Spaces. Clients create briefs, review deliverables, manage their brand, view analytics, manage their account. AI Copilot assists throughout. Enterprise clients get human Account Executive overlay.
 
-### Client portal
-
-Project dashboard. The client creates briefs guided by the Creative Director agent, uploads files (temporary drive — 15 day retention), and reviews progress.
-
-Commentable elements: script, breakdown, style, schedule, storyboard, video.
-
-The client can see progress and comment, but cannot directly edit.
-
-### Admin portal
-
-Command center. Management of all projects, agent orchestration, complete production pipeline, billing, legal, and quality control.
-
-Receives all client comments organized by project and element.
+### Admin Portal
+Mission Control for the entire platform. Real structure visibility (24 motors organized by category). Agent monitoring, gate reviews, model management, security center, backoffice modules (admin role only: finance, accounting, HR, internal projects, client management, internal analytics).
 
 ---
 
-## Immutable principles
+## Immutable Principles
 
-1. **Absolute quality over speed.** Every output must meet a professional cinematographic standard. No shortcuts.
+1. **Absolute quality over speed.** Every output must meet professional standards. No shortcuts.
 2. **AI automated but human controllable.** Every agent can be overridden, paused, or replaced by a human expert at any point.
 3. **Hyper-specialization.** Each agent does one thing exceptionally well, rather than many things acceptably.
-4. **Fluid human-AI substitution.** Any agent can be replaced by a human without changing the system structure. The interface with the team leader doesn't change.
-5. **Structure mirrors real cinema.** The team structure, roles, and chain of command replicate how professional film productions work.
-6. **Quality gates prevent expensive mistakes.** The showrunner's 5 gates catch problems when they're cheap to fix, not after video is generated.
+4. **Fluid human-AI substitution.** Any agent can be replaced by a human without changing the system structure.
+5. **Quality gates prevent expensive mistakes.** Gates catch problems when they're cheap to fix, not after content is published.
+6. **GDPR-first data protection.** Every data decision assumes the strictest standard. Client data is sacred.
+7. **Client simplicity over system complexity.** Clients see 6 Spaces and outcomes. The 24 motors and ~125 agents are invisible to them.
 
 ---
 
-## Future vision
+## Related Documents
 
-- Self-manageable subscription system
-- Always with the option to hire human specialists, especially in creative areas
-
----
-
-## Related documents
-
-- `TEAM_STRUCTURE.md` — 9 teams, chain of command, communication protocols, conflict resolution
-- `AGENT_REGISTRY.md` — Technical reference cards for all 47 agents with phases and dependencies
-- `PRODUCTION_PIPELINE.md` — Step-by-step production flow with 5 gates, iteration loops, time estimates
-- `MVP_ROADMAP.md` — 3-phase rollout plan (20 → 30 → 47 agents) with advance criteria
-- `TECH_ARCHITECTURE.md` — Technical stack, data model, agent orchestration, infrastructure
-- `PORTAL_SPECS.md` — Public, client, and admin portal specifications
-- `DECISION_LOG.md` — Chronological log of all key decisions (DEC-001 through DEC-021)
+- `TECH_ARCHITECTURE.md` — Technical stack, data model, communication architecture
+- `TEAM_STRUCTURE.md` — Video motor teams, chain of command (needs expansion for other motors)
+- `AGENT_REGISTRY.md` — Technical reference cards for Video motor agents (needs registries for other motors)
+- `PRODUCTION_PIPELINE.md` — Video pipeline: 10 steps, 5 gates
+- `MVP_ROADMAP.md` — Video motor phased rollout
+- `PORTAL_SPECS.md` — Full UI/UX spec for all 3 portals
+- `DECISION_LOG.md` — All key architectural decisions
+- `SESSION_CONTEXT.md` — Complete project briefing
+- `docs/superpowers/specs/2026-04-06-marketing-engine-design.md` — 24-motor architecture spec
+- `docs/superpowers/specs/2026-04-06-security-framework-design.md` — Security framework spec
