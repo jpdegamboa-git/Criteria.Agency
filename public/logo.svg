@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Capa_2" data-name="Capa 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 518.71 78.11">
+  <defs>
+    <style>
+      .cls-1 {
+        letter-spacing: -.04em;
+      }
+
+      .cls-1, .cls-2, .cls-3 {
+        font-family: TangoSans, TangoSans;
+        font-size: 61.26px;
+        isolation: isolate;
+      }
+
+      .cls-1, .cls-3 {
+        fill: #585758;
+      }
+
+      .cls-2 {
+        fill: #9d9a9c;
+      }
+
+      .cls-4 {
+        fill: #ed854b;
+      }
+
+      .cls-5 {
+        fill: #e86b73;
+      }
+
+      .cls-6 {
+        fill: #55c9ca;
+      }
+
+      .cls-7 {
+        fill: #fff;
+      }
+
+      .cls-8 {
+        letter-spacing: -.04em;
+      }
+
+      .cls-9 {
+        fill: #ffd053;
+      }
+    </style>
+  </defs>
+  <g id="Capa_2-2" data-name="Capa 2">
+    <g>
+      <text class="cls-3" transform="translate(0 60.41)"><tspan x="0" y="0">cri</tspan></text>
+      <text class="cls-1" transform="translate(71.92 60.41)"><tspan x="0" y="0">t</tspan></text>
+      <text class="cls-3" transform="translate(95.99 60.41)"><tspan x="0" y="0">eria</tspan></text>
+      <text class="cls-2" transform="translate(210.44 60.83)"><tspan x="0" y="0">a</tspan><tspan class="cls-8" x="33.26" y="0">g</tspan><tspan x="66.04" y="0">ency</tspan></text>
+      <g>
+        <g>
+          <path class="cls-9" d="M479.34.98l-33.64,33.64c-1.31,1.31-1.31,3.44,0,4.75l23.44,23.44c1.31,1.31,1.31,3.44,0,4.75l-5.31,5.31c-.93.93-.27,2.52,1.05,2.52h15.45c.89,0,1.74-.36,2.37-.98l35.03-35.03c1.31-1.31,1.31-3.44,0-4.75L484.09.98c-1.31-1.31-3.44-1.31-4.75,0h0Z"/>
+          <path class="cls-7" d="M475.77,23.07v27.74c0,2.18,2.63,3.28,4.19,1.75l14.02-13.87c.97-.96.97-2.53,0-3.49l-14.02-13.87c-1.55-1.53-4.19-.44-4.19,1.75h0Z"/>
+        </g>
+        <path class="cls-5" d="M441.43,63.29l9.39-9.39c.83-.83,2.18-.83,3.01,0l9.76,9.75c.83.83.83,2.18,0,3.01l-9.39,9.39c-.83.83-2.18.83-3.01,0l-9.76-9.75c-.83-.83-.83-2.18,0-3.01Z"/>
+        <path class="cls-6" d="M432.42,47.9l6.2-6.2c.83-.83,2.18-.83,3.01,0l6.01,6.01c.83.83.83,2.18,0,3.01l-6.2,6.2c-.83.83-2.18.83-3.01,0l-6.01-6.01c-.83-.83-.83-2.18,0-3.01Z"/>
+        <path class="cls-4" d="M423.17,57.15l3.18-3.18c.75-.75,1.96-.75,2.71,0l3.06,3.06c.75.75.75,1.96,0,2.71l-3.18,3.18c-.75.75-1.96.75-2.71,0l-3.06-3.06c-.75-.75-.75-1.96,0-2.71Z"/>
+      </g>
+      <path class="cls-6" d="M202.01,58.26l3.24-3.24c.43-.43,1.14-.43,1.57,0l3.14,3.14c.43.43.43,1.14,0,1.57l-3.24,3.24c-.43.43-1.14.43-1.57,0l-3.14-3.14c-.43-.43-.43-1.14,0-1.57Z"/>
+    </g>
+  </g>
+</svg>
