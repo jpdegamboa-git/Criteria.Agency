@@ -1,0 +1,93 @@
+{
+  "meta": {
+    "name": "Meta (Facebook + Instagram)",
+    "type": "paid",
+    "formats": [
+      {"name": "Image Ad", "specs": "1080x1080 or 1200x628", "placement": "Feed, Stories, Reels"},
+      {"name": "Video Ad", "specs": "1080x1080 (feed), 1080x1920 (stories/reels), max 240min", "placement": "Feed, Stories, Reels, In-Stream"},
+      {"name": "Carousel", "specs": "Up to 10 cards, 1080x1080 each", "placement": "Feed, Stories"},
+      {"name": "Collection", "specs": "Cover image/video + product catalog", "placement": "Feed"}
+    ],
+    "minBudget": {"daily": 1, "campaign": 5, "currency": "USD"},
+    "audienceTypes": ["demographics", "interests", "behaviors", "lookalike", "custom", "retargeting"],
+    "kpis": ["CPM", "CPC", "CTR", "CPA", "ROAS", "Reach", "Frequency", "Engagement Rate"],
+    "strengths": "Largest audience, strong targeting, visual-first",
+    "limitations": "iOS privacy impact, declining organic reach, ad fatigue"
+  },
+  "google_ads": {
+    "name": "Google Ads",
+    "type": "paid",
+    "formats": [
+      {"name": "Search", "specs": "3 headlines (30 chars), 2 descriptions (90 chars)", "placement": "Search results"},
+      {"name": "Display", "specs": "Various sizes (300x250, 728x90, etc.) or responsive", "placement": "Display Network"},
+      {"name": "YouTube Video", "specs": "Skippable (any length), Non-skippable (15-20s), Bumper (6s)", "placement": "YouTube"},
+      {"name": "Shopping", "specs": "Product feed from Merchant Center", "placement": "Search, Shopping tab"},
+      {"name": "Performance Max", "specs": "Multiple assets (headlines, descriptions, images, videos)", "placement": "All Google surfaces"}
+    ],
+    "minBudget": {"daily": 1, "campaign": 5, "currency": "USD"},
+    "audienceTypes": ["keywords", "topics", "placements", "demographics", "in-market", "affinity", "custom intent", "remarketing"],
+    "kpis": ["CPC", "CTR", "Quality Score", "Conversion Rate", "CPA", "ROAS", "Impression Share"],
+    "strengths": "High intent (search), massive reach (display+YouTube), strong conversion tracking",
+    "limitations": "Competitive CPCs in some industries, complex to manage, requires ongoing optimization"
+  },
+  "tiktok": {
+    "name": "TikTok Ads",
+    "type": "paid",
+    "formats": [
+      {"name": "In-Feed Video", "specs": "9:16, 5-60s recommended, max 10min", "placement": "For You Page"},
+      {"name": "TopView", "specs": "9:16, up to 60s, auto-play", "placement": "First ad on app open"},
+      {"name": "Spark Ads", "specs": "Boost organic posts", "placement": "For You Page"},
+      {"name": "Branded Hashtag Challenge", "specs": "Custom hashtag + challenge page", "placement": "Discover page"}
+    ],
+    "minBudget": {"daily": 20, "campaign": 50, "currency": "USD"},
+    "audienceTypes": ["demographics", "interests", "behaviors", "custom", "lookalike", "creator"],
+    "kpis": ["CPM", "CPC", "CTR", "Video Views", "Video Completion Rate", "Engagement Rate", "CPA"],
+    "strengths": "Young audiences, high engagement, viral potential, authentic content performs best",
+    "limitations": "Skews young (18-34), requires native-style content, less proven for B2B"
+  },
+  "linkedin": {
+    "name": "LinkedIn Ads",
+    "type": "paid",
+    "formats": [
+      {"name": "Sponsored Content", "specs": "Single image, video, carousel, document", "placement": "Feed"},
+      {"name": "Message Ads", "specs": "Direct message to inbox", "placement": "LinkedIn Messaging"},
+      {"name": "Lead Gen Forms", "specs": "Pre-filled forms from profile data", "placement": "Feed"},
+      {"name": "Text Ads", "specs": "25 char headline, 75 char description", "placement": "Right rail"}
+    ],
+    "minBudget": {"daily": 10, "campaign": 100, "currency": "USD"},
+    "audienceTypes": ["job_title", "company_size", "industry", "seniority", "skills", "groups", "ABM_lists"],
+    "kpis": ["CPM", "CPC", "CTR", "CPL", "Lead Quality Score", "Engagement Rate"],
+    "strengths": "Best B2B targeting, professional context, high-quality leads, decision-maker access",
+    "limitations": "High CPCs ($5-15+), smaller audience than Meta, limited creative formats"
+  },
+  "email": {
+    "name": "Email Marketing",
+    "type": "owned",
+    "formats": [
+      {"name": "Newsletter", "specs": "Regular cadence, content digest", "frequency": "Weekly/Biweekly"},
+      {"name": "Nurture Sequence", "specs": "Automated drip campaign, 3-7 emails", "trigger": "Sign-up, download, action"},
+      {"name": "Promotional", "specs": "Offer/sale announcement", "frequency": "As needed"},
+      {"name": "Transactional", "specs": "Order confirmation, receipts, updates", "trigger": "Purchase/action"}
+    ],
+    "minBudget": {"monthly": 0, "note": "Platform cost varies: $0-300/mo for most SMBs"},
+    "benchmarks": {"openRate": "20-25%", "clickRate": "2-5%", "unsubscribeRate": "<0.5%", "deliverability": ">95%"},
+    "kpis": ["Open Rate", "Click Rate", "Conversion Rate", "Revenue Per Email", "List Growth Rate", "Unsubscribe Rate"],
+    "strengths": "Highest ROI channel (~$36 per $1), owned audience, personalization, automation",
+    "limitations": "Requires list building, deliverability management, content creation effort"
+  },
+  "seo": {
+    "name": "SEO & Organic Content",
+    "type": "owned",
+    "formats": [
+      {"name": "Blog Articles", "specs": "1500-3000 words, keyword-optimized", "frequency": "2-4/month"},
+      {"name": "Landing Pages", "specs": "Conversion-optimized, specific keyword target", "frequency": "As needed"},
+      {"name": "Technical SEO", "specs": "Site speed, mobile, structured data, crawlability", "frequency": "Ongoing"},
+      {"name": "Local SEO", "specs": "Google Business Profile, local citations", "frequency": "Ongoing"}
+    ],
+    "minBudget": {"monthly": 0, "note": "Content creation cost, tools ~$100-500/mo"},
+    "timeline": "3-6 months for meaningful organic traffic growth",
+    "kpis": ["Organic Traffic", "Keyword Rankings", "Domain Authority", "Organic Conversions", "Pages Indexed", "Core Web Vitals"],
+    "strengths": "Compounding returns, free traffic once established, builds authority",
+    "limitations": "Slow results (3-6 months), requires consistent content, algorithm dependency"
+  }
+}
