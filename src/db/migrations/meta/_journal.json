@@ -50,6 +50,34 @@
       "when": 1775527199849,
       "tag": "0006_volatile_imperial_guard",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1775529144838,
+      "tag": "0007_damp_squadron_sinister",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1775529366905,
+      "tag": "0008_bouncy_centennial",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1775563820501,
+      "tag": "0009_married_naoko",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1775576221534,
+      "tag": "0010_dazzling_captain_midlands",
+      "breakpoints": true
     }
   ]
 }

@@ -24,17 +24,15 @@ export const projectTypeEnum = pgEnum("project_type", [
 ]);
 
 export const projectStatusEnum = pgEnum("project_status", [
-  "brief",
-  "concept",
-  "script",
-  "visual_look",
-  "storyboard",
-  "video_gen",
-  "edit",
-  "audio",
-  "polish",
-  "delivered",
-  "paused",
+  // Video production
+  "brief", "concept", "script", "visual_look", "storyboard",
+  "video_gen", "edit", "audio", "polish",
+  // Brand builder
+  "discovery", "research", "positioning", "identity", "brand_dna",
+  // Strategist
+  "diagnostic", "objectives", "audiences", "value_prop", "media_plan", "budget", "briefs",
+  // Shared
+  "delivered", "paused",
 ]);
 
 export const gateTypeEnum = pgEnum("gate_type", [
@@ -48,18 +46,15 @@ export const gateTypeEnum = pgEnum("gate_type", [
 export const gateDecisionEnum = pgEnum("gate_decision", ["pass", "fail"]);
 
 export const artifactStepEnum = pgEnum("artifact_step", [
-  "brief",
-  "concept",
-  "script",
-  "visual_look",
-  "storyboard",
-  "video_gen",
-  "edit",
-  "audio",
-  "polish",
-  "delivery",
-  "model_config",
-  "gate_review",
+  // Video production
+  "brief", "concept", "script", "visual_look", "storyboard",
+  "video_gen", "edit", "audio", "polish", "delivery",
+  // Brand builder
+  "discovery", "research", "positioning", "identity", "brand_dna",
+  // Strategist
+  "diagnostic", "objectives", "audiences", "value_prop", "media_plan", "budget", "briefs",
+  // Shared
+  "model_config", "gate_review",
 ]);
 
 export const artifactTypeEnum = pgEnum("artifact_type", [
@@ -208,8 +203,10 @@ export const projects = pgTable("projects", {
     .notNull(),
   name: varchar("name", { length: 255 }).notNull(),
   type: projectTypeEnum("type").notNull(),
+  pipelineType: varchar("pipeline_type", { length: 50 }).default("video-production").notNull(),
+  parentProjectId: uuid("parent_project_id"),
   status: projectStatusEnum("status").default("brief").notNull(),
-  currentGate: gateTypeEnum("current_gate"),
+  currentGate: varchar("current_gate", { length: 20 }),
   deliveryStatus: deliveryStatusEnum("delivery_status").default("draft").notNull(),
   currentVersion: integer("current_version").default(1).notNull(),
   videoUrl: text("video_url"),
@@ -242,7 +239,7 @@ export const gateReviews = pgTable("gate_reviews", {
   projectId: uuid("project_id")
     .references(() => projects.id)
     .notNull(),
-  gate: gateTypeEnum("gate").notNull(),
+  gate: varchar("gate", { length: 20 }).notNull(),
   iteration: integer("iteration").default(1).notNull(),
   decision: gateDecisionEnum("decision").notNull(),
   reviewer: varchar("reviewer", { length: 20 }).notNull(),
