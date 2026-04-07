@@ -25,6 +25,18 @@ export function escapeJsString(str: string): string {
 }
 
 /**
+ * Validate an agent ID for safe filesystem use.
+ * Returns the trimmed ID if it only contains [a-zA-Z0-9_-], or null if it
+ * contains any path-traversal or special characters (., /, \, etc.).
+ */
+export function sanitizeAgentId(id: string): string | null {
+  const trimmed = id.trim();
+  if (trimmed.length === 0) return null;
+  if (/^[a-zA-Z0-9_-]+$/.test(trimmed)) return trimmed;
+  return null;
+}
+
+/**
  * Validate and sanitize a URL for use in href/src attributes.
  * Returns empty string if URL looks suspicious.
  */

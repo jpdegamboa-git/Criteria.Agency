@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { db, schema } from "../db/index.js";
 import { eq, and, sql, desc } from "drizzle-orm";
 import { config } from "../shared/config.js";
+import { sanitizeAgentId } from "../shared/sanitize.js";
 import { readFile, writeFile } from "fs/promises";
 import { join } from "path";
 
@@ -122,7 +123,8 @@ canvasRoutes.get("/api/canvas/replay/:projectId", async (c) => {
 
 // GET /api/agents/:id/file — read agent skill file
 canvasRoutes.get("/api/agents/:id/file", async (c) => {
-  const agentId = c.req.param("id");
+  const agentId = sanitizeAgentId(c.req.param("id"));
+  if (!agentId) return c.json({ error: "Invalid agent id" }, 400);
   const agentsDir = config.agentsPath;
   const { readdirSync } = await import("fs");
   const files = readdirSync(agentsDir);
@@ -134,7 +136,8 @@ canvasRoutes.get("/api/agents/:id/file", async (c) => {
 
 // PUT /api/agents/:id/file — save agent skill file
 canvasRoutes.put("/api/agents/:id/file", async (c) => {
-  const agentId = c.req.param("id");
+  const agentId = sanitizeAgentId(c.req.param("id"));
+  if (!agentId) return c.json({ error: "Invalid agent id" }, 400);
   const body = await c.req.json<{ content: string }>();
   const agentsDir = config.agentsPath;
   const { readdirSync } = await import("fs");

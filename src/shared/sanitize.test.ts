@@ -1,5 +1,54 @@
 import { describe, it, expect } from "vitest";
-import { escapeHtml, escapeJsString, sanitizeUrl } from "./sanitize.js";
+import { escapeHtml, escapeJsString, sanitizeUrl, sanitizeAgentId } from "./sanitize.js";
+
+describe("sanitizeAgentId", () => {
+  it("should accept a simple alphanumeric id", () => {
+    expect(sanitizeAgentId("T1L")).toBe("T1L");
+  });
+
+  it("should accept ids with hyphens and underscores", () => {
+    expect(sanitizeAgentId("T1-L")).toBe("T1-L");
+    expect(sanitizeAgentId("agent_001")).toBe("agent_001");
+  });
+
+  it("should accept mixed-case ids", () => {
+    expect(sanitizeAgentId("XF-001")).toBe("XF-001");
+  });
+
+  it("should trim surrounding whitespace before validating", () => {
+    expect(sanitizeAgentId("  T1-L  ")).toBe("T1-L");
+  });
+
+  it("should reject path traversal with dots", () => {
+    expect(sanitizeAgentId("../../etc/passwd")).toBeNull();
+  });
+
+  it("should reject ids containing a forward slash", () => {
+    expect(sanitizeAgentId("foo/bar")).toBeNull();
+  });
+
+  it("should reject ids containing a backslash", () => {
+    expect(sanitizeAgentId("foo\\bar")).toBeNull();
+  });
+
+  it("should reject ids containing a dot", () => {
+    expect(sanitizeAgentId("foo.bar")).toBeNull();
+    expect(sanitizeAgentId(".hidden")).toBeNull();
+  });
+
+  it("should reject empty or whitespace-only ids", () => {
+    expect(sanitizeAgentId("")).toBeNull();
+    expect(sanitizeAgentId("   ")).toBeNull();
+  });
+
+  it("should reject ids with null bytes", () => {
+    expect(sanitizeAgentId("foo\0bar")).toBeNull();
+  });
+
+  it("should reject ids with spaces", () => {
+    expect(sanitizeAgentId("foo bar")).toBeNull();
+  });
+});
 
 describe("escapeHtml", () => {
   it("should escape < and >", () => {
