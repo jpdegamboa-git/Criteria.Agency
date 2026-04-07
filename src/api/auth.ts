@@ -2,14 +2,17 @@ import { createMiddleware } from "hono/factory";
 import { auth } from "../auth.js";
 import { config } from "../shared/config.js";
 
+// Synthetic user set in context when API key auth succeeds.
+const API_KEY_ADMIN_USER = { id: "api-key", role: "admin", name: "API Key" } as const;
+
 /**
  * Session-based authentication middleware (Better Auth).
  * Also accepts API key via Authorization header or X-API-Key for CLI/scripts.
  *
  * Priority:
  * 1. Better Auth session cookie → user context
- * 2. API key (ADMIN_API_KEY) → admin access
- * 3. Dev mode (no ADMIN_API_KEY set + no BETTER_AUTH_SECRET) → allow all
+ * 2. API key (ADMIN_API_KEY) → synthetic admin user context
+ * 3. Explicit dev bypass (SKIP_AUTH=true env var) → allow all
  */
 export const requireSession = createMiddleware(async (c, next) => {
   // 1. Check for Better Auth session
@@ -28,19 +31,22 @@ export const requireSession = createMiddleware(async (c, next) => {
     if (authHeader) {
       const [scheme, token] = authHeader.split(" ");
       if (scheme === "Bearer" && token === adminKey) {
+        c.set("user", API_KEY_ADMIN_USER);
         await next();
         return;
       }
     }
     const apiKeyHeader = c.req.header("X-API-Key");
     if (apiKeyHeader === adminKey) {
+      c.set("user", API_KEY_ADMIN_USER);
       await next();
       return;
     }
   }
 
-  // 3. Dev mode — no auth configured, allow all
-  if (!adminKey && config.betterAuthSecret === "dev-secret-change-in-production") {
+  // 3. Explicit dev bypass — only when SKIP_AUTH=true is set in the environment
+  if (config.skipAuth) {
+    c.set("user", API_KEY_ADMIN_USER);
     await next();
     return;
   }
@@ -51,15 +57,13 @@ export const requireSession = createMiddleware(async (c, next) => {
 /**
  * Role-based access control middleware.
  * Must be used AFTER requireSession.
- * API key auth bypasses role check (already trusted).
  */
 export const requireAdmin = createMiddleware(async (c, next) => {
   const user = c.get("user") as { role?: string } | undefined;
 
-  // API key auth and dev mode don't set user — they're already trusted
+  // No user in context — deny. requireSession must run first.
   if (!user) {
-    await next();
-    return;
+    return c.json({ error: "Forbidden: no user context" }, 403);
   }
 
   if (user.role !== "admin") {

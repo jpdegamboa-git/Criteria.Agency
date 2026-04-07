@@ -50,6 +50,9 @@ export const config = {
 
   // Better Auth
   betterAuthSecret: process.env.BETTER_AUTH_SECRET ?? "dev-secret-change-in-production",
+
+  // Explicit dev-mode auth bypass — must be set to "true" to skip auth
+  skipAuth: process.env.SKIP_AUTH === "true",
   webUrl: process.env.WEB_URL ?? "http://localhost:3001",
 
   // Google OAuth (for social login)
@@ -81,8 +84,9 @@ export function auditConfig(): void {
   if (config.resendApiKey) configured.push("Resend (email)");
   else warnings.push("RESEND_API_KEY empty — emails will log to console");
 
+  if (config.skipAuth) warnings.push("SKIP_AUTH=true — ALL authentication is bypassed (dev/test only)");
   if (config.adminApiKey) configured.push("Admin auth");
-  else warnings.push("ADMIN_API_KEY empty — API routes are UNPROTECTED (dev mode)");
+  else if (!config.skipAuth) warnings.push("ADMIN_API_KEY empty — API routes are UNPROTECTED");
 
   if (config.googleClientId && config.googleClientSecret) configured.push("Google OAuth");
   else warnings.push("GOOGLE_CLIENT_ID/SECRET empty — Google sign-in disabled");
