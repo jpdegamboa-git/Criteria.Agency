@@ -476,6 +476,26 @@ export const AGENT_CONTEXT_MAP: Record<string, AgentContextEntry> = {
   "OP-001:op_scan": { artifactSteps: [], attachmentTypes: ["text", "json"], taskInstruction: "Collect recent outputs from 4 Listeners (LI-001 Brand, LI-002 Culture, LI-003 Industry, LI-004 Competitive). Cross signals looking for patterns: trending topic matching audience, competitor gap, brand mention to amplify, industry signal for thought leadership." },
   "OP-L:op_evaluate": { artifactSteps: ["op_scan"], attachmentTypes: ["text", "json"], taskInstruction: "Evaluate each signal: relevance to brand (1-10), time window, potential impact, resource needed. Filter: only signals scoring >= minRelevanceScore become opportunities." },
   "OP-002:op_alert": { artifactSteps: ["op_evaluate"], attachmentTypes: ["text", "json"], taskInstruction: "For each approved opportunity: generate activation brief with suggested motor (CM for social, Ads for campaigns, WR for content, SEO for thought leadership), urgency level, and draft brief." },
+
+  // ── Brand Listener (loop) ──
+  "BL-001:bl_scan": { artifactSteps: [], attachmentTypes: ["text"], taskInstruction: "Scan for brand mentions across social media, press, forums, reviews, and blogs. Collect: source, text, author, date, reach estimate. Use LLM general knowledge — mark estimates with [VERIFY]. Output: {mentions: [{source, text, author, date, reach, url}]}." },
+  "BL-002:bl_analyze": { artifactSteps: ["bl_scan"], attachmentTypes: ["text", "json"], taskInstruction: "Classify each mention by sentiment (positive/neutral/negative, 1-10 scale), topic (product/service/brand/people/price), and urgency (routine/notable/crisis). Calculate Brand Health Score (weighted sentiment average). Flag crisis-level mentions. Output: {brand_health_score, sentiment_distribution, crisis_alerts: [], notable_mentions: []}." },
+  "BL-L:bl_report": { artifactSteps: ["bl_scan", "bl_analyze"], attachmentTypes: ["text", "json"], taskInstruction: "Generate Brand Health Report: overall score, sentiment trend (vs previous period), top positive mentions, top negative mentions, crisis alerts if any, recommendations. If crisis detected, generate immediate alert artifact." },
+
+  // ── Culture Listener (loop) ──
+  "CL-001:cl_scan": { artifactSteps: [], attachmentTypes: ["text"], taskInstruction: "Scan for cultural trends, viral topics, memes, social movements, and seasonal themes relevant to the client's market and audience. Use LLM general knowledge. Output: {trends: [{topic, description, velocity, platform, audience_overlap_estimate}]}." },
+  "CL-002:cl_analyze": { artifactSteps: ["cl_scan"], attachmentTypes: ["text", "json"], taskInstruction: "Evaluate each trend for brand relevance: does it match the audience? Is it on-brand? What's the time window? Score relevance 1-10. Identify upcoming special dates and cultural moments. Output: {relevant_trends: [{topic, relevance_score, time_window, suggested_action}], upcoming_dates: []}." },
+  "CL-L:cl_report": { artifactSteps: ["cl_scan", "cl_analyze"], attachmentTypes: ["text", "json"], taskInstruction: "Generate Trend Report: top relevant trends with suggested brand response, upcoming cultural moments to prepare for, trends to avoid. Feed high-score trends to Opportunity Agent." },
+
+  // ── Industry Listener (loop) ──
+  "IL-001:il_scan": { artifactSteps: [], attachmentTypes: ["text"], taskInstruction: "Scan for industry signals: publications, research reports, patents, product launches, regulatory changes, M&A activity, technology innovations in the client's sector. Use LLM general knowledge. Output: {signals: [{type, title, source, date, summary}]}." },
+  "IL-002:il_analyze": { artifactSteps: ["il_scan"], attachmentTypes: ["text", "json"], taskInstruction: "Evaluate each signal's impact on the client's business: is it an opportunity or threat? What's the timeframe? What action should the client consider? Score impact 1-10. Output: {analyzed_signals: [{title, impact_score, opportunity_or_threat, timeframe, suggested_action}]}." },
+  "IL-L:il_report": { artifactSteps: ["il_scan", "il_analyze"], attachmentTypes: ["text", "json"], taskInstruction: "Generate Industry Intelligence Report: top signals by impact, opportunities to pursue, threats to monitor, recommended thought leadership topics. Feed high-impact signals to Opportunity Agent." },
+
+  // ── Competitive Listener (loop) ──
+  "CO-001:co_scan": { artifactSteps: [], attachmentTypes: ["text"], taskInstruction: "Scan competitor activity: campaigns launched, product updates, pricing changes, hiring patterns, content published, social media activity, PR mentions. Focus on client's top 5 competitors. Use LLM general knowledge. Output: {competitor_activity: [{competitor, type, description, date, significance}]}." },
+  "CO-002:co_analyze": { artifactSteps: ["co_scan"], attachmentTypes: ["text", "json"], taskInstruction: "Identify competitive gaps and threats: what are competitors doing that the client isn't? Where is the client ahead? Score each gap by urgency (1-10) and opportunity size. Output: {gaps: [{area, competitor, description, urgency, opportunity_size, suggested_response}], threats: []}." },
+  "CO-L:co_report": { artifactSteps: ["co_scan", "co_analyze"], attachmentTypes: ["text", "json"], taskInstruction: "Generate Competitive Dashboard: competitor activity summary, gaps ranked by priority, threats to watch, recommended competitive responses. Feed high-urgency gaps to Opportunity Agent." },
 };
 
 // ── Agent Output Types ─────────────────────────────────────────
@@ -573,4 +593,12 @@ export const AGENT_OUTPUT_TYPES: Record<
   "CH-L:ch_request": "text", "CH-001:ch_analysis": "text", "CH-002:ch_analysis": "text", "CH-003:ch_specs": "text", "CH-L:ch_delivery": "text",
   // Opportunity Agent
   "OP-001:op_scan": "text", "OP-L:op_evaluate": "text", "OP-002:op_alert": "text",
+  // Brand Listener
+  "BL-001:bl_scan": "text", "BL-002:bl_analyze": "text", "BL-L:bl_report": "text",
+  // Culture Listener
+  "CL-001:cl_scan": "text", "CL-002:cl_analyze": "text", "CL-L:cl_report": "text",
+  // Industry Listener
+  "IL-001:il_scan": "text", "IL-002:il_analyze": "text", "IL-L:il_report": "text",
+  // Competitive Listener
+  "CO-001:co_scan": "text", "CO-002:co_analyze": "text", "CO-L:co_report": "text",
 };
