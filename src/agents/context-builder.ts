@@ -49,6 +49,45 @@ function getMimeType(filePath: string): string {
   return EXT_MIME_MAP[ext] ?? "application/octet-stream";
 }
 
+// ── Shared Directives ─────────────────────────────────────────
+
+const SHARED_DIRECTIVES = [
+  "agents/_shared/brand-voice.md",
+  "agents/_shared/production-constraints.md",
+];
+
+// Directives loaded only for specific pipelines
+const PIPELINE_DIRECTIVES: Record<string, string[]> = {
+  strategist: ["agents/_shared/harvard-frameworks.md"],
+};
+
+async function loadDirectives(paths: string[]): Promise<string[]> {
+  const directives: string[] = [];
+  for (const relativePath of paths) {
+    const fullPath = path.resolve(
+      path.dirname(config.agentsPath),
+      relativePath,
+    );
+    try {
+      const content = await fs.readFile(fullPath, "utf-8");
+      directives.push(content);
+    } catch {
+      // Directive not found — skip without breaking execution
+    }
+  }
+  return directives;
+}
+
+async function loadSharedDirectives(): Promise<string[]> {
+  return loadDirectives(SHARED_DIRECTIVES);
+}
+
+async function loadPipelineDirectives(pipelineType: string): Promise<string[]> {
+  const paths = PIPELINE_DIRECTIVES[pipelineType];
+  if (!paths) return [];
+  return loadDirectives(paths);
+}
+
 // ── Context Builder ────────────────────────────────────────────
 
 export async function buildAgentContext(
@@ -56,27 +95,40 @@ export async function buildAgentContext(
   projectId: string,
   step: string,
   modelId: string,
+  pipelineType: string = "video-production",
+  parentProjectId?: string | null,
 ): Promise<{
   systemPrompt: string;
   userPrompt: string;
   attachments: Attachment[];
 }> {
-  // 1. Load skill file
+  // 1. Load shared directives (brand voice, production constraints)
+  const sharedDirectives = await loadSharedDirectives();
+
+  // 1b. Load pipeline-specific directives (e.g., Harvard frameworks for strategist)
+  const pipelineDirectives = await loadPipelineDirectives(pipelineType);
+
+  // 2. Load skill file
   const agentEntry = AGENT_REGISTRY[agentId];
-  let systemPrompt = "";
+  let skillFileContent = "";
   if (agentEntry?.skillFile) {
     const skillPath = path.resolve(
       path.dirname(config.agentsPath),
       agentEntry.skillFile,
     );
     try {
-      systemPrompt = await fs.readFile(skillPath, "utf-8");
+      skillFileContent = await fs.readFile(skillPath, "utf-8");
     } catch {
       // Skill file not found — agent runs without custom system prompt
     }
   }
 
-  // 2. Look up context map entry
+  // 3. Assemble system prompt: shared + pipeline directives + agent skill file
+  const systemPrompt = [...sharedDirectives, ...pipelineDirectives, skillFileContent]
+    .filter(Boolean)
+    .join("\n\n---\n\n");
+
+  // 4. Look up context map entry
   const contextKey = `${agentId}:${step}`;
   const contextEntry = AGENT_CONTEXT_MAP[contextKey];
 
@@ -88,14 +140,37 @@ export async function buildAgentContext(
     };
   }
 
-  // 3. Get model info for supported inputs
+  // 5. Get model info for supported inputs
   const model = getModel(modelId);
   const supportedInputs = model?.supportedInputs ?? ["text"];
 
-  // 4. Query artifacts from DB
+  // 6. Query artifacts from DB
   const textSections: string[] = [];
   const attachments: Attachment[] = [];
 
+  // 6a. Load parent project artifacts (e.g., Brand DNA from Brand Builder)
+  if (parentProjectId) {
+    const parentArtifacts = await db
+      .select()
+      .from(schema.artifacts)
+      .where(eq(schema.artifacts.projectId, parentProjectId));
+
+    for (const artifact of parentArtifacts) {
+      const attType = getAttachmentType(artifact.storagePath);
+      if (attType === "document" || attType === "json") {
+        try {
+          const content = await fs.readFile(artifact.storagePath, "utf-8");
+          textSections.push(
+            `## [Parent Project] ${artifact.step}: ${artifact.name}\n\n${content}`,
+          );
+        } catch {
+          // Skip unreadable parent artifacts
+        }
+      }
+    }
+  }
+
+  // 6b. Load current project artifacts
   if (contextEntry.artifactSteps.length > 0) {
     const artifacts = await db
       .select()
@@ -160,7 +235,7 @@ export async function buildAgentContext(
     }
   }
 
-  // 5. Assemble user prompt
+  // 7. Assemble user prompt
   const userPrompt = [contextEntry.taskInstruction, ...textSections].join(
     "\n\n",
   );

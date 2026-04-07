@@ -77,6 +77,14 @@ async function executeRealAgent(
   const outputType: ModelType =
     AGENT_OUTPUT_TYPES[contextKey] ?? "text";
 
+  // a2. Get project for pipelineType and parentProjectId
+  const [project] = await db
+    .select()
+    .from(schema.projects)
+    .where(eq(schema.projects.id, projectId));
+  const pipelineType = project?.pipelineType ?? "video-production";
+  const parentProjectId = project?.parentProjectId;
+
   // b. Get model
   const modelId = await getModelForAgent(agentId, projectId, step, outputType);
 
@@ -107,6 +115,8 @@ async function executeRealAgent(
       projectId,
       step,
       modelId,
+      pipelineType,
+      parentProjectId,
     );
 
     // f. Call provider.generate
