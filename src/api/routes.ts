@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { cors } from "hono/cors";
 import { db, schema } from "../db/index.js";
 import { eq } from "drizzle-orm";
 import { AGENT_REGISTRY } from "../agents/registry.js";
@@ -10,7 +11,7 @@ import {
 } from "../orchestrator/state-machine.js";
 import { getArtifacts, readArtifact } from "../storage/artifacts.js";
 import type { ProjectType } from "../shared/types.js";
-import { requireAuth } from "./auth.js";
+import { requireSession, requireAdmin } from "./auth.js";
 import { parseBody, createProjectSchema, resumeProjectSchema } from "./validators.js";
 import { reviewRoutes } from "./review-routes.js";
 import { checkoutRoutes } from "./checkout-routes.js";
@@ -20,26 +21,52 @@ import { contentRoutes } from "./content-routes.js";
 import { entityRoutes } from "./entity-routes.js";
 import { invoiceRoutes } from "./invoice-routes.js";
 import { dashboardRoutes } from "./dashboard-routes.js";
+import { canvasRoutes } from "./canvas-routes.js";
+import { auth } from "../auth.js";
+import { config } from "../shared/config.js";
 
 export const app = new Hono();
+
+// ── CORS (allow frontend origin) ──
+app.use(
+  "/api/auth/*",
+  cors({
+    origin: config.webUrl,
+    allowHeaders: ["Content-Type", "Authorization"],
+    allowMethods: ["POST", "GET", "OPTIONS"],
+    exposeHeaders: ["Content-Length"],
+    maxAge: 600,
+    credentials: true,
+  }),
+);
+
+// ── Better Auth handler ──
+app.on(["POST", "GET"], "/api/auth/*", (c) => {
+  return auth.handler(c.req.raw);
+});
 
 // ── Public routes (no auth required) ──
 app.route("/", reviewRoutes);     // Token-based auth (client portal)
 app.route("/", checkoutRoutes);   // Public pricing + Stripe webhook
 
-// ── Protected routes (require ADMIN_API_KEY) ──
-app.use("/projects/*", requireAuth);
-app.use("/agents", requireAuth);
-app.use("/artifacts/*", requireAuth);
-app.use("/api/transactions/*", requireAuth);
-app.use("/api/expected-payments/*", requireAuth);
-app.use("/api/categorization-rules/*", requireAuth);
-app.use("/api/subscriptions/*", requireAuth);
-app.use("/api/content/*", requireAuth);
-app.use("/api/copilot/*", requireAuth);
-app.use("/api/entities/*", requireAuth);
-app.use("/api/invoices/*", requireAuth);
-app.use("/admin/*", requireAuth);
+// ── Protected routes (require session) ──
+app.use("/projects/*", requireSession);
+app.use("/agents", requireSession);
+app.use("/artifacts/*", requireSession);
+app.use("/api/transactions/*", requireSession);
+app.use("/api/expected-payments/*", requireSession);
+app.use("/api/categorization-rules/*", requireSession);
+app.use("/api/subscriptions/*", requireSession);
+app.use("/api/content/*", requireSession);
+app.use("/api/copilot/*", requireSession);
+app.use("/api/entities/*", requireSession);
+app.use("/api/invoices/*", requireSession);
+app.use("/admin/*", requireSession);
+app.use("/admin/*", requireAdmin);
+app.use("/api/canvas/*", requireSession);
+app.use("/api/canvas/*", requireAdmin);
+app.use("/api/agents/*/file", requireSession);
+app.use("/api/agents/*/file", requireAdmin);
 
 app.route("/", financeRoutes);
 app.route("/", copilotRoutes);
@@ -47,6 +74,7 @@ app.route("/", contentRoutes);
 app.route("/", entityRoutes);
 app.route("/", invoiceRoutes);
 app.route("/", dashboardRoutes);
+app.route("/", canvasRoutes);
 
 // Health
 app.get("/health", (c) => c.json({ status: "ok", version: "0.1.0" }));
