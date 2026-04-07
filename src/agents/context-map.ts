@@ -496,6 +496,17 @@ export const AGENT_CONTEXT_MAP: Record<string, AgentContextEntry> = {
   "CO-001:co_scan": { artifactSteps: [], attachmentTypes: ["text"], taskInstruction: "Scan competitor activity: campaigns launched, product updates, pricing changes, hiring patterns, content published, social media activity, PR mentions. Focus on client's top 5 competitors. Use LLM general knowledge. Output: {competitor_activity: [{competitor, type, description, date, significance}]}." },
   "CO-002:co_analyze": { artifactSteps: ["co_scan"], attachmentTypes: ["text", "json"], taskInstruction: "Identify competitive gaps and threats: what are competitors doing that the client isn't? Where is the client ahead? Score each gap by urgency (1-10) and opportunity size. Output: {gaps: [{area, competitor, description, urgency, opportunity_size, suggested_response}], threats: []}." },
   "CO-L:co_report": { artifactSteps: ["co_scan", "co_analyze"], attachmentTypes: ["text", "json"], taskInstruction: "Generate Competitive Dashboard: competitor activity summary, gaps ranked by priority, threats to watch, recommended competitive responses. Feed high-urgency gaps to Opportunity Agent." },
+
+  // ── Sales/CRM Pipeline ──
+  "SL-001:sl_capture": { artifactSteps: [], attachmentTypes: ["json"], taskInstruction: "Capture lead from channel. Normalize: name, email, company, phone, source (web_form/email/event/ad/referral), sourceDetail. Deduplicate by email against existing leads. Output: {lead, is_duplicate, merged_with}." },
+  "SL-002:sl_enrich": { artifactSteps: ["sl_capture"], attachmentTypes: ["text", "json"], taskInstruction: "Enrich lead with public data: company name, size, industry, HQ, website, LinkedIn. Use LLM general knowledge — mark all with [VERIFY]. Output: {enriched_fields, confidence_scores}." },
+  "SL-003:sl_score": { artifactSteps: ["sl_capture", "sl_enrich"], attachmentTypes: ["text", "json"], taskInstruction: "Score lead: Fit (0-100 ICP match), Intent (0-100 engagement), BANT (Budget/Authority/Need/Timeline Y/N each). Total = Fit*0.4 + Intent*0.3 + BANT*0.3. Classify: Hot(80+), Warm(50-79), Cold(<50). Output: {scores, classification, recommended_action}." },
+  "SL-004:sl_nurture": { artifactSteps: ["sl_score"], attachmentTypes: ["text", "json"], taskInstruction: "Based on score: Hot → create Email Marketing sub-project for immediate sales outreach. Warm → 4-email weekly nurture sequence. Cold → monthly drip. Output: {em_sub_project_id, sequence_type, timeline}." },
+  "SL-005:sl_proposal": { artifactSteps: ["sl_capture", "sl_enrich", "sl_score"], attachmentTypes: ["text", "json"], taskInstruction: "Generate proposal: create WR sub-project (proposal copy), GD sub-project (branded template), request pricing from XA-001. Compile final document. Do NOT write the proposal — coordinate production. Output: {proposal_document, pricing_summary, valid_until}." },
+  "SL-L:sl_negotiate": { artifactSteps: ["sl_proposal"], attachmentTypes: ["text", "json"], taskInstruction: "Track negotiation: log interactions, follow-ups, objections, counter-proposals. Update deal probability. Schedule next action. Output: {negotiation_log, updated_probability, next_action, next_action_date}." },
+  "SL-L:sl_close": { artifactSteps: ["sl_negotiate"], attachmentTypes: ["text", "json"], taskInstruction: "Close deal: won (value, date, terms) or lost (reason: price/timing/competition/need/other). Update lead and deal status. Output: {outcome, value_if_won, reason_if_lost, close_date}." },
+  "SL-006:sl_attribution": { artifactSteps: ["sl_capture", "sl_close"], attachmentTypes: ["text", "json"], taskInstruction: "Attribute closed deal to origin: channel, campaign, content. Models: first-touch, last-touch, linear. Output: {attribution: {first_touch, last_touch, linear}}." },
+  "SL-L:sl_delivery": { artifactSteps: ["sl_close", "sl_attribution"], attachmentTypes: ["text", "json"], taskInstruction: "Generate deal close report: outcome, value, attribution, time-to-close, lessons learned. Update pipeline metrics." },
 };
 
 // ── Agent Output Types ─────────────────────────────────────────
@@ -601,4 +612,6 @@ export const AGENT_OUTPUT_TYPES: Record<
   "IL-001:il_scan": "text", "IL-002:il_analyze": "text", "IL-L:il_report": "text",
   // Competitive Listener
   "CO-001:co_scan": "text", "CO-002:co_analyze": "text", "CO-L:co_report": "text",
+  // Sales/CRM
+  "SL-001:sl_capture": "text", "SL-002:sl_enrich": "text", "SL-003:sl_score": "text", "SL-004:sl_nurture": "text", "SL-005:sl_proposal": "text", "SL-L:sl_negotiate": "text", "SL-L:sl_close": "text", "SL-006:sl_attribution": "text", "SL-L:sl_delivery": "text",
 };

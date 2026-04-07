@@ -375,3 +375,27 @@ PipelineRegistry.register({
 
 // NOTE: Opportunity Agent is NOT a pipeline — it operates as a scheduled loop.
 // Agents OP-L, OP-001, OP-002 are registered in agent-registry but not in PipelineRegistry.
+
+// ── Sales/CRM Pipeline ──
+PipelineRegistry.register({
+  type: "sales-crm",
+  steps: [
+    "sl_capture", "sl_enrich", "sl_score", "sl_nurture", "sl_proposal",
+    "sl_negotiate", "sl_close", "sl_attribution", "sl_delivery",
+  ],
+  stepAgents: {
+    sl_capture: ["SL-L", "SL-001"],
+    sl_enrich: ["SL-002"],
+    sl_score: ["SL-003"],
+    sl_nurture: ["SL-004"],
+    sl_proposal: ["SL-005"],
+    sl_negotiate: ["SL-L"],
+    sl_close: ["SL-L"],
+    sl_attribution: ["SL-006"],
+    sl_delivery: ["SL-L"],
+  },
+  gates: {
+    "sl-g1": { afterStep: "sl_score", evaluators: ["SL-L"], maxIterations: 2, failReturnTo: "sl_score" },
+    "sl-g2": { afterStep: "sl_proposal", evaluators: ["SL-L", "XA-003"], maxIterations: 2, failReturnTo: "sl_proposal" },
+  },
+});
