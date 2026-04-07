@@ -137,6 +137,22 @@ export const MODEL_DEFAULTS: Record<string, string> = {
   "OP-L": "claude-sonnet-4",
   "OP-001": "gemini-2.5-flash",
   "OP-002": "gemini-2.5-flash",
+  // Brand Listener
+  "BL-L": "claude-sonnet-4",
+  "BL-001": "gemini-2.5-flash",
+  "BL-002": "gemini-2.5-flash",
+  // Culture Listener
+  "CL-L": "claude-sonnet-4",
+  "CL-001": "gemini-2.5-flash",
+  "CL-002": "gemini-2.5-flash",
+  // Industry Listener
+  "IL-L": "claude-sonnet-4",
+  "IL-001": "gemini-2.5-flash",
+  "IL-002": "gemini-2.5-flash",
+  // Competitive Listener
+  "CO-L": "claude-sonnet-4",
+  "CO-001": "gemini-2.5-flash",
+  "CO-002": "gemini-2.5-flash",
 };
 
 const DEFAULT_FALLBACK = "gemini-2.5-flash";

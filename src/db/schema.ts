@@ -117,6 +117,14 @@ export const artifactStepEnum = pgEnum("artifact_step", [
   "ch_request", "ch_analysis", "ch_specs", "ch_delivery",
   // Opportunity Agent (loop, not pipeline)
   "op_scan", "op_evaluate", "op_alert",
+  // Brand Listener
+  "bl_scan", "bl_analyze", "bl_report",
+  // Culture Listener
+  "cl_scan", "cl_analyze", "cl_report",
+  // Industry Listener
+  "il_scan", "il_analyze", "il_report",
+  // Competitive Listener
+  "co_scan", "co_analyze", "co_report",
   // Shared
   "model_config", "gate_review",
 ]);

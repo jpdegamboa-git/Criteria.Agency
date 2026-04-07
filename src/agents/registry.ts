@@ -302,4 +302,20 @@ export const AGENT_REGISTRY: Record<string, AgentRegistryEntry> = {
   "OP-L": { id: "OP-L", name: "Opportunity Director", skillFile: "agents/OP-L_opportunity_director.md", team: 27, level: "leader", steps: [], gates: [], autonomy: 70 },
   "OP-001": { id: "OP-001", name: "Signal Scanner", skillFile: "agents/OP-001_signal_scanner.md", team: 27, level: "sub", steps: [], gates: [], autonomy: 80 },
   "OP-002": { id: "OP-002", name: "Activation Planner", skillFile: "agents/OP-002_activation_planner.md", team: 27, level: "sub", steps: [], gates: [], autonomy: 75 },
+  // ── Brand Listener Motor (replaces LI-001 stub) ──
+  "BL-L": { id: "BL-L", name: "Brand Listener Director", skillFile: "agents/BL-L_brand_listener_director.md", team: 28, level: "leader", steps: [], gates: [], autonomy: 70 },
+  "BL-001": { id: "BL-001", name: "Mention Scanner", skillFile: "agents/BL-001_mention_scanner.md", team: 28, level: "sub", steps: [], gates: [], autonomy: 80 },
+  "BL-002": { id: "BL-002", name: "Sentiment Analyst", skillFile: "agents/BL-002_sentiment_analyst.md", team: 28, level: "sub", steps: [], gates: [], autonomy: 80 },
+  // ── Culture Listener Motor (replaces LI-002 stub) ──
+  "CL-L": { id: "CL-L", name: "Culture Listener Director", skillFile: "agents/CL-L_culture_listener_director.md", team: 29, level: "leader", steps: [], gates: [], autonomy: 70 },
+  "CL-001": { id: "CL-001", name: "Trend Scanner", skillFile: "agents/CL-001_trend_scanner.md", team: 29, level: "sub", steps: [], gates: [], autonomy: 80 },
+  "CL-002": { id: "CL-002", name: "Relevance Analyst", skillFile: "agents/CL-002_relevance_analyst.md", team: 29, level: "sub", steps: [], gates: [], autonomy: 75 },
+  // ── Industry Listener Motor (replaces LI-003 stub) ──
+  "IL-L": { id: "IL-L", name: "Industry Listener Director", skillFile: "agents/IL-L_industry_listener_director.md", team: 30, level: "leader", steps: [], gates: [], autonomy: 70 },
+  "IL-001": { id: "IL-001", name: "Industry Scanner", skillFile: "agents/IL-001_industry_scanner.md", team: 30, level: "sub", steps: [], gates: [], autonomy: 80 },
+  "IL-002": { id: "IL-002", name: "Impact Analyst", skillFile: "agents/IL-002_impact_analyst.md", team: 30, level: "sub", steps: [], gates: [], autonomy: 75 },
+  // ── Competitive Listener Motor (replaces LI-004 stub) ──
+  "CO-L": { id: "CO-L", name: "Competitive Listener Director", skillFile: "agents/CO-L_competitive_listener_director.md", team: 31, level: "leader", steps: [], gates: [], autonomy: 70 },
+  "CO-001": { id: "CO-001", name: "Competitor Scanner", skillFile: "agents/CO-001_competitor_scanner.md", team: 31, level: "sub", steps: [], gates: [], autonomy: 80 },
+  "CO-002": { id: "CO-002", name: "Gap Analyst", skillFile: "agents/CO-002_gap_analyst.md", team: 31, level: "sub", steps: [], gates: [], autonomy: 75 },
 };
