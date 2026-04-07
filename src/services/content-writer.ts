@@ -2,7 +2,7 @@ import fs from "fs/promises";
 import path from "path";
 import { db, schema } from "../db/index.js";
 import { eq } from "drizzle-orm";
-import { askClaude } from "./claude.js";
+import { generateText } from "../providers/generate-text.js";
 import { config } from "../shared/config.js";
 
 // ── Types ──
@@ -200,12 +200,7 @@ ${autoReview(output!, brief).issues.map((i) => `- ${i}`).join("\n")}
 
 Fix ALL issues and respond with the corrected JSON only.`;
 
-    const raw = await askClaude({
-      system: systemPrompt,
-      prompt: currentPrompt,
-      model: "claude-sonnet-4-20250514",
-      maxTokens: 4096,
-    });
+    const raw = await generateText("claude-sonnet-4", systemPrompt, currentPrompt, 4096);
 
     output = parseContentOutput(raw, brief);
 
@@ -265,12 +260,7 @@ Target word count: ${targetWords} words (must be within ±10%).
 Apply the feedback while maintaining brand voice and content rules.
 Respond with valid JSON only. No markdown fences, no explanation.`;
 
-  const raw = await askClaude({
-    system: systemPrompt,
-    prompt,
-    model: "claude-sonnet-4-20250514",
-    maxTokens: 4096,
-  });
+  const raw = await generateText("claude-sonnet-4", systemPrompt, prompt, 4096);
 
   return parseContentOutput(raw, brief as unknown as ContentBrief);
 }

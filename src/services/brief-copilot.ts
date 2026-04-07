@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import { db, schema } from "../db/index.js";
 import { eq } from "drizzle-orm";
-import { askClaude } from "./claude.js";
+import { generateText } from "../providers/generate-text.js";
 import { config } from "../shared/config.js";
 
 // ── Types ──
@@ -80,12 +80,7 @@ Produce a JSON object with these exact keys:
 
 Fill each field with the best information extracted from the answers. Use empty string for missing data.`;
 
-  const raw = await askClaude({
-    system,
-    prompt,
-    model: "claude-sonnet-4-20250514",
-    maxTokens: 1024,
-  });
+  const raw = await generateText("claude-sonnet-4", system, prompt, 1024);
 
   try {
     const cleaned = raw.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
@@ -173,12 +168,7 @@ CLIENT'S NEW MESSAGE:
 
 Respond with the JSON format specified in the skill file.`;
 
-  const raw = await askClaude({
-    system: SKILL_PROMPT,
-    prompt: conversationContext,
-    model: "claude-sonnet-4-20250514",
-    maxTokens: 1024,
-  });
+  const raw = await generateText("claude-sonnet-4", SKILL_PROMPT, conversationContext, 1024);
 
   // Parse Claude response
   let parsed: CopilotClaude;

@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { db, schema } from "../db/index.js";
-import { askClaude } from "./claude.js";
+import { generateText } from "../providers/generate-text.js";
 
 // ── Types ──
 
@@ -150,12 +150,7 @@ Respond with JSON:
   "type": "client" | "vendor" | "personal" | "bank" | "government" | "unknown"
 }`;
 
-      const raw = await askClaude({
-        system,
-        prompt,
-        model: "claude-haiku-4-20250414",
-        maxTokens: 256,
-      });
+      const raw = await generateText("claude-haiku-4", system, prompt, 256);
 
       const jsonMatch = raw.match(/\{[\s\S]*\}/);
       if (jsonMatch) {

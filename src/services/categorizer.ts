@@ -1,6 +1,6 @@
 import { db, schema } from "../db/index.js";
 import { eq, desc, isNotNull } from "drizzle-orm";
-import { askClaude } from "./claude.js";
+import { generateText } from "../providers/generate-text.js";
 
 // ── Types ──
 
@@ -213,12 +213,7 @@ ${examplesText}
 
 Respond ONLY with JSON.`;
 
-    const response = await askClaude({
-      system,
-      prompt,
-      model: "claude-haiku-4-20250414",
-      maxTokens: 256,
-    });
+    const response = await generateText("claude-haiku-4", system, prompt, 256);
 
     const parsed = JSON.parse(response);
 

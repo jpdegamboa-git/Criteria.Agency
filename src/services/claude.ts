@@ -1,3 +1,12 @@
+/**
+ * @deprecated This module creates a standalone Anthropic SDK client that bypasses
+ * the provider registry, rate limiting, and cost tracking.
+ * Use `generateText` from `../providers/generate-text.js` instead.
+ */
+
+// Re-export the canonical helper for backward compatibility.
+export { generateText } from "../providers/generate-text.js";
+
 import Anthropic from "@anthropic-ai/sdk";
 import { config } from "../shared/config.js";
 
