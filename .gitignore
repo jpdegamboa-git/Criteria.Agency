@@ -3,3 +3,4 @@ dist/
 storage/projects/
 .env
 .DS_Store
+.superpowers/
