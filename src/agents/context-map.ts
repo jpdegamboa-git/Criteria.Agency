@@ -368,6 +368,63 @@ export const AGENT_CONTEXT_MAP: Record<string, AgentContextEntry> = {
     taskInstruction:
       "Evaluate this gate. For G1 (post-moodboard): Does the visual direction align with Brand DNA? Is the Design System correctly applied? Is the copy direction clear? For G2 (post-production): Are pieces visually excellent? Is copy integrated well? Does it respect the Design System? For G3 (post-delivery): Are all formats present and correct? Score 1-10. Issue PASS or FAIL with notes.",
   },
+
+  // ── Writers Room Pipeline ──
+  "WR-L:wr_brief": { artifactSteps: [], attachmentTypes: ["json"], taskInstruction: "Interpret the copy brief. Decide mode: EXPRESS (1 piece, 1 channel, short format) or FULL (multiple pieces, campaign, long content). Assign specialist: WR-002 (av), WR-003 (digital), WR-004 (seo), WR-005 (brand), CW-001 (graphic). Define tone and creative direction. Output JSON: {mode, specialist, tone, direction, pieces: [{format, channel, maxLength}]}." },
+  "WR-001:wr_research": { artifactSteps: ["wr_brief"], attachmentTypes: ["text"], taskInstruction: "Research topic, audience, competition, keywords. Output: {topic_summary, audience_profile, competitor_messaging, keywords, content_angles, references}." },
+  "WR-002:wr_draft": { artifactSteps: ["wr_brief", "wr_research"], attachmentTypes: ["text", "image"], taskInstruction: "Write AV copy: scripts with timing marks, narrator direction, super text. 30s ≈ 75 words, 60s ≈ 150 words." },
+  "WR-003:wr_draft": { artifactSteps: ["wr_brief", "wr_research"], attachmentTypes: ["text", "image"], taskInstruction: "Write digital copy: ads, social posts, email, landing pages. Include A/B variants for subject lines and headlines." },
+  "WR-004:wr_draft": { artifactSteps: ["wr_brief", "wr_research"], attachmentTypes: ["text"], taskInstruction: "Write SEO content: articles, pillar pages. H1-H2-H3 structure, meta title <60 chars, meta description 120-160 chars, keyword optimization." },
+  "WR-005:wr_draft": { artifactSteps: ["wr_brief", "wr_research"], attachmentTypes: ["text", "image"], taskInstruction: "Write brand copy: taglines (3-8 words), manifestos (200-500 words), naming, claims. Provide 3-5 options with rationale." },
+  "CW-001:wr_draft": { artifactSteps: ["wr_brief", "wr_research"], attachmentTypes: ["text", "image"], taskInstruction: "Write short copy for graphic pieces: headlines (max 8 words), subheadlines (max 15), body (max 30), CTAs (max 5). Output JSON." },
+  "WR-L:wr_adaptation": { artifactSteps: ["wr_brief", "wr_draft"], attachmentTypes: ["text"], taskInstruction: "Adapt approved copy to additional channels. Adjust length, tone, format per channel specs." },
+  "WR-L:wr_delivery": { artifactSteps: ["wr_brief", "wr_draft", "wr_adaptation"], attachmentTypes: ["text"], taskInstruction: "Final review: tone matches Brand DNA, lengths respect specs, no errors. Compile deliverables." },
+
+  // ── Audio Pipeline ──
+  "AU-L:au_brief": { artifactSteps: [], attachmentTypes: ["json", "audio"], taskInstruction: "Interpret audio brief. Define type (podcast/jingle/voiceover/soundtrack/sonic_branding/sfx_pack/video_audio), sonic concept, agents needed. If parent is video, load script and storyboard." },
+  "AU-001:au_sound_design": { artifactSteps: ["au_brief"], attachmentTypes: ["audio", "text"], taskInstruction: "Design sound landscape: select/create SFX, foley, ambiences, transitions. Categorize: hits, whooshes, transitions, ambience, ui. Naming: {category}_{description}_{number}.wav." },
+  "AU-002:au_production": { artifactSteps: ["au_brief", "au_sound_design"], attachmentTypes: ["audio", "text"], taskInstruction: "Produce musical elements: composition, selection, arrangement. Deliver stems separated (melody, harmony, bass, drums, pads)." },
+  "AU-003:au_production": { artifactSteps: ["au_brief", "au_sound_design"], attachmentTypes: ["audio", "text"], taskInstruction: "Direct and generate voiceover: voice selection, TTS generation, pronunciation guide. Deliver VO as isolated track with cue sheet." },
+  "AU-004:au_mix_master": { artifactSteps: ["au_brief", "au_sound_design", "au_production"], attachmentTypes: ["audio"], taskInstruction: "Mix all elements (music, VO, SFX, ambience). Master per channel: broadcast -24 LUFS, streaming -14, web -16, social -14, event -20. Deliver WAV + MP3/AAC." },
+  "AU-L:au_delivery": { artifactSteps: ["au_brief", "au_mix_master"], attachmentTypes: ["audio", "text"], taskInstruction: "Final review: specs match requirements, quality professional, brand sonic identity respected. Compile deliverables with manifest." },
+
+  // ── Web Pipeline ──
+  "WB-L:wb_brief": { artifactSteps: [], attachmentTypes: ["json"], taskInstruction: "Interpret web brief. Select template: landing-page, landing-multi, microsite, corporate, blog. Define scope: pages, functionality, conversion goal." },
+  "WB-001:wb_architecture": { artifactSteps: ["wb_brief"], attachmentTypes: ["text", "json"], taskInstruction: "Design sitemap, navigation (primary 5-7 items max), content hierarchy per page. Map template components. Define form fields. Output JSON." },
+  "WB-002:wb_content": { artifactSteps: ["wb_brief", "wb_architecture"], attachmentTypes: ["text", "image", "json"], taskInstruction: "Compose content: map Writers Room copy to template slots, position Graphic Design images, configure CTAs. No empty slots." },
+  "WB-003:wb_seo": { artifactSteps: ["wb_brief", "wb_architecture", "wb_content"], attachmentTypes: ["text", "json"], taskInstruction: "Configure SEO: meta title <60 chars, meta description 120-160 chars, OG tags, JSON-LD schema, heading validation, alt text, sitemap.xml, robots.txt." },
+  "WB-005:wb_build": { artifactSteps: ["wb_content", "wb_seo"], attachmentTypes: ["text", "json"], taskInstruction: "Compile site from template + content + SEO. Optimize images (WebP, lazy loading). Configure CDN, analytics (GA4, GTM), form submissions." },
+  "WB-004:wb_qa": { artifactSteps: ["wb_build"], attachmentTypes: ["text"], taskInstruction: "Validate: responsive (375/768/1280px), accessibility WCAG 2.1 AA (contrast 4.5:1, alt text, keyboard nav, 44x44 touch), Core Web Vitals (LCP <2.5s, FID <100ms, CLS <0.1), links, forms." },
+  "WB-L:wb_delivery": { artifactSteps: ["wb_qa"], attachmentTypes: ["text"], taskInstruction: "Final review before deploy. Verify QA clean, content correct, Brand DNA respected. Prepare deploy package." },
+
+  // ── Marketplace Pipeline ──
+  "MK-L:mk_request": { artifactSteps: [], attachmentTypes: ["json"], taskInstruction: "Interpret procurement need. Define: category, services, budget range, location, deadline, minimum vendors, scoring weights." },
+  "MK-001:mk_search": { artifactSteps: ["mk_request"], attachmentTypes: ["json"], taskInstruction: "Search vendor registry by category/services. Rank by rating, total_jobs, price_range, location. Return minimum N vendors." },
+  "MK-001:mk_quote": { artifactSteps: ["mk_request", "mk_search"], attachmentTypes: ["json"], taskInstruction: "Request and compile quotes: amount, currency, delivery days, specs, payment terms, valid_until." },
+  "MK-002:mk_compare": { artifactSteps: ["mk_request", "mk_search", "mk_quote"], attachmentTypes: ["json"], taskInstruction: "Normalize quotes, score: price (0-100), quality (rating), timeliness (delivery days), reliability (history). Apply weights. Rank and recommend." },
+  "MK-003:mk_contract": { artifactSteps: ["mk_request", "mk_compare"], attachmentTypes: ["json", "text"], taskInstruction: "Generate work order: specs, quantities, timeline, payment terms, acceptance criteria." },
+  "MK-003:mk_tracking": { artifactSteps: ["mk_contract"], attachmentTypes: ["text"], taskInstruction: "Track milestones: order confirmed → production started → proof ready → complete → shipped → delivered. Flag delays." },
+  "MK-L:mk_delivery": { artifactSteps: ["mk_request", "mk_contract", "mk_tracking"], attachmentTypes: ["text"], taskInstruction: "Verify delivery, confirm quality, generate vendor review scores." },
+
+  // ── Print Production Pipeline ──
+  "PP-L:pp_brief": { artifactSteps: [], attachmentTypes: ["image", "json"], taskInstruction: "Interpret print brief: piece type, quantity, paper, finishing, color mode, bleed, resolution. Input includes artes from Graphic Design." },
+  "PP-001:pp_prepress": { artifactSteps: ["pp_brief"], attachmentTypes: ["image"], taskInstruction: "Prepare files: RGB→CMYK, verify 300 DPI (150 large format), add 3mm bleed (5mm large), verify 5mm safe zone, outline typography, check overprint, rich black C40M40Y40K100. Run preflight." },
+  "PP-002:pp_vendor_request": { artifactSteps: ["pp_brief", "pp_prepress"], attachmentTypes: ["text", "json"], taskInstruction: "Define print specs for quoting: paper type/weight, finishing, quantity, packaging. Create Marketplace request category='imprenta'." },
+  "PP-003:pp_quality_check": { artifactSteps: ["pp_brief", "pp_prepress"], attachmentTypes: ["image", "text"], taskInstruction: "Inspect delivery: color accuracy (Delta E <3), cut precision, finishing quality, quantity. Output quality report with pass/fail." },
+  "PP-L:pp_delivery": { artifactSteps: ["pp_quality_check"], attachmentTypes: ["text"], taskInstruction: "Final approval. Review quality report. Accept, request reprint, or escalate." },
+
+  // ── Events Pipeline ──
+  "EV-L:ev_brief": { artifactSteps: [], attachmentTypes: ["json"], taskInstruction: "Interpret event brief: type (webinar/workshop/launch/conference/activation/gala/expo), format (virtual/presencial/hybrid), scale, objectives, KPIs, budget." },
+  "EV-L:ev_concept": { artifactSteps: ["ev_brief"], attachmentTypes: ["text"], taskInstruction: "Design concept: theme, agenda structure, experience flow, differentiators, atmosphere. For virtual: platform, engagement features." },
+  "EV-001:ev_planning": { artifactSteps: ["ev_brief", "ev_concept"], attachmentTypes: ["text", "json"], taskInstruction: "Detailed plan: timeline, checklist with owners/deadlines, budget by category, venue layout with zones, capacity planning, attendee flow map." },
+  "EV-002:ev_vendor_setup": { artifactSteps: ["ev_planning"], attachmentTypes: ["text", "json"], taskInstruction: "Create Marketplace requests per vendor category: venue, catering, A/V, entertainment, MC, decoration, furniture, photography, logistics." },
+  "EV-003:ev_pre_event": { artifactSteps: ["ev_planning", "ev_vendor_setup"], attachmentTypes: ["text", "image", "json"], taskInstruction: "Coordinate content: WR (scripts, copy), GD (visuals, signage), Print (badges, program), Audio (sound design), Email (invitations, reminders), CM (teasers)." },
+  "EV-005:ev_pre_event": { artifactSteps: ["ev_planning"], attachmentTypes: ["text", "json"], taskInstruction: "Guest management: curate list, RSVP tracking, confirmations, +1s, dietary restrictions, QR check-in prep, seating chart, reminders." },
+  "EV-003:ev_live_event": { artifactSteps: ["ev_pre_event"], attachmentTypes: ["text", "image"], taskInstruction: "Coordinate live coverage: Video (recording/streaming), CM (real-time posts, stories, hashtag monitoring)." },
+  "EV-005:ev_live_event": { artifactSteps: ["ev_pre_event"], attachmentTypes: ["text"], taskInstruction: "On-site operations: check-in (QR scan), real-time attendance, walk-ins, seating changes, issue resolution." },
+  "EV-003:ev_post_event": { artifactSteps: ["ev_live_event"], attachmentTypes: ["text", "image", "video"], taskInstruction: "Follow-up: Email (thank you, survey), CM (recap, gallery), Video (recap 1-3min), WR (blog recap, press release)." },
+  "EV-004:ev_post_event": { artifactSteps: ["ev_live_event"], attachmentTypes: ["text", "json"], taskInstruction: "Measure: attendance vs target, leads, social engagement, ROI, NPS. Generate report with insights and recommendations." },
+  "EV-L:ev_delivery": { artifactSteps: ["ev_post_event"], attachmentTypes: ["text", "json"], taskInstruction: "Close event: review report, validate follow-up complete, submit vendor reviews, document learnings." },
 };
 
 // ── Agent Output Types ─────────────────────────────────────────
@@ -440,4 +497,17 @@ export const AGENT_OUTPUT_TYPES: Record<
   "GD-003:adaptation": "image",
   "GD-003:delivery": "text",
   "GD-L:gate": "text",
+
+  // Writers Room
+  "WR-L:wr_brief": "text", "WR-001:wr_research": "text", "WR-002:wr_draft": "text", "WR-003:wr_draft": "text", "WR-004:wr_draft": "text", "WR-005:wr_draft": "text", "CW-001:wr_draft": "text", "WR-L:wr_adaptation": "text", "WR-L:wr_delivery": "text",
+  // Audio
+  "AU-L:au_brief": "text", "AU-001:au_sound_design": "audio", "AU-002:au_production": "audio", "AU-003:au_production": "audio", "AU-004:au_mix_master": "audio", "AU-L:au_delivery": "audio",
+  // Web
+  "WB-L:wb_brief": "text", "WB-001:wb_architecture": "text", "WB-002:wb_content": "text", "WB-003:wb_seo": "text", "WB-005:wb_build": "text", "WB-004:wb_qa": "text", "WB-L:wb_delivery": "text",
+  // Marketplace
+  "MK-L:mk_request": "text", "MK-001:mk_search": "text", "MK-001:mk_quote": "text", "MK-002:mk_compare": "text", "MK-003:mk_contract": "text", "MK-003:mk_tracking": "text", "MK-L:mk_delivery": "text",
+  // Print Production
+  "PP-L:pp_brief": "text", "PP-001:pp_prepress": "text", "PP-002:pp_vendor_request": "text", "PP-003:pp_quality_check": "text", "PP-L:pp_delivery": "text",
+  // Events
+  "EV-L:ev_brief": "text", "EV-L:ev_concept": "text", "EV-001:ev_planning": "text", "EV-002:ev_vendor_setup": "text", "EV-003:ev_pre_event": "text", "EV-005:ev_pre_event": "text", "EV-003:ev_live_event": "text", "EV-005:ev_live_event": "text", "EV-003:ev_post_event": "text", "EV-004:ev_post_event": "text", "EV-L:ev_delivery": "text",
 };
