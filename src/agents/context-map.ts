@@ -507,6 +507,15 @@ export const AGENT_CONTEXT_MAP: Record<string, AgentContextEntry> = {
   "SL-L:sl_close": { artifactSteps: ["sl_negotiate"], attachmentTypes: ["text", "json"], taskInstruction: "Close deal: won (value, date, terms) or lost (reason: price/timing/competition/need/other). Update lead and deal status. Output: {outcome, value_if_won, reason_if_lost, close_date}." },
   "SL-006:sl_attribution": { artifactSteps: ["sl_capture", "sl_close"], attachmentTypes: ["text", "json"], taskInstruction: "Attribute closed deal to origin: channel, campaign, content. Models: first-touch, last-touch, linear. Output: {attribution: {first_touch, last_touch, linear}}." },
   "SL-L:sl_delivery": { artifactSteps: ["sl_close", "sl_attribution"], attachmentTypes: ["text", "json"], taskInstruction: "Generate deal close report: outcome, value, attribution, time-to-close, lessons learned. Update pipeline metrics." },
+
+  // ── Analytics Pipeline ──
+  "AN-L:an_request": { artifactSteps: [], attachmentTypes: ["json"], taskInstruction: "Interpret analytics request: type (dashboard/report/query), period, metrics, comparison period. Output JSON." },
+  "AN-001:an_collect": { artifactSteps: ["an_request"], attachmentTypes: ["json"], taskInstruction: "Collect data from all motors: Ads (spend, clicks, conversions), CM (engagement, reach), Email (opens, clicks), SEO (rankings, traffic), Sales (leads, deals, revenue). Normalize into unified dataset." },
+  "AN-002:an_analyze": { artifactSteps: ["an_request", "an_collect"], attachmentTypes: ["json"], taskInstruction: "Calculate metrics: CAC (spend/customers), LTV (avg revenue × retention), ROAS per channel, funnel rates (lead→MQL→SQL→customer), attribution (first/last/linear). Flag anomalies (>20% change). Output structured metrics." },
+  "AN-005:an_analyze": { artifactSteps: ["an_request", "an_collect"], attachmentTypes: ["json", "text"], taskInstruction: "Answer natural language question using collected data. Translate to data query, execute, format response in conversational Spanish with supporting numbers. Output: {question, answer, supporting_data}." },
+  "AN-003:an_visualize": { artifactSteps: ["an_request", "an_analyze"], attachmentTypes: ["json"], taskInstruction: "Generate dashboard data: KPI cards (metric, value, trend, target), charts (line trends, bar comparisons, funnel), tables (channel comparison). Output structured JSON for frontend." },
+  "AN-004:an_visualize": { artifactSteps: ["an_request", "an_analyze"], attachmentTypes: ["json"], taskInstruction: "Generate report with narrative in Spanish: executive summary (3-5 sentences), metric sections with explanations, anomaly highlights, actionable recommendations (3-5). Output markdown." },
+  "AN-L:an_deliver": { artifactSteps: ["an_visualize"], attachmentTypes: ["text", "json"], taskInstruction: "Final review: verify metrics accuracy, narrative clarity, recommendations quality. Compile and deliver." },
 };
 
 // ── Agent Output Types ─────────────────────────────────────────
@@ -614,4 +623,6 @@ export const AGENT_OUTPUT_TYPES: Record<
   "CO-001:co_scan": "text", "CO-002:co_analyze": "text", "CO-L:co_report": "text",
   // Sales/CRM
   "SL-001:sl_capture": "text", "SL-002:sl_enrich": "text", "SL-003:sl_score": "text", "SL-004:sl_nurture": "text", "SL-005:sl_proposal": "text", "SL-L:sl_negotiate": "text", "SL-L:sl_close": "text", "SL-006:sl_attribution": "text", "SL-L:sl_delivery": "text",
+  // Analytics
+  "AN-L:an_request": "text", "AN-001:an_collect": "text", "AN-002:an_analyze": "text", "AN-005:an_analyze": "text", "AN-003:an_visualize": "text", "AN-004:an_visualize": "text", "AN-L:an_deliver": "text",
 };

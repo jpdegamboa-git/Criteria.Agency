@@ -399,3 +399,19 @@ PipelineRegistry.register({
     "sl-g2": { afterStep: "sl_proposal", evaluators: ["SL-L", "XA-003"], maxIterations: 2, failReturnTo: "sl_proposal" },
   },
 });
+
+// ── Analytics Pipeline ──
+PipelineRegistry.register({
+  type: "analytics",
+  steps: ["an_request", "an_collect", "an_analyze", "an_visualize", "an_deliver"],
+  stepAgents: {
+    an_request: ["AN-L"],
+    an_collect: ["AN-001"],
+    an_analyze: ["AN-002", "AN-005"],
+    an_visualize: ["AN-003", "AN-004"],
+    an_deliver: ["AN-L"],
+  },
+  gates: {
+    "an-g1": { afterStep: "an_analyze", evaluators: ["AN-L"], maxIterations: 2, failReturnTo: "an_collect" },
+  },
+});
