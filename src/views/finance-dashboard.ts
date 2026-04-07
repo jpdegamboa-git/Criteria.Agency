@@ -25,26 +25,12 @@ export async function renderFinanceDashboard(): Promise<string> {
       </div>
 
       <!-- KPI Cards -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <div class="bg-criteria-gray border border-criteria-border rounded-xl p-5">
-          <p class="text-criteria-muted text-sm mb-1">Ingresos</p>
-          <p id="kpiIncome" class="text-2xl font-bold text-green-400">$0.00</p>
-          <span id="kpiIncomeChange" class="inline-block mt-2 text-xs font-medium px-2 py-0.5 rounded-full bg-green-400/10 text-green-400">0%</span>
-        </div>
-        <div class="bg-criteria-gray border border-criteria-border rounded-xl p-5">
-          <p class="text-criteria-muted text-sm mb-1">Gastos</p>
-          <p id="kpiExpenses" class="text-2xl font-bold text-red-400">$0.00</p>
-          <span id="kpiExpensesChange" class="inline-block mt-2 text-xs font-medium px-2 py-0.5 rounded-full bg-red-400/10 text-red-400">0%</span>
-        </div>
-        <div class="bg-criteria-gray border border-criteria-border rounded-xl p-5">
-          <p class="text-criteria-muted text-sm mb-1">Balance</p>
-          <p id="kpiBalance" class="text-2xl font-bold text-criteria-white">$0.00</p>
-          <span id="kpiBalanceChange" class="inline-block mt-2 text-xs font-medium px-2 py-0.5 rounded-full bg-criteria-border text-criteria-light">0%</span>
-        </div>
-        <div class="bg-criteria-gray border border-criteria-border rounded-xl p-5">
-          <p class="text-criteria-muted text-sm mb-1">Por cobrar</p>
-          <p id="kpiReceivable" class="text-2xl font-bold text-amber-400">$0.00</p>
-        </div>
+      <div id="kpiCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <!-- Skeleton placeholders shown while loading -->
+        <div class="animate-pulse bg-criteria-gray border border-criteria-border rounded-xl p-5 h-24"></div>
+        <div class="animate-pulse bg-criteria-gray border border-criteria-border rounded-xl p-5 h-24"></div>
+        <div class="animate-pulse bg-criteria-gray border border-criteria-border rounded-xl p-5 h-24"></div>
+        <div class="animate-pulse bg-criteria-gray border border-criteria-border rounded-xl p-5 h-24"></div>
       </div>
 
       <!-- Cash Flow Chart -->
@@ -136,19 +122,43 @@ export async function renderFinanceDashboard(): Promise<string> {
 
         var cashFlowChartInstance = null;
 
+        function makeKpiCard(label, valueText, valueClass, changeText, changeBgClass, changeTextClass) {
+          var card = document.createElement('div');
+          card.className = 'bg-criteria-gray border border-criteria-border rounded-xl p-5';
+          var lbl = document.createElement('p');
+          lbl.className = 'text-criteria-muted text-sm mb-1';
+          lbl.textContent = label;
+          var val = document.createElement('p');
+          val.className = 'text-2xl font-bold ' + valueClass;
+          val.textContent = valueText;
+          card.appendChild(lbl);
+          card.appendChild(val);
+          if (changeText) {
+            var badge = document.createElement('span');
+            badge.className = 'inline-block mt-2 text-xs font-medium px-2 py-0.5 rounded-full ' + changeBgClass + ' ' + changeTextClass;
+            badge.textContent = changeText;
+            card.appendChild(badge);
+          }
+          return card;
+        }
+
+        function renderKpiCards(d) {
+          var container = document.getElementById('kpiCards');
+          while (container.firstChild) container.removeChild(container.firstChild);
+          var incomeChange = d.changes ? changeBadge(d.changes.income) : null;
+          var expensesChange = d.changes ? changeBadge(d.changes.expenses) : null;
+          var balanceChange = d.changes ? changeBadge(d.changes.balance) : null;
+          container.appendChild(makeKpiCard('Ingresos', fmt(d.income), 'text-green-400', incomeChange, 'bg-green-400/10', 'text-green-400'));
+          container.appendChild(makeKpiCard('Gastos', fmt(d.expenses), 'text-red-400', expensesChange, 'bg-red-400/10', 'text-red-400'));
+          container.appendChild(makeKpiCard('Balance', fmt(d.balance), 'text-criteria-white', balanceChange, 'bg-criteria-border', 'text-criteria-light'));
+          container.appendChild(makeKpiCard('Por cobrar', fmt(d.receivable), 'text-amber-400', null, '', ''));
+        }
+
         async function loadSummary() {
           try {
             var res = await fetch('/api/finances/summary?period=' + periodParam());
             var d = await res.json();
-            document.getElementById('kpiIncome').textContent = fmt(d.income);
-            document.getElementById('kpiExpenses').textContent = fmt(d.expenses);
-            document.getElementById('kpiBalance').textContent = fmt(d.balance);
-            document.getElementById('kpiReceivable').textContent = fmt(d.receivable);
-            if (d.changes) {
-              document.getElementById('kpiIncomeChange').textContent = changeBadge(d.changes.income);
-              document.getElementById('kpiExpensesChange').textContent = changeBadge(d.changes.expenses);
-              document.getElementById('kpiBalanceChange').textContent = changeBadge(d.changes.balance);
-            }
+            renderKpiCards(d);
           } catch(e) { console.error('summary fetch error', e); }
         }
 
@@ -213,6 +223,8 @@ export async function renderFinanceDashboard(): Promise<string> {
         }
 
         async function loadTopEntities() {
+          showTableSkeleton('topVendorsBody', 3);
+          showTableSkeleton('topClientsBody', 3);
           try {
             var res = await fetch('/api/finances/top-entities?period=' + periodParam());
             var d = await res.json();
@@ -271,7 +283,28 @@ export async function renderFinanceDashboard(): Promise<string> {
           } catch(e) { console.error('top-entities fetch error', e); }
         }
 
+        function showTableSkeleton(tbodyId, cols) {
+          var tbody = document.getElementById(tbodyId);
+          if (!tbody) return;
+          tbody.textContent = '';
+          for (var s = 0; s < 5; s++) {
+            var tr = document.createElement('tr');
+            tr.className = 'animate-pulse border-b border-criteria-border';
+            for (var c = 0; c < cols; c++) {
+              var td = document.createElement('td');
+              td.className = 'py-3 px-2';
+              var div = document.createElement('div');
+              div.className = 'h-4 bg-criteria-gray rounded';
+              div.style.width = (c === 0 ? '96px' : c === 1 ? '128px' : '64px');
+              td.appendChild(div);
+              tr.appendChild(td);
+            }
+            tbody.appendChild(tr);
+          }
+        }
+
         async function loadTransactions() {
+          showTableSkeleton('recentTxnsBody', 4);
           try {
             var res = await fetch('/api/transactions?limit=10');
             var d = await res.json();

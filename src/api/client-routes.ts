@@ -5,6 +5,7 @@ import { renderClientDashboard } from "../views/client-dashboard.js";
 import { renderProjectList } from "../views/project-list.js";
 import { renderProjectDetail } from "../views/project-detail.js";
 import { renderCopilotChat } from "../views/copilot-chat.js";
+import { renderOnboarding } from "../views/onboarding.js";
 
 export const clientRoutes = new Hono();
 
@@ -122,4 +123,9 @@ clientRoutes.get("/app/projects/:id", async (c) => {
 // GET /app/copilot
 clientRoutes.get("/app/copilot", (c) => {
   return c.html(renderCopilotChat());
+});
+
+// GET /app/onboarding
+clientRoutes.get("/app/onboarding", (c) => {
+  return c.html(renderOnboarding());
 });

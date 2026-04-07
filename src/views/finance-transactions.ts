@@ -117,7 +117,27 @@ export async function renderFinanceTransactions(): Promise<string> {
           return div.innerHTML;
         }
 
+        function showShimmerRows() {
+          tbody.textContent = "";
+          for (var s = 0; s < 8; s++) {
+            var tr = document.createElement("tr");
+            tr.className = "animate-pulse border-b border-criteria-border";
+            var widths = ["80px", "128px", "160px", "96px", "80px", "72px"];
+            widths.forEach(function(w) {
+              var td = document.createElement("td");
+              td.className = "px-4 py-3";
+              var div = document.createElement("div");
+              div.className = "h-4 bg-criteria-gray rounded";
+              div.style.width = w;
+              td.appendChild(div);
+              tr.appendChild(td);
+            });
+            tbody.appendChild(tr);
+          }
+        }
+
         async function loadTransactions() {
+          showShimmerRows();
           try {
             var res = await fetch("/api/transactions?" + buildQuery());
             var json = await res.json();

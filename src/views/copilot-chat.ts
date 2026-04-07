@@ -132,12 +132,17 @@ export function renderCopilotChat(): string {
       document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
     }
 
+    var typingTimer = null;
+
     function appendTypingIndicator() {
       var inner = document.getElementById('messagesInner');
       var wrapper = document.createElement('div');
       wrapper.className = 'flex gap-3';
       wrapper.id = 'typingIndicator';
       wrapper.appendChild(makeAvatarEl());
+
+      var msgWrap = document.createElement('div');
+      msgWrap.className = 'flex-1 max-w-lg';
 
       var bubble = document.createElement('div');
       bubble.className = 'bg-criteria-gray border border-criteria-border rounded-2xl rounded-tl-sm px-4 py-3';
@@ -152,12 +157,33 @@ export function renderCopilotChat(): string {
       });
 
       bubble.appendChild(dots);
-      wrapper.appendChild(bubble);
+
+      // Slow-response hint shown after 8 seconds
+      var hint = document.createElement('p');
+      hint.id = 'typingHint';
+      hint.className = 'text-criteria-muted text-xs mt-2 hidden';
+      hint.textContent = 'Analizando tu consulta, esto puede tomar unos segundos...';
+      bubble.appendChild(hint);
+
+      msgWrap.appendChild(bubble);
+      var label = document.createElement('p');
+      label.className = 'text-criteria-muted text-xs mt-1 ml-2';
+      label.textContent = 'Copilot';
+      msgWrap.appendChild(label);
+
+      wrapper.appendChild(msgWrap);
       inner.appendChild(wrapper);
       document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+
+      // Show hint after 8s if still waiting
+      typingTimer = setTimeout(function() {
+        var h = document.getElementById('typingHint');
+        if (h) h.classList.remove('hidden');
+      }, 8000);
     }
 
     function removeTypingIndicator() {
+      if (typingTimer) { clearTimeout(typingTimer); typingTimer = null; }
       var el = document.getElementById('typingIndicator');
       if (el) el.remove();
     }
