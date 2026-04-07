@@ -11,17 +11,47 @@ export const PROJECT_TYPES = [
 export type ProjectType = (typeof PROJECT_TYPES)[number];
 
 export const PROJECT_STATUSES = [
-  "brief",
-  "concept",
-  "script",
-  "visual_look",
-  "storyboard",
-  "video_gen",
-  "edit",
-  "audio",
-  "polish",
-  "delivered",
-  "paused",
+  // Video production
+  "brief", "concept", "script", "visual_look", "storyboard",
+  "video_gen", "edit", "audio", "polish",
+  // Brand builder
+  "discovery", "research", "positioning", "identity", "brand_dna",
+  // Strategist
+  "diagnostic", "objectives", "audiences", "value_prop", "media_plan", "budget", "briefs",
+  // Graphic design
+  "design_system", "moodboard", "production", "adaptation",
+  // Writers Room
+  "wr_brief", "wr_research", "wr_draft", "wr_adaptation", "wr_delivery",
+  // Audio
+  "au_brief", "au_sound_design", "au_production", "au_mix_master", "au_delivery",
+  // Web
+  "wb_brief", "wb_architecture", "wb_content", "wb_seo", "wb_build", "wb_qa", "wb_delivery",
+  // Marketplace
+  "mk_request", "mk_search", "mk_quote", "mk_compare", "mk_contract", "mk_tracking", "mk_delivery",
+  // Print Production
+  "pp_brief", "pp_prepress", "pp_vendor_request", "pp_production_tracking", "pp_quality_check", "pp_delivery",
+  // Events
+  "ev_brief", "ev_concept", "ev_planning", "ev_vendor_setup", "ev_pre_event", "ev_live_event", "ev_post_event", "ev_delivery",
+  // Ads
+  "ad_brief", "ad_strategy", "ad_creative", "ad_targeting", "ad_launch_kit", "ad_delivery",
+  // Community Management
+  "cm_brief", "cm_calendar", "cm_content_production", "cm_scheduling", "cm_monitoring", "cm_reporting", "cm_delivery",
+  // Email Marketing
+  "em_brief", "em_strategy", "em_production", "em_segmentation", "em_send", "em_analysis", "em_delivery",
+  // SEO/Content
+  "se_brief", "se_audit", "se_keyword_strategy", "se_content_plan", "se_optimization", "se_reporting", "se_delivery",
+  // Channel Manager
+  "ch_request", "ch_analysis", "ch_specs", "ch_delivery",
+  // Sales/CRM
+  "sl_capture", "sl_enrich", "sl_score", "sl_nurture", "sl_proposal", "sl_negotiate", "sl_close", "sl_attribution", "sl_delivery",
+  // Financial
+  "fn_request", "fn_budget", "fn_tracking", "fn_pl", "fn_deliver",
+  // Analytics
+  "an_request", "an_collect", "an_analyze", "an_visualize", "an_deliver",
+  // Security
+  "sec_audit", "sec_scan", "sec_remediate", "sec_report", "sec_deliver",
+  // Shared terminal statuses
+  "delivered", "paused",
 ] as const;
 export type ProjectStatus = (typeof PROJECT_STATUSES)[number];
 
@@ -32,18 +62,47 @@ export const GATE_DECISIONS = ["pass", "fail"] as const;
 export type GateDecision = (typeof GATE_DECISIONS)[number];
 
 export const ARTIFACT_STEPS = [
-  "brief",
-  "concept",
-  "script",
-  "visual_look",
-  "storyboard",
-  "video_gen",
-  "edit",
-  "audio",
-  "polish",
-  "delivery",
-  "model_config",
-  "gate_review",
+  // Video production
+  "brief", "concept", "script", "visual_look", "storyboard",
+  "video_gen", "edit", "audio", "polish", "delivery",
+  // Brand builder
+  "discovery", "research", "positioning", "identity", "brand_dna",
+  // Strategist
+  "diagnostic", "objectives", "audiences", "value_prop", "media_plan", "budget", "briefs",
+  // Graphic design
+  "design_system", "moodboard", "production", "adaptation",
+  // Writers Room
+  "wr_brief", "wr_research", "wr_draft", "wr_adaptation", "wr_delivery",
+  // Audio
+  "au_brief", "au_sound_design", "au_production", "au_mix_master", "au_delivery",
+  // Web
+  "wb_brief", "wb_architecture", "wb_content", "wb_seo", "wb_build", "wb_qa", "wb_delivery",
+  // Marketplace
+  "mk_request", "mk_search", "mk_quote", "mk_compare", "mk_contract", "mk_tracking", "mk_delivery",
+  // Print Production
+  "pp_brief", "pp_prepress", "pp_vendor_request", "pp_production_tracking", "pp_quality_check", "pp_delivery",
+  // Events
+  "ev_brief", "ev_concept", "ev_planning", "ev_vendor_setup", "ev_pre_event", "ev_live_event", "ev_post_event", "ev_delivery",
+  // Ads
+  "ad_brief", "ad_strategy", "ad_creative", "ad_targeting", "ad_launch_kit", "ad_delivery",
+  // Community Management
+  "cm_brief", "cm_calendar", "cm_content_production", "cm_scheduling", "cm_monitoring", "cm_reporting", "cm_delivery",
+  // Email Marketing
+  "em_brief", "em_strategy", "em_production", "em_segmentation", "em_send", "em_analysis", "em_delivery",
+  // SEO/Content
+  "se_brief", "se_audit", "se_keyword_strategy", "se_content_plan", "se_optimization", "se_reporting", "se_delivery",
+  // Channel Manager
+  "ch_request", "ch_analysis", "ch_specs", "ch_delivery",
+  // Sales/CRM
+  "sl_capture", "sl_enrich", "sl_score", "sl_nurture", "sl_proposal", "sl_negotiate", "sl_close", "sl_attribution", "sl_delivery",
+  // Financial
+  "fn_request", "fn_budget", "fn_tracking", "fn_pl", "fn_deliver",
+  // Analytics
+  "an_request", "an_collect", "an_analyze", "an_visualize", "an_deliver",
+  // Security
+  "sec_audit", "sec_scan", "sec_remediate", "sec_report", "sec_deliver",
+  // Shared
+  "model_config", "gate_review",
 ] as const;
 export type ArtifactStep = (typeof ARTIFACT_STEPS)[number];
 
@@ -74,9 +133,9 @@ export const TASK_TYPES = [
 ] as const;
 export type TaskType = (typeof TASK_TYPES)[number];
 
-// ── Pipeline flow ──
+// ── Pipeline flow (video-production — legacy constants kept for compatibility) ──
 
-/** Ordered pipeline steps (excluding gates and paused) */
+/** Ordered video-production pipeline steps (legacy). Use PipelineRegistry for other pipelines. */
 export const PIPELINE_FLOW: ProjectStatus[] = [
   "brief",
   "concept",
@@ -90,7 +149,7 @@ export const PIPELINE_FLOW: ProjectStatus[] = [
   "delivered",
 ];
 
-/** Which gate follows which step (if any) */
+/** Video-production gate map (legacy). Use PipelineRegistry for other pipelines. */
 export const STEP_GATE_MAP: Partial<Record<ProjectStatus, GateType>> = {
   concept: "g1",
   script: "g2",
@@ -99,7 +158,7 @@ export const STEP_GATE_MAP: Partial<Record<ProjectStatus, GateType>> = {
   polish: "g5",
 };
 
-/** Gate failure: which step to return to */
+/** Video-production gate failure return steps (legacy). */
 export const GATE_FAIL_RETURN: Record<GateType, ProjectStatus> = {
   g1: "concept",
   g2: "script",
@@ -108,7 +167,7 @@ export const GATE_FAIL_RETURN: Record<GateType, ProjectStatus> = {
   g5: "polish",
 };
 
-/** Max iterations per gate before escalation */
+/** Video-production max gate iterations (legacy). */
 export const GATE_MAX_ITERATIONS: Record<GateType, number> = {
   g1: 3,
   g2: 3,
@@ -128,7 +187,8 @@ export interface AgentRegistryEntry {
   team: number;
   level: AgentLevel;
   steps: ArtifactStep[];
-  gates: GateType[];
+  /** Gate names this agent evaluates (any pipeline gate string, e.g. "g1", "bb-g1", "st-g2") */
+  gates: string[];
   autonomy: number;
 }
 
