@@ -104,6 +104,39 @@ export const MODEL_DEFAULTS: Record<string, string> = {
   "EV-003": "gemini-2.5-flash",
   "EV-004": "gemini-2.5-flash",
   "EV-005": "gemini-2.5-flash",
+  // Ads Motor
+  "AD-L": "claude-sonnet-4",
+  "AD-001": "gemini-2.5-flash",
+  "AD-002": "gemini-2.5-flash",
+  "AD-003": "gemini-2.5-flash",
+  "AD-004": "gemini-2.5-flash",
+  // Community Management
+  "CM-L": "claude-sonnet-4",
+  "CM-001": "gemini-2.5-flash",
+  "CM-002": "gemini-2.5-flash",
+  "CM-003": "gemini-2.5-flash",
+  "CM-004": "gemini-2.5-flash",
+  // Email Marketing
+  "EM-L": "claude-sonnet-4",
+  "EM-001": "gemini-2.5-flash",
+  "EM-002": "gemini-2.5-flash",
+  "EM-003": "gemini-2.5-flash",
+  "EM-004": "gemini-2.5-flash",
+  // SEO/Content
+  "SE-L": "claude-sonnet-4",
+  "SE-001": "gemini-2.5-flash",
+  "SE-002": "gemini-2.5-flash",
+  "SE-003": "gemini-2.5-flash",
+  "SE-004": "gemini-2.5-flash",
+  // Channel Manager
+  "CH-L": "claude-sonnet-4",
+  "CH-001": "gemini-2.5-flash",
+  "CH-002": "gemini-2.5-flash",
+  "CH-003": "gemini-2.5-flash",
+  // Opportunity Agent
+  "OP-L": "claude-sonnet-4",
+  "OP-001": "gemini-2.5-flash",
+  "OP-002": "gemini-2.5-flash",
 };
 
 const DEFAULT_FALLBACK = "gemini-2.5-flash";
