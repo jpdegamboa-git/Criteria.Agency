@@ -33,6 +33,18 @@ export const projectStatusEnum = pgEnum("project_status", [
   "diagnostic", "objectives", "audiences", "value_prop", "media_plan", "budget", "briefs",
   // Graphic design
   "design_system", "moodboard", "production", "adaptation",
+  // Writers Room
+  "wr_brief", "wr_research", "wr_draft", "wr_adaptation", "wr_delivery",
+  // Audio
+  "au_brief", "au_sound_design", "au_production", "au_mix_master", "au_delivery",
+  // Web
+  "wb_brief", "wb_architecture", "wb_content", "wb_seo", "wb_build", "wb_qa", "wb_delivery",
+  // Marketplace
+  "mk_request", "mk_search", "mk_quote", "mk_compare", "mk_contract", "mk_tracking", "mk_delivery",
+  // Print Production
+  "pp_brief", "pp_prepress", "pp_vendor_request", "pp_production_tracking", "pp_quality_check", "pp_delivery",
+  // Events
+  "ev_brief", "ev_concept", "ev_planning", "ev_vendor_setup", "ev_pre_event", "ev_live_event", "ev_post_event", "ev_delivery",
   // Shared
   "delivered", "paused",
 ]);
@@ -46,6 +58,12 @@ export const gateTypeEnum = pgEnum("gate_type", [
   "gd-g1",
   "gd-g2",
   "gd-g3",
+  "wr-g1", "wr-g2",
+  "au-g1", "au-g2",
+  "wb-g1", "wb-g2", "wb-g3",
+  "mk-g1", "mk-g2",
+  "pp-g1", "pp-g2",
+  "ev-g1", "ev-g2", "ev-g3",
 ]);
 
 export const gateDecisionEnum = pgEnum("gate_decision", ["pass", "fail"]);
@@ -60,6 +78,18 @@ export const artifactStepEnum = pgEnum("artifact_step", [
   "diagnostic", "objectives", "audiences", "value_prop", "media_plan", "budget", "briefs",
   // Graphic design
   "design_system", "moodboard", "production", "adaptation",
+  // Writers Room
+  "wr_brief", "wr_research", "wr_draft", "wr_adaptation", "wr_delivery",
+  // Audio
+  "au_brief", "au_sound_design", "au_production", "au_mix_master", "au_delivery",
+  // Web
+  "wb_brief", "wb_architecture", "wb_content", "wb_seo", "wb_build", "wb_qa", "wb_delivery",
+  // Marketplace
+  "mk_request", "mk_search", "mk_quote", "mk_compare", "mk_contract", "mk_tracking", "mk_delivery",
+  // Print Production
+  "pp_brief", "pp_prepress", "pp_vendor_request", "pp_production_tracking", "pp_quality_check", "pp_delivery",
+  // Events
+  "ev_brief", "ev_concept", "ev_planning", "ev_vendor_setup", "ev_pre_event", "ev_live_event", "ev_post_event", "ev_delivery",
   // Shared
   "model_config", "gate_review",
 ]);
@@ -555,6 +585,56 @@ export const verification = pgTable("verification", {
   expiresAt: timestamp("expires_at").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// ── Vendor Management (Marketplace) ──
+
+export const vendorQuoteStatusEnum = pgEnum("vendor_quote_status", [
+  "pending", "accepted", "rejected", "expired",
+]);
+
+export const vendors = pgTable("vendors", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  name: varchar("name", { length: 255 }).notNull(),
+  categories: text("categories").array().notNull(),
+  services: text("services").array().notNull(),
+  location: varchar("location", { length: 255 }),
+  rating: numeric("rating", { precision: 2, scale: 1 }).default("0"),
+  totalJobs: integer("total_jobs").default(0),
+  priceRange: varchar("price_range", { length: 10 }),
+  portfolioUrl: varchar("portfolio_url", { length: 500 }),
+  contact: jsonb("contact").$type<{ email?: string; phone?: string; whatsapp?: string; website?: string }>(),
+  notes: text("notes"),
+  active: boolean("active").default(true),
+  clientId: uuid("client_id").references(() => clients.id),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const vendorQuotes = pgTable("vendor_quotes", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  vendorId: uuid("vendor_id").references(() => vendors.id).notNull(),
+  projectId: uuid("project_id").references(() => projects.id).notNull(),
+  category: varchar("category", { length: 100 }).notNull(),
+  amount: numeric("amount", { precision: 12, scale: 2 }).notNull(),
+  currency: varchar("currency", { length: 3 }).default("USD"),
+  deliveryDays: integer("delivery_days"),
+  specs: jsonb("specs"),
+  status: vendorQuoteStatusEnum("status").default("pending"),
+  validUntil: timestamp("valid_until"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const vendorReviews = pgTable("vendor_reviews", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  vendorId: uuid("vendor_id").references(() => vendors.id).notNull(),
+  projectId: uuid("project_id").references(() => projects.id).notNull(),
+  quality: integer("quality").notNull(),
+  price: integer("price").notNull(),
+  timeliness: integer("timeliness").notNull(),
+  communication: integer("communication").notNull(),
+  notes: text("notes"),
+  reviewDate: timestamp("review_date").defaultNow().notNull(),
 });
 
 // ── Waitlist ──
