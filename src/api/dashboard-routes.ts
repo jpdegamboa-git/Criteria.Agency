@@ -3,6 +3,9 @@ import { db, schema } from "../db/index.js";
 import { sql, and, gte, lt, eq, desc } from "drizzle-orm";
 import { layout } from "../views/layout.js";
 import { renderFinanceImport } from "../views/finance-import.js";
+import { renderFinanceDashboard } from "../views/finance-dashboard.js";
+import { renderFinanceTransactions } from "../views/finance-transactions.js";
+import { renderFinanceReconciliation } from "../views/finance-reconciliation.js";
 import { importCSV, previewCSV } from "../services/bank-sync.js";
 
 export const dashboardRoutes = new Hono();
@@ -44,28 +47,18 @@ function getPeriodDates(period: string): {
 
 // ── SSR Page Placeholders ──
 
-dashboardRoutes.get("/admin/finances", (c) => {
+dashboardRoutes.get("/admin/finances", async (c) => {
   return c.html(
-    layout("Dashboard", "<h1>Financial Dashboard</h1><p>Coming soon</p>"),
+    await renderFinanceDashboard(),
   );
 });
 
-dashboardRoutes.get("/admin/finances/transactions", (c) => {
-  return c.html(
-    layout(
-      "Transactions",
-      "<h1>Transactions</h1><p>Coming soon</p>",
-    ),
-  );
+dashboardRoutes.get("/admin/finances/transactions", async (c) => {
+  return c.html(await renderFinanceTransactions());
 });
 
-dashboardRoutes.get("/admin/finances/reconciliation", (c) => {
-  return c.html(
-    layout(
-      "Reconciliation",
-      "<h1>Reconciliation</h1><p>Coming soon</p>",
-    ),
-  );
+dashboardRoutes.get("/admin/finances/reconciliation", async (c) => {
+  return c.html(await renderFinanceReconciliation());
 });
 
 dashboardRoutes.get("/admin/finances/import", async (c) => {
