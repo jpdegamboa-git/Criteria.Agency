@@ -274,6 +274,89 @@ export const AGENT_OUTPUTS: Record<string, Record<string, MockArtifactDef[]>> = 
   "T9-003": {},
   "T9-004": {},
   "T9-005": {},
+
+  // ── Brand Builder Pipeline ──
+  "BB-L": {
+    discovery: [
+      { name: "workshop_synthesis.md", type: "document", templateContent: "## Workshop Synthesis\n\n[Brand Architect's synthesis of workshop responses into initial brand directions]" },
+    ],
+    positioning: [
+      { name: "positioning_document.md", type: "document", templateContent: "## Brand Positioning\n\n### 3Cs Analysis\n**Company:** [strengths, capabilities]\n**Customers:** [target segments, needs]\n**Competitors:** [landscape, gaps]\n\n### Positioning Statement\n[target] + [value] + [competitive set] + [reasons to believe]\n\n### Brand Personality\n[traits, tone, character]" },
+    ],
+    brand_dna: [
+      { name: "brand_dna_document.md", type: "document", templateContent: "## Brand DNA Document\n\n### 1. Mission, Vision & Values\n### 2. Target Audiences\n### 3. Positioning Statement\n### 4. Brand Personality\n### 5. Verbal Identity\n### 6. Visual Direction\n### 7. Content Guidelines" },
+    ],
+  },
+  "BB-001": {
+    discovery: [
+      { name: "workshop_responses.json", type: "document", templateContent: JSON.stringify({ mission: "", vision: "", values: [], history: "", products_services: "", target_audience: "", differentiators: [], aspirations: "", tone_preferences: "", competitors_mentioned: [] }, null, 2) },
+    ],
+  },
+  "BB-002": {
+    research: [
+      { name: "audience_analysis.md", type: "document", templateContent: "## Audience Analysis\n\n### Segment 1\n**Demographics:** \n**Psychographics:** \n**Behaviors:** \n**Motivations:** " },
+      { name: "competitive_context.md", type: "document", templateContent: "## Competitive Context\n\nBASELINE ANALYSIS — NO LIVE DATA" },
+    ],
+  },
+  "BB-003": {
+    identity: [
+      { name: "verbal_guidelines.md", type: "document", templateContent: "## Verbal Identity Guidelines\n\n### Tone of Voice\n### Vocabulary\n### Key Phrases\n### Do's and Don'ts" },
+    ],
+  },
+  "BB-004": {
+    identity: [
+      { name: "visual_direction.md", type: "document", templateContent: "## Visual Identity Direction\n\n### Color Palette\n### Typography Direction\n### Imagery Style\n### Logo Direction" },
+    ],
+  },
+  // ── Strategist Pipeline ──
+  "ST-L": {
+    diagnostic: [
+      { name: "marketing_diagnostic.md", type: "document", templateContent: "## Marketing Diagnostic Report\n\n### SWOT Analysis\n### Channel Presence Assessment\n### Top 3 Urgent Actions" },
+    ],
+    objectives: [
+      { name: "objectives_document.md", type: "document", templateContent: "## Marketing Objectives\n\n| Objective | Funnel Stage | Metric | Target | Timeframe |" },
+    ],
+    value_prop: [
+      { name: "positioning_statement.md", type: "document", templateContent: "## Marketing Positioning\n\n### 3Cs Analysis\n### Positioning Statement\n### Messaging Hierarchy" },
+    ],
+    briefs: [
+      { name: "campaign_briefs.md", type: "document", templateContent: "## Campaign Briefs\n\n---\n### Brief 1\n**Objective:**\n**Audience:**\n**Channel:**\n**Budget:**\n**KPIs:**\n**Timeline:**" },
+    ],
+  },
+  "ST-001": {
+    audiences: [
+      { name: "buyer_personas.md", type: "document", templateContent: "## Buyer Personas\n\n### Persona 1: [Name]\n**Demographics:**\n**Behaviors:**\n**Motivations:**\n**Pain Points:**" },
+    ],
+  },
+  "ST-002": {
+    media_plan: [
+      { name: "media_plan.md", type: "document", templateContent: "## Media Plan\n\n### Funnel Matrix\n| Objective x Audience | Paid | Owned | Earned |" },
+    ],
+  },
+  "ST-003": {
+    budget: [
+      { name: "budget_allocation.md", type: "document", templateContent: "## Budget Allocation\n\n| Channel | Funnel Stage | Budget | % | Expected CAC | Expected ROAS |" },
+      { name: "budget_breakdown.json", type: "document", templateContent: JSON.stringify({ total_budget: 0, currency: "USD", channels: {}, alerts: {} }, null, 2) },
+    ],
+  },
+  // ── Listener Stubs ──
+  "LI-001": { diagnostic: [{ name: "brand_health_baseline.md", type: "document", templateContent: "## Brand Health Assessment\n\nBASELINE ANALYSIS — NO LIVE DATA" }] },
+  "LI-002": {
+    research: [{ name: "cultural_trends.md", type: "document", templateContent: "## Cultural Trends\n\nBASELINE ANALYSIS — NO LIVE DATA" }],
+    diagnostic: [{ name: "cultural_context.md", type: "document", templateContent: "## Cultural Context\n\nBASELINE ANALYSIS — NO LIVE DATA" }],
+    audiences: [{ name: "audience_cultural_context.md", type: "document", templateContent: "## Audience Cultural Context\n\nBASELINE ANALYSIS — NO LIVE DATA" }],
+  },
+  "LI-003": { diagnostic: [{ name: "industry_overview.md", type: "document", templateContent: "## Industry Intelligence\n\nBASELINE ANALYSIS — NO LIVE DATA" }] },
+  "LI-004": {
+    research: [{ name: "competitive_landscape.md", type: "document", templateContent: "## Competitive Landscape\n\nBASELINE ANALYSIS — NO LIVE DATA" }],
+    diagnostic: [{ name: "competitive_analysis.md", type: "document", templateContent: "## Competitive Analysis\n\nBASELINE ANALYSIS — NO LIVE DATA" }],
+    value_prop: [{ name: "competitive_positioning.md", type: "document", templateContent: "## Competitive Positioning Context\n\nBASELINE ANALYSIS — NO LIVE DATA" }],
+  },
+  // ── Transversal Stubs ──
+  "XA-001": { budget: [{ name: "budget_validation.md", type: "document", templateContent: "## Budget Validation\n\n**Decision:** PASS/FAIL\n**Notes:**" }] },
+  "XA-002": { media_plan: [{ name: "channel_specs_reference.md", type: "document", templateContent: "## Channel Specifications Reference" }] },
+  "XA-003": {},
+  "XA-004": { media_plan: [{ name: "media_opportunities.md", type: "document", templateContent: "## Media Opportunities\n\nBASELINE SUGGESTIONS — NOT VERIFIED" }] },
 };
 
 // ── Pipeline-generic types ──
