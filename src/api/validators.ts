@@ -269,6 +269,56 @@ export const createCheckoutSchema = z.object({
   company: z.string().min(1).max(200),
 });
 
+// ── Brand Guardian: Validate ──
+
+export const validateContentSchema = z.object({
+  content: z.string().min(1).max(50000),
+  contentType: z.string().min(1).max(50),
+  projectId: z.string().uuid().optional(),
+  brandDna: z.string().max(50000).optional(),
+});
+
+// ── Brand Guardian: Rules ──
+
+export const createBrandRuleSchema = z.object({
+  dimension: z.enum(["tone", "vocabulary", "key_messages", "audience_fit", "visual_palette", "typography", "imagery_style", "logo_usage"]),
+  type: z.enum(["always", "never", "prefer", "avoid"]),
+  rule: z.string().min(1).max(2000),
+  source: z.enum(["brand_dna", "human_feedback", "learned"]).default("human_feedback"),
+  examples: z.array(z.object({
+    correct: z.string(),
+    incorrect: z.string(),
+  })).default([]),
+});
+
+export const updateBrandRuleSchema = z.object({
+  type: z.enum(["always", "never", "prefer", "avoid"]).optional(),
+  rule: z.string().min(1).max(2000).optional(),
+  enabled: z.boolean().optional(),
+  examples: z.array(z.object({
+    correct: z.string(),
+    incorrect: z.string(),
+  })).optional(),
+}).refine(data => Object.keys(data).length > 0, {
+  message: "At least one field is required",
+});
+
+// ── Brand Guardian: Config ──
+
+export const upsertBrandGuardianConfigSchema = z.object({
+  passThreshold: z.number().int().min(0).max(100).optional(),
+  autoPassThreshold: z.number().int().min(0).max(100).optional(),
+  strictMode: z.boolean().optional(),
+  weightsByDimension: z.record(z.number().min(0).max(100)).optional(),
+});
+
+// ── Brand Guardian: Override ──
+
+export const brandOverrideSchema = z.object({
+  action: z.enum(["approve", "reject"]),
+  feedback: z.string().min(1).max(5000),
+});
+
 // ── Helper: parse with nice error response ──
 
 export function parseBody<T>(schema: z.ZodType<T>, body: unknown): { success: true; data: T } | { success: false; error: string } {
