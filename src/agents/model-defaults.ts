@@ -67,6 +67,43 @@ export const MODEL_DEFAULTS: Record<string, string> = {
   "GD-005:production": "gemini-imagen-3",
   // Copywriter (cross-motor)
   "CW-001": "claude-sonnet-4",
+  // Writers Room
+  "WR-L": "claude-sonnet-4",
+  "WR-001": "gemini-2.5-flash",
+  "WR-002": "gemini-2.5-flash",
+  "WR-003": "gemini-2.5-flash",
+  "WR-004": "gemini-2.5-flash",
+  "WR-005": "claude-sonnet-4",
+  // Audio Motor
+  "AU-L": "claude-sonnet-4",
+  "AU-001": "gemini-2.5-pro-audio",
+  "AU-002": "gemini-2.5-pro-audio",
+  "AU-003": "gemini-2.5-pro-audio",
+  "AU-004": "gemini-2.5-flash",
+  // Web Motor
+  "WB-L": "claude-sonnet-4",
+  "WB-001": "gemini-2.5-flash",
+  "WB-002": "gemini-2.5-flash",
+  "WB-003": "gemini-2.5-flash",
+  "WB-004": "gemini-2.5-flash",
+  "WB-005": "gemini-2.5-flash",
+  // Marketplace
+  "MK-L": "claude-sonnet-4",
+  "MK-001": "gemini-2.5-flash",
+  "MK-002": "gemini-2.5-flash",
+  "MK-003": "gemini-2.5-flash",
+  // Print Production
+  "PP-L": "claude-sonnet-4",
+  "PP-001": "gemini-2.5-flash",
+  "PP-002": "gemini-2.5-flash",
+  "PP-003": "gemini-2.5-flash",
+  // Events Motor
+  "EV-L": "claude-sonnet-4",
+  "EV-001": "gemini-2.5-flash",
+  "EV-002": "gemini-2.5-flash",
+  "EV-003": "gemini-2.5-flash",
+  "EV-004": "gemini-2.5-flash",
+  "EV-005": "gemini-2.5-flash",
 };
 
 const DEFAULT_FALLBACK = "gemini-2.5-flash";
