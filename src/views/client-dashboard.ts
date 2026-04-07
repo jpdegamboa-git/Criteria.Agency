@@ -11,6 +11,12 @@ export interface ClientDashboardData {
   }>;
   pendingReviews: number;
   completedProjects: number;
+  /** Count of projects in active (in-progress) statuses. */
+  activeProjects?: number;
+  /** Count of projects in paused status. */
+  pausedProjects?: number;
+  /** Average days from project creation to delivery (null if no completed projects). */
+  avgDaysToCompletion?: number | null;
 }
 
 const STATUS_COLORS: Record<string, string> = {
