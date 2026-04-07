@@ -11,6 +11,8 @@ const positiveAmount = z.string().regex(/^\d+(\.\d{1,2})?$/, "Must be a positive
 export const createProjectSchema = z.object({
   name: z.string().min(1).max(200).optional(),
   type: z.enum(["corporate", "social", "commercial", "music_video", "shortfilm"]).optional(),
+  pipelineType: z.enum(["video-production", "brand-builder", "strategist"]).optional(),
+  parentProjectId: z.string().uuid().optional(),
   clientName: z.string().min(1).max(200).optional(),
   clientEmail: z.string().email().optional(),
 });

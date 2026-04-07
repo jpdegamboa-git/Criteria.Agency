@@ -10,7 +10,6 @@ import {
   resumeProject,
 } from "../orchestrator/state-machine.js";
 import { getArtifacts, readArtifact } from "../storage/artifacts.js";
-import type { ProjectType } from "../shared/types.js";
 import { requireSession, requireAdmin } from "./auth.js";
 import { parseBody, createProjectSchema, resumeProjectSchema } from "./validators.js";
 import { reviewRoutes } from "./review-routes.js";
@@ -87,7 +86,7 @@ app.post("/projects", async (c) => {
   const body = await c.req.json();
   const parsed = parseBody(createProjectSchema, body);
   if (!parsed.success) return c.json({ error: parsed.error }, 400);
-  const { name, type, clientName, clientEmail } = parsed.data;
+  const { name, type, pipelineType, parentProjectId, clientName, clientEmail } = parsed.data;
 
   // Create or find client
   let [client] = await db
@@ -105,12 +104,24 @@ app.post("/projects", async (c) => {
       .returning();
   }
 
+  // Determine initial status based on pipeline type
+  const resolvedPipelineType = pipelineType ?? "video-production";
+  const initialStatusMap: Record<string, string> = {
+    "video-production": "brief",
+    "brand-builder": "discovery",
+    "strategist": "diagnostic",
+  };
+  const initialStatus = initialStatusMap[resolvedPipelineType] ?? "brief";
+
   const [project] = await db
     .insert(schema.projects)
     .values({
       clientId: client.id,
       name: name ?? "Untitled Project",
-      type: (type ?? "corporate") as ProjectType,
+      type: (type ?? "corporate") as any,
+      pipelineType: resolvedPipelineType,
+      parentProjectId: parentProjectId ?? null,
+      status: initialStatus as any,
     })
     .returning();
 
