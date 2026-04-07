@@ -1,18 +1,9 @@
 import { layout } from "./layout.js";
-
-const financeNav = `
-<nav class="border-b border-criteria-border">
-  <div class="max-w-6xl mx-auto px-6 py-3 flex gap-6">
-    <a href="/admin/finances" class="text-criteria-muted hover:text-criteria-light">Dashboard</a>
-    <a href="/admin/finances/transactions" class="text-criteria-muted hover:text-criteria-light">Transacciones</a>
-    <a href="/admin/finances/reconciliation" class="text-criteria-muted hover:text-criteria-light">Reconciliacion</a>
-    <a href="/admin/finances/import" class="text-criteria-accent font-medium">Importar</a>
-  </div>
-</nav>`;
+import { financeNav } from "./finance-nav.js";
 
 export async function renderFinanceImport(): Promise<string> {
   const body = `
-${financeNav}
+${financeNav("import")}
 
 <div class="max-w-4xl mx-auto px-6 py-10">
   <h1 class="text-2xl font-bold text-criteria-white mb-8">Importar Estado de Cuenta</h1>

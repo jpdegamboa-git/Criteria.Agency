@@ -1,4 +1,67 @@
-export function layout(title: string, body: string): string {
+export function clientNav(active: string): string {
+  const items = [
+    { href: "/app/dashboard", label: "Dashboard", key: "dashboard" },
+    { href: "/app/projects", label: "Proyectos", key: "projects" },
+    { href: "/app/copilot", label: "Copilot", key: "copilot" },
+    { href: "/app/content", label: "Contenido", key: "content" },
+  ];
+  return `
+  <nav class="border-b border-criteria-border bg-criteria-dark sticky top-0 z-10">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="flex items-center justify-between h-16">
+        <a href="/app/dashboard" class="flex items-center gap-2">
+          <span class="text-criteria-accent font-bold text-lg tracking-tight">criteria.agency</span>
+        </a>
+        <div class="flex items-center gap-1 text-sm">
+          ${items
+            .map(
+              (item) =>
+                `<a href="${item.href}" class="px-4 py-2 rounded-lg font-medium transition-colors ${
+                  active === item.key
+                    ? "text-criteria-white bg-criteria-gray"
+                    : "text-criteria-muted hover:text-criteria-light hover:bg-criteria-gray/50"
+                }">${item.label}</a>`,
+            )
+            .join("")}
+        </div>
+      </div>
+    </div>
+  </nav>`;
+}
+
+export function adminNav(active: string): string {
+  const items = [
+    { href: "/admin/dashboard", label: "Dashboard", key: "dashboard" },
+    { href: "/admin/finances", label: "Finanzas", key: "finances" },
+    { href: "/admin/agents", label: "Agentes", key: "agents" },
+    { href: "/admin/canvas", label: "Canvas", key: "canvas" },
+  ];
+  return `
+  <nav class="border-b border-criteria-border bg-criteria-dark sticky top-0 z-10">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="flex items-center justify-between h-16">
+        <a href="/admin/dashboard" class="flex items-center gap-2">
+          <span class="text-criteria-accent font-bold text-lg tracking-tight">criteria.agency</span>
+          <span class="text-criteria-muted text-xs font-normal ml-1">admin</span>
+        </a>
+        <div class="flex items-center gap-1 text-sm">
+          ${items
+            .map(
+              (item) =>
+                `<a href="${item.href}" class="px-4 py-2 rounded-lg font-medium transition-colors ${
+                  active === item.key
+                    ? "text-criteria-white bg-criteria-gray"
+                    : "text-criteria-muted hover:text-criteria-light hover:bg-criteria-gray/50"
+                }">${item.label}</a>`,
+            )
+            .join("")}
+        </div>
+      </div>
+    </div>
+  </nav>`;
+}
+
+export function layout(title: string, body: string, nav?: string): string {
   return `<!DOCTYPE html>
 <html lang="es">
 <head>
@@ -34,6 +97,7 @@ export function layout(title: string, body: string): string {
   </style>
 </head>
 <body class="bg-criteria-black text-criteria-light min-h-screen">
+  ${nav ?? ""}
   ${body}
 </body>
 </html>`;

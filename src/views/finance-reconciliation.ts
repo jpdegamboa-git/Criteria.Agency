@@ -1,33 +1,12 @@
 import { layout } from "./layout.js";
-
-function financeNav(active: "transactions" | "reconciliation"): string {
-  const links = [
-    { href: "/finance/transactions", label: "Transacciones", key: "transactions" as const },
-    { href: "/finance/reconciliation", label: "Reconciliacion", key: "reconciliation" as const },
-  ];
-  return `
-    <nav class="border-b border-criteria-border bg-criteria-dark">
-      <div class="max-w-7xl mx-auto px-6 flex items-center gap-6 h-14">
-        <a href="/" class="text-criteria-accent font-bold text-lg mr-4">criteria.agency</a>
-        ${links
-          .map(
-            (l) =>
-              `<a href="${l.href}" class="px-3 py-2 text-sm font-medium rounded ${
-                active === l.key
-                  ? "text-criteria-white bg-criteria-gray"
-                  : "text-criteria-muted hover:text-criteria-light"
-              }">${l.label}</a>`,
-          )
-          .join("")}
-      </div>
-    </nav>`;
-}
+import { financeNav } from "./finance-nav.js";
 
 export async function renderFinanceReconciliation(): Promise<string> {
   return layout(
     "Reconciliacion",
     `
     ${financeNav("reconciliation")}
+
 
     <main class="max-w-7xl mx-auto px-6 py-8">
       <h1 class="text-2xl font-bold text-criteria-white mb-6">Reconciliacion</h1>

@@ -15,6 +15,7 @@ import { requireTenantMatch } from "../middleware/tenant-guard.js";
 import { parseBody, createProjectSchema, resumeProjectSchema } from "./validators.js";
 import { reviewRoutes } from "./review-routes.js";
 import { checkoutRoutes } from "./checkout-routes.js";
+import { clientRoutes } from "./client-routes.js";
 import { financeRoutes } from "./finance-routes.js";
 import { copilotRoutes } from "./copilot-routes.js";
 import { contentRoutes } from "./content-routes.js";
@@ -82,6 +83,10 @@ app.on(["POST", "GET"], "/api/auth/*", (c) => {
 // ── Public routes (no auth required) ──
 app.route("/", reviewRoutes);     // Token-based auth (client portal)
 app.route("/", checkoutRoutes);   // Public pricing + Stripe webhook
+
+// ── Client app routes (require session) ──
+app.use("/app/*", requireSession);
+app.route("/", clientRoutes);
 
 // ── Protected routes (require session) ──
 app.use("/projects", requireSession, requireTenantMatch);

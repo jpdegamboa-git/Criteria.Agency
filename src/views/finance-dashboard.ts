@@ -1,4 +1,5 @@
 import { layout } from "./layout.js";
+import { financeNav } from "./finance-nav.js";
 
 export async function renderFinanceDashboard(): Promise<string> {
   return layout(
@@ -7,23 +8,7 @@ export async function renderFinanceDashboard(): Promise<string> {
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <!-- Navigation -->
-    <nav class="border-b border-criteria-border bg-criteria-dark">
-      <div class="max-w-7xl mx-auto px-6">
-        <div class="flex items-center justify-between h-16">
-          <div class="flex items-center gap-2">
-            <span class="text-criteria-accent font-bold text-lg">criteria.agency</span>
-            <span class="text-criteria-muted text-sm ml-2">/ Finanzas</span>
-          </div>
-          <div class="flex items-center gap-6 text-sm">
-            <a href="/admin/finances" class="text-criteria-accent font-medium">Dashboard</a>
-            <a href="/admin/finances/transactions" class="text-criteria-muted hover:text-criteria-light transition-colors">Transacciones</a>
-            <a href="/admin/finances/reconciliation" class="text-criteria-muted hover:text-criteria-light transition-colors">Conciliacion</a>
-            <a href="/admin/finances/import" class="text-criteria-muted hover:text-criteria-light transition-colors">Importar</a>
-          </div>
-        </div>
-      </div>
-    </nav>
+    ${financeNav("dashboard")}
 
     <main class="max-w-7xl mx-auto px-6 py-8">
 
