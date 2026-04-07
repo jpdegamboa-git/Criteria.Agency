@@ -508,6 +508,13 @@ export const AGENT_CONTEXT_MAP: Record<string, AgentContextEntry> = {
   "SL-006:sl_attribution": { artifactSteps: ["sl_capture", "sl_close"], attachmentTypes: ["text", "json"], taskInstruction: "Attribute closed deal to origin: channel, campaign, content. Models: first-touch, last-touch, linear. Output: {attribution: {first_touch, last_touch, linear}}." },
   "SL-L:sl_delivery": { artifactSteps: ["sl_close", "sl_attribution"], attachmentTypes: ["text", "json"], taskInstruction: "Generate deal close report: outcome, value, attribution, time-to-close, lessons learned. Update pipeline metrics." },
 
+  // ── Financial Pipeline ──
+  "FN-L:fn_request": { artifactSteps: [], attachmentTypes: ["json"], taskInstruction: "Interpret financial request: budget allocation, spend tracking, or P&L analysis. Define scope and period." },
+  "FN-001:fn_budget": { artifactSteps: ["fn_request"], attachmentTypes: ["json"], taskInstruction: "Allocate marketing budget: distribute by channel and funnel stage using M6 frameworks. Consider CAC targets, channel ROAS history, and campaign objectives. Output: {allocation: [{channel, amount, funnel_stage, expected_roas}], total, rationale}." },
+  "FN-002:fn_tracking": { artifactSteps: ["fn_request", "fn_budget"], attachmentTypes: ["json"], taskInstruction: "Track actual spend vs budget in real-time: by campaign, channel, period. Flag deviations >10%. Calculate burn rate and forecast budget exhaustion date. Output: {tracking: [{campaign, budgeted, actual, variance_pct}], alerts: [], burn_rate, forecast_exhaustion}." },
+  "FN-003:fn_pl": { artifactSteps: ["fn_request", "fn_budget", "fn_tracking"], attachmentTypes: ["json"], taskInstruction: "Generate P&L by campaign: investment (spend + production costs) vs return (attributed revenue). Calculate true ROI. Project future returns based on trends. Output: {pl: [{campaign, investment, revenue, roi, projected_6m}], total_marketing_roi}." },
+  "FN-L:fn_deliver": { artifactSteps: ["fn_pl"], attachmentTypes: ["text", "json"], taskInstruction: "Review financial analysis. Validate numbers, compile report with recommendations for budget reallocation." },
+
   // ── Analytics Pipeline ──
   "AN-L:an_request": { artifactSteps: [], attachmentTypes: ["json"], taskInstruction: "Interpret analytics request: type (dashboard/report/query), period, metrics, comparison period. Output JSON." },
   "AN-001:an_collect": { artifactSteps: ["an_request"], attachmentTypes: ["json"], taskInstruction: "Collect data from all motors: Ads (spend, clicks, conversions), CM (engagement, reach), Email (opens, clicks), SEO (rankings, traffic), Sales (leads, deals, revenue). Normalize into unified dataset." },
@@ -516,6 +523,15 @@ export const AGENT_CONTEXT_MAP: Record<string, AgentContextEntry> = {
   "AN-003:an_visualize": { artifactSteps: ["an_request", "an_analyze"], attachmentTypes: ["json"], taskInstruction: "Generate dashboard data: KPI cards (metric, value, trend, target), charts (line trends, bar comparisons, funnel), tables (channel comparison). Output structured JSON for frontend." },
   "AN-004:an_visualize": { artifactSteps: ["an_request", "an_analyze"], attachmentTypes: ["json"], taskInstruction: "Generate report with narrative in Spanish: executive summary (3-5 sentences), metric sections with explanations, anomaly highlights, actionable recommendations (3-5). Output markdown." },
   "AN-L:an_deliver": { artifactSteps: ["an_visualize"], attachmentTypes: ["text", "json"], taskInstruction: "Final review: verify metrics accuracy, narrative clarity, recommendations quality. Compile and deliver." },
+
+  // ── Security Pipeline ──
+  "SC-L:sec_audit": { artifactSteps: [], attachmentTypes: ["json"], taskInstruction: "Define security audit scope: code review, data protection, agent behavior, infrastructure. Prioritize by risk level." },
+  "SC-001:sec_scan": { artifactSteps: ["sec_audit"], attachmentTypes: ["text"], taskInstruction: "Scan codebase for vulnerabilities: OWASP Top 10 (injection, XSS, CSRF, broken auth, sensitive data exposure), dependency vulnerabilities, hardcoded secrets. Output: {findings: [{severity, category, location, description, remediation}]}." },
+  "SC-002:sec_scan": { artifactSteps: ["sec_audit"], attachmentTypes: ["text", "json"], taskInstruction: "Audit data protection: multi-tenancy isolation (client data separation), encryption at rest and in transit, PII handling, access controls, compliance (GDPR basics). Output: {findings: [{area, status, risk, recommendation}]}." },
+  "SC-003:sec_scan": { artifactSteps: ["sec_audit"], attachmentTypes: ["text", "json"], taskInstruction: "Audit agent execution: what data do agents access, what do they produce, are there scope violations, are outputs sanitized, are credentials exposed in prompts. Output: {findings: [{agent_id, issue, severity, recommendation}]}." },
+  "SC-001:sec_remediate": { artifactSteps: ["sec_scan"], attachmentTypes: ["text"], taskInstruction: "Generate remediation plan for critical and high findings. Include code fixes where possible. Prioritize by severity and exploitability." },
+  "SC-L:sec_report": { artifactSteps: ["sec_scan", "sec_remediate"], attachmentTypes: ["text", "json"], taskInstruction: "Compile security report: executive summary, findings by severity (critical/high/medium/low), remediation status, compliance score, recommendations. Output markdown report." },
+  "SC-L:sec_deliver": { artifactSteps: ["sec_report"], attachmentTypes: ["text"], taskInstruction: "Final review of security report. Verify all critical findings are addressed or have mitigation plans." },
 };
 
 // ── Agent Output Types ─────────────────────────────────────────
@@ -625,4 +641,8 @@ export const AGENT_OUTPUT_TYPES: Record<
   "SL-001:sl_capture": "text", "SL-002:sl_enrich": "text", "SL-003:sl_score": "text", "SL-004:sl_nurture": "text", "SL-005:sl_proposal": "text", "SL-L:sl_negotiate": "text", "SL-L:sl_close": "text", "SL-006:sl_attribution": "text", "SL-L:sl_delivery": "text",
   // Analytics
   "AN-L:an_request": "text", "AN-001:an_collect": "text", "AN-002:an_analyze": "text", "AN-005:an_analyze": "text", "AN-003:an_visualize": "text", "AN-004:an_visualize": "text", "AN-L:an_deliver": "text",
+  // Financial Motor
+  "FN-L:fn_request": "text", "FN-001:fn_budget": "text", "FN-002:fn_tracking": "text", "FN-003:fn_pl": "text", "FN-L:fn_deliver": "text",
+  // Security Team
+  "SC-L:sec_audit": "text", "SC-001:sec_scan": "text", "SC-002:sec_scan": "text", "SC-003:sec_scan": "text", "SC-001:sec_remediate": "text", "SC-L:sec_report": "text", "SC-L:sec_deliver": "text",
 };

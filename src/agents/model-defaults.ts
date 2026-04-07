@@ -161,6 +161,16 @@ export const MODEL_DEFAULTS: Record<string, string> = {
   "SL-004": "gemini-2.5-flash",
   "SL-005": "gemini-2.5-flash",
   "SL-006": "gemini-2.5-flash",
+  // Security Team
+  "SC-L": "claude-sonnet-4",
+  "SC-001": "gemini-2.5-flash",
+  "SC-002": "gemini-2.5-flash",
+  "SC-003": "gemini-2.5-flash",
+  // Financial Motor
+  "FN-L": "claude-sonnet-4",
+  "FN-001": "gemini-2.5-flash",
+  "FN-002": "gemini-2.5-flash",
+  "FN-003": "gemini-2.5-flash",
   // Analytics
   "AN-L": "claude-sonnet-4",
   "AN-001": "gemini-2.5-flash",

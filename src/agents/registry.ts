@@ -333,4 +333,14 @@ export const AGENT_REGISTRY: Record<string, AgentRegistryEntry> = {
   "AN-003": { id: "AN-003", name: "Dashboard Builder", skillFile: "agents/AN-003_dashboard_builder.md", team: 33, level: "sub", steps: ["an_visualize"] as any, gates: [], autonomy: 80 },
   "AN-004": { id: "AN-004", name: "Report Generator", skillFile: "agents/AN-004_report_generator.md", team: 33, level: "sub", steps: ["an_visualize"] as any, gates: [], autonomy: 80 },
   "AN-005": { id: "AN-005", name: "NL Query Agent", skillFile: "agents/AN-005_nl_query_agent.md", team: 33, level: "sub", steps: ["an_analyze"] as any, gates: [], autonomy: 75 },
+  // ── Financial Motor (evolves XA-001) ──
+  "FN-L": { id: "FN-L", name: "Financial Director", skillFile: "agents/FN-L_financial_director.md", team: 34, level: "leader", steps: ["fn_request", "fn_deliver"] as any, gates: ["fn-g1"] as any, autonomy: 75 },
+  "FN-001": { id: "FN-001", name: "Budget Allocator", skillFile: "agents/FN-001_budget_allocator.md", team: 34, level: "sub", steps: ["fn_budget"] as any, gates: [], autonomy: 80 },
+  "FN-002": { id: "FN-002", name: "Spend Tracker", skillFile: "agents/FN-002_spend_tracker.md", team: 34, level: "sub", steps: ["fn_tracking"] as any, gates: [], autonomy: 85 },
+  "FN-003": { id: "FN-003", name: "P&L Analyst", skillFile: "agents/FN-003_pl_analyst.md", team: 34, level: "sub", steps: ["fn_pl"] as any, gates: [], autonomy: 80 },
+  // ── Security Team ──
+  "SC-L": { id: "SC-L", name: "Security Architect", skillFile: "agents/SC-L_security_architect.md", team: 35, level: "leader", steps: ["sec_audit", "sec_report", "sec_deliver"] as any, gates: ["sec-g1"] as any, autonomy: 70 },
+  "SC-001": { id: "SC-001", name: "Code Guardian", skillFile: "agents/SC-001_code_guardian.md", team: 35, level: "sub", steps: ["sec_scan", "sec_remediate"] as any, gates: [], autonomy: 80 },
+  "SC-002": { id: "SC-002", name: "Data Protection Officer", skillFile: "agents/SC-002_data_protection_officer.md", team: 35, level: "sub", steps: ["sec_scan"] as any, gates: [], autonomy: 75 },
+  "SC-003": { id: "SC-003", name: "Agent Auditor", skillFile: "agents/SC-003_agent_auditor.md", team: 35, level: "sub", steps: ["sec_scan"] as any, gates: [], autonomy: 80 },
 };

@@ -400,6 +400,22 @@ PipelineRegistry.register({
   },
 });
 
+// ── Financial Motor Pipeline ──
+PipelineRegistry.register({
+  type: "financial",
+  steps: ["fn_request", "fn_budget", "fn_tracking", "fn_pl", "fn_deliver"],
+  stepAgents: {
+    fn_request: ["FN-L"],
+    fn_budget: ["FN-001"],
+    fn_tracking: ["FN-002"],
+    fn_pl: ["FN-003"],
+    fn_deliver: ["FN-L"],
+  },
+  gates: {
+    "fn-g1": { afterStep: "fn_budget", evaluators: ["FN-L"], maxIterations: 2, failReturnTo: "fn_budget" },
+  },
+});
+
 // ── Analytics Pipeline ──
 PipelineRegistry.register({
   type: "analytics",
@@ -413,5 +429,21 @@ PipelineRegistry.register({
   },
   gates: {
     "an-g1": { afterStep: "an_analyze", evaluators: ["AN-L"], maxIterations: 2, failReturnTo: "an_collect" },
+  },
+});
+
+// ── Security Pipeline ──
+PipelineRegistry.register({
+  type: "security",
+  steps: ["sec_audit", "sec_scan", "sec_remediate", "sec_report", "sec_deliver"],
+  stepAgents: {
+    sec_audit: ["SC-L"],
+    sec_scan: ["SC-001", "SC-002", "SC-003"],
+    sec_remediate: ["SC-001"],
+    sec_report: ["SC-L"],
+    sec_deliver: ["SC-L"],
+  },
+  gates: {
+    "sec-g1": { afterStep: "sec_scan", evaluators: ["SC-L"], maxIterations: 2, failReturnTo: "sec_scan" },
   },
 });
