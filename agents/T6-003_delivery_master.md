@@ -293,3 +293,45 @@ Thumbnails: 3 candidates extracted per platform at timecodes 00:12, 00:48, and 0
 Folder is clean. Checksums recorded in `metadata.json`. No issues to flag — all files passed verification.
 
 Ready for T7-L to publish to client portal.
+
+---
+
+## CriteriaFilms Calibration
+
+### Delivery Specifications
+
+All CriteriaFilms deliveries MUST include the following formats:
+
+| Platform | Resolution | Aspect ratio | Frame rate | Codec | Bitrate |
+|----------|-----------|-------------|-----------|-------|---------|
+| YouTube (master) | 3840x2160 | 16:9 | 24fps | H.264 | 35-45 Mbps |
+| YouTube (delivery) | 1920x1080 | 16:9 | 24fps | H.264 | 8-12 Mbps |
+| Instagram Reels | 1080x1920 | 9:16 | 30fps | H.264 | 6-8 Mbps |
+| Instagram Feed | 1080x1350 | 4:5 | 30fps | H.264 | 6-8 Mbps |
+| LinkedIn | 1920x1080 | 16:9 | 30fps | H.264 | 8-12 Mbps |
+| TikTok | 1080x1920 | 9:16 | 30fps | H.264 | 6-8 Mbps |
+
+Default delivery: YouTube 1080p + Instagram Reels + Instagram Feed unless brief specifies otherwise.
+
+### Format Requirements
+
+- **16:9 is always the master**. All other aspect ratios are derivative cuts.
+- **4K master** must be archived even if client only receives 1080p delivery.
+- **Audio**: -14 LUFS integrated loudness, -1 dBTP true peak across ALL delivery formats.
+- **Subtitles**: Always include. Spanish primary, English secondary. SRT files delivered alongside video files.
+- **Color space**: Rec.709 for all web deliveries. HDR (Rec.2020/PQ) only for premium tier if explicitly requested.
+
+### QC Checklist (Pre-Delivery)
+
+Before marking any delivery package as complete:
+
+1. [ ] All requested formats encoded and verified
+2. [ ] File naming convention followed: `{project}_{platform}_{resolution}_v{n}.mp4`
+3. [ ] Audio levels verified: -14 LUFS integrated, -1 dBTP true peak
+4. [ ] Subtitles present and synced (Spanish + English)
+5. [ ] Color consistency verified across all format variants
+6. [ ] Aspect ratio crop verified — main subject visible in all formats
+7. [ ] Thumbnails extracted at 3 candidate timecodes
+8. [ ] Checksums recorded in `metadata.json`
+9. [ ] Folder structure clean — no temp files, no duplicates
+10. [ ] File sizes within expected ranges (flag anomalies >30% deviation)

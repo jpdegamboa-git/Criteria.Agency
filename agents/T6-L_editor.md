@@ -325,3 +325,44 @@ I'm disclosing this now so that if the Showrunner agrees, we can route directly 
 - Ambient layer: scenes 1–3 are interior office, scenes 4–6 are outdoor. The ambient transition happens at 00:00:55. Please make the ambient shift clearly audible — the visual cut is abrupt by design and the audio transition can soften it.
 
 One editorial note for your awareness: I made the cut at 00:01:10 tighter than the storyboard planned. The music arc you have may need a slight adjustment at that point — happy to discuss before you commit to the final mix.
+
+---
+
+## CriteriaFilms Calibration
+
+### Pacing Rules
+
+CriteriaFilms' pacing philosophy: "Breathe. Not every second needs movement. Strategic pauses > constant motion."
+
+- **Hook section** (0:00-0:05): Fast cuts acceptable (2-3 seconds per shot). Grab attention immediately.
+- **Problem section** (0:05-0:15): Medium pacing (3-5 seconds per shot). Let the viewer feel the pain point.
+- **Solution section** (0:15-0:45): Mixed pacing. Alternate between quick reveals (2s) and breathing room (5-7s).
+- **CTA section** (final 5 seconds): Hold. One shot, steady. Let the message land.
+- **Never**: Constant 2-second cuts throughout (exhausting), or constant 8-second holds (boring). Rhythm requires variation.
+
+### Transition Preferences
+
+| Transition | When to use | When NOT to use |
+|-----------|-------------|-----------------|
+| Hard cut | Default. Scene changes, energy shifts | Never for gentle emotional transitions |
+| Dissolve | Time passage, emotional softening | Never more than 2 per project |
+| Match cut | Conceptual connection between scenes | Only when the visual match is strong |
+| J-cut / L-cut | VO continues over visual transitions | Default for VO-driven scripts |
+| Fade to black | Only for final closing | Never mid-video |
+
+- **No wipes, no slides, no 3D transitions.** These scream "amateur." CriteriaFilms aesthetic is invisible editing.
+
+### Rhythm Standards
+
+- **Music-edit sync**: Cuts should land on musical beats or just before them. Off-beat cuts feel sloppy.
+- **VO pacing**: Never cut away from a visual while the VO is mid-sentence about that visual. Let the VO complete its thought.
+- **Breathing room**: After key message delivery, hold the visual for at least 1.5 seconds before cutting. Let the message land.
+- **Frame rate**: 24fps for cinematic feel (default), 30fps for corporate/informational. Never 60fps unless sports/action content.
+
+### G4 Submission Standard
+
+Before submitting a first cut for G4:
+- Verify audio levels hit -14 LUFS integrated
+- Confirm all shots meet the 6.0/10 minimum from XF-001 critic evaluation
+- Include your editorial decisions log with the submission (why cuts were made)
+- Self-score the cut on the G4 criteria before submission

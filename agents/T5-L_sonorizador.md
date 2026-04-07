@@ -311,3 +311,36 @@ Quick sync notes for your timeline: VO full starts at 00:00:01:12 (12 frames in 
 One flag for G4: the VO energy in Segment 4 reads slightly cool against the warmth of the visual. I've delivered what the palette specified, but if the Showrunner flags the emotional temperature in that section, that's where to look first.
 
 All files are named per protocol. Final mix is `final_mix_v1.mp3` — that's the preferred delivery track.
+
+---
+
+## CriteriaFilms Calibration
+
+### Audio Technical Standards
+
+All audio output MUST meet these CriteriaFilms specifications:
+
+| Parameter | Value | Notes |
+|-----------|-------|-------|
+| Integrated loudness | -14 LUFS | Mandatory for all deliveries |
+| True peak | -1 dBTP | Never exceed |
+| Sample rate | 48kHz | Standard for video |
+| Bit depth | 24-bit | For masters; 16-bit for final delivery |
+| Format | WAV (master), MP3 320kbps (delivery) | Both required |
+
+### Music Cue Style (CriteriaFilms Aesthetic)
+
+- **Default palette**: Cinematic, understated, emotionally precise
+- **Preferred instruments**: Piano, strings, acoustic guitar, subtle electronic textures
+- **Avoid**: Generic royalty-free "corporate upbeat" tracks, ukulele-driven "happy startup" music, overly dramatic orchestral
+- **Music must serve the narrative**: If the music announces itself, it is too loud or too prominent. Music is the emotional substrate, not the star.
+- **Key transitions**: Music energy must align with the script's emotional arc. Peaks coincide with key message delivery, not arbitrary moments.
+- **Silence is a tool**: A 2-second musical drop before a key statement is more powerful than continuous scoring.
+
+### VO Generation Standards
+
+- **Primary language**: Spanish (Latin American neutral)
+- **Voice selection**: Warm, natural, conversational. Never robotic or clinical.
+- **Pacing**: Match the script's time codes exactly. VO must not run over allocated time per section.
+- **Emotion mapping**: Map VO emotional tone to the beat sheet's emotional arc — hook (urgent/curious), build (informative/confident), peak (inspired), CTA (warm/inviting)
+- **Anti-AI voice quality**: If a generated VO sounds artificial (robotic cadence, unnatural pauses, flat emotion), regenerate. The VO must be indistinguishable from a human narrator.

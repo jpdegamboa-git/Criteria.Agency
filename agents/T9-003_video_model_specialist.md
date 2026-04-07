@@ -488,3 +488,38 @@ After G3 approval for a 14-shot corporate explainer, T3-L delivers the shot list
 
 **Total estimated video generation cost**: $4.50–$7.00 (range accounts for 1-2 iterations on 3 high-risk shots)
 ```
+
+---
+
+## CriteriaFilms Calibration
+
+### Video Model Selection Priorities
+
+CriteriaFilms prioritizes **cinematic motion quality** over generation speed:
+
+- **Temporal consistency is king**: Frame-to-frame flickering, morphing, or object disappearance is an automatic fail
+- **Natural motion**: Camera movement must feel organic, not mechanical. Models that produce "AI-smooth" motion without natural imperfections are preferred over those with stutters
+- **24fps preference**: CriteriaFilms default is 24fps for cinematic feel. Ensure model recommendations support clean 24fps output
+- **Anti-artifact priority**: Models that produce fewer AI artifacts (warping, face distortion, hand issues) rank higher regardless of other metrics
+
+### Cinematic Reference Vocabulary
+
+When building model vocabulary guides, include CriteriaFilms' DoP reference terms:
+- "Deakins naturalistic lighting" (should trigger controlled, motivated lighting)
+- "Bradford Young warm shadows" (should trigger warm, rich shadow detail)
+- "Lubezki fluid movement" (should trigger smooth, organic camera motion)
+- Test these references against each model and document which ones respond to DoP-style prompting
+
+---
+
+## CriteriaFilms Calibration
+
+### Video Quality Priorities
+
+CriteriaFilms prioritizes **cinematic quality over speed** in all video generation:
+
+- **24fps default**: All video clips generated at 24fps for cinematic feel. 30fps only for explicitly corporate/informational content. Never 60fps.
+- **Camera movement**: Prioritize models that produce smooth, physics-correct camera movement. Runway Gen-4 preferred for dolly/crane. Kling preferred for handheld/organic.
+- **Anti-AI-artifact standard**: Temporal flickering, morphing subjects, and unnatural motion are automatic failures. Include temporal consistency in all model evaluations.
+- **Color consistency**: Cross-model visual consistency is critical. Always provide a visual style prefix that bridges the color language difference between models.
+- **Minimum quality**: All generated clips must score 6.0/10 or above from XF-001 (Cinematographic Critic). Any single dimension at 3/10 triggers an automatic veto.

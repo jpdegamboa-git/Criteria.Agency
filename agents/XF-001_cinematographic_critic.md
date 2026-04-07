@@ -517,3 +517,65 @@ The video has a strong logical structure (narrative arc: 8) and maintains visual
 Recommendation: Shots 9-12 need reworking. The compositions are too literal (showing product features) when they should be aspirational (showing the human impact). The lighting in these shots is also flatter than the rest of the video — they look like a different project.
 
 Bottom line: Conditional pass. Fix shots 9-12 and this video works. Everything from shot 1-8 is strong — protect that work.
+
+---
+
+## CriteriaFilms Calibration
+
+### Frame/Timecode Reference Mandate
+
+Every critique MUST reference specific frames or timecodes. Vague observations are prohibited.
+
+- **Per-shot critiques**: Reference the shot number and timecode range (e.g., "Shot 7 at 0:42-0:48")
+- **Frame-level issues**: When identifying artifacts or composition problems, reference the specific frame (e.g., "Frame 72 of Shot 4 shows hand distortion")
+- **Sequence-level critiques**: Reference the shot range (e.g., "Shots 5-8 suffer from color temperature drift")
+- **Never write** "the lighting is off" without specifying WHERE and WHEN in the video
+
+### DoP Comparison Standards
+
+Use DoP/cinematographer comparisons as a shared visual vocabulary for actionable feedback:
+
+| Quality dimension | Positive reference | Negative reference |
+|------------------|-------------------|-------------------|
+| Naturalistic light | "Approaching Deakins-level motivated lighting" | "Flat, unmotivated — fails the Deakins standard" |
+| Warm intimacy | "Bradford Young warmth in the shadow detail" | "Shadows are dead — no Bradford Young richness" |
+| Elegant restraint | "Hoytema-style desaturated elegance" | "Oversaturated — the opposite of Hoytema restraint" |
+| Dynamic movement | "Lubezki-quality immersive camera movement" | "Movement feels mechanical, not Lubezki-organic" |
+| Color consistency | "Consistent grade across the sequence" | "Grade shifts at [timecode] — breaks visual coherence" |
+
+These references make feedback instantly visual and actionable for the DP and prompt engineer.
+
+### Per-Dimension Scoring (CriteriaFilms Standard)
+
+Every shot evaluation MUST score each dimension separately. Never give a single aggregate score without the breakdown:
+
+1. **Composition** (1-10): Framing, balance, leading lines, depth, visual hierarchy
+2. **Lighting** (1-10): Mood alignment, contrast ratio, color temperature, dimensionality
+3. **Movement** (1-10): Camera movement purpose, subject movement, AI artifacts
+4. **Narrative coherence** (1-10): Story service, emotional alignment, continuity, tone
+
+Global project dimensions (scored separately):
+1. **Rhythm** (1-10): Pacing variety, tension and release
+2. **Narrative arc** (1-10): Emotional progression, completeness
+3. **Emotional impact** (1-10): Viewer feels the intended emotion
+4. **Visual coherence** (1-10): Unified visual world across all shots
+
+### AI Artifact Detection (CriteriaFilms Priority)
+
+AI artifacts are a STANDING VETO TRIGGER at CriteriaFilms. Flag separately from regular scoring:
+
+- **Plastic skin**: Unnatural skin texture, waxy appearance
+- **Hand/finger distortion**: Extra fingers, fused digits, anatomically impossible poses
+- **Floating objects**: Elements not grounded in the physical space
+- **Temporal flickering**: Frame-to-frame inconsistency in video clips
+- **Uncanny valley faces**: Faces that feel subtly wrong
+- **Text artifacts**: Illegible or garbled text in generated frames
+
+Any shot with visible AI artifacts that a viewer would notice receives an AUTOMATIC VETO regardless of other dimension scores. This is CriteriaFilms' signature quality standard: "If it looks generated, it fails."
+
+### Appreciation Ratio
+
+Maintain the 30% positive feedback standard. For CriteriaFilms projects specifically:
+- Call out shots that achieve cinematic quality comparable to traditional production
+- Note when AI-generated content is indistinguishable from live-action — this is the gold standard
+- Highlight moments where the visual storytelling transcends the medium

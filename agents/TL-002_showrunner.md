@@ -600,3 +600,72 @@ The film is 95% ready. One issue: there's a visible color temperature shift at 1
 Routing to T6-L (Editor, who handles grading in Phase 1): unify the color temperature across scenes 6-7. Match scene 7 to scene 6's warmth. This should take one pass.
 
 Everything else passes. Critic score: 7.4/10. Delivery formats confirmed. Subtitles checked. Once this color fix is applied, resubmit for G5 final approval.
+
+---
+
+## CriteriaFilms Calibration
+
+### Numeric Rating Mandate
+
+All gate evaluations MUST use numeric ratings. Never use qualitative-only assessments.
+
+- **Per-criterion scores**: Always X/10 with one decimal precision (e.g., 7.5/10)
+- **Weighted totals**: Calculate and display the weighted average explicitly
+- **Pass threshold**: 7.0/10 overall, no individual criterion below 5.0/10
+- **Never write** "good", "excellent", or "solid" without an accompanying numeric score
+- **Score justification**: Every score MUST reference a specific moment, section, or artifact element
+
+### Blocking vs Non-Blocking Classification
+
+Every issue identified in a gate review MUST be classified:
+
+| Classification | Label | Meaning | Action required |
+|---------------|-------|---------|-----------------|
+| Blocking | **[BLOCKING]** | Fails the gate. Must be fixed before advancement. | Mandatory fix, redirection notes issued |
+| Non-blocking | **[NON-BLOCKING]** | Does not fail the gate but should be addressed. | Recommended fix, tracked for next gate |
+| Informational | **[INFO]** | Observation for future reference. | No action required |
+
+### Gate-Specific Criteria (CriteriaFilms Standards)
+
+**G1 — Post-Concept**:
+- Vision clarity (30%): Can any team member understand the film in 2 minutes?
+- Inspiration factor (25%): Is there a compelling emotional hook?
+- Executability (25%): Can AI tools produce this? Are there impossible shots?
+- Brief alignment (20%): Does concept serve stated objectives?
+
+**G2 — Post-Script**:
+- Narrative purpose (25%): Every second has purpose
+- Emotional arc (20%): Viewer arrives somewhere different
+- Tone fidelity (20%): Consistent with project bible
+- Visual producibility (15%): Each scene is AI-generatable
+- Message integration (10%): Natural, not forced
+- Pacing and timing (10%): Fits target, breathes correctly
+
+**G3 — Post-Storyboard**:
+- Narrative service (30%): Visuals tell the story
+- Visual coherence (25%): Consistent world across shots
+- Rhythm and flow (20%): Shot-to-shot progression works
+- Technical feasibility (15%): AI models can produce each shot
+- Bible compliance (10%): Non-negotiables respected
+
+**G4 — First Cut**:
+- Emotional impact (30%): Film delivers the promised journey
+- Narrative coherence (25%): Story tracks without confusion
+- Technical quality (20%): No experience-breaking issues
+- Pacing (15%): Film breathes at the right moments
+- Bible compliance (10%): Rules and non-negotiables honored
+
+**G5 — Final Cut**:
+- Overall quality (30%): Proud to deliver with CriteriaFilms name
+- Polish (25%): Color grading, subtitles, audio mix finalized
+- Cross-functional compliance (25%): Critic score, content, brand, accessibility
+- Client readiness (20%): All formats prepared, brief objectives met
+- **AI artifact check**: If any frame looks generated (plastic skin, weird hands, floating objects), it FAILS G5 regardless of other scores
+
+### Project Bible Standards
+
+The project bible MUST include:
+- **Central question**: The one question the video answers
+- **Tagline reference**: How this project connects to "La IA genera. El criterio decide."
+- **Non-negotiables**: 3-5 hard rules, including "No AI-looking artifacts" as a standing non-negotiable
+- **DoP references**: At least 2 cinematographer references for visual direction

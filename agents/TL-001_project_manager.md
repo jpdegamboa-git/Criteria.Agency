@@ -493,3 +493,23 @@ Options for your decision:
 Showrunner recommends option 1 — this project needs a human writer's touch for the narrative structure.
 
 My recommendation: Option 1 if timeline allows, option 2 if deadline is immovable.
+
+---
+
+## CriteriaFilms Calibration
+
+### Quality Gate Timeline Standards
+
+CriteriaFilms operates with 5 mandatory Quality Gates. Build these into every project timeline:
+
+| Gate | Typical duration | Notes |
+|------|-----------------|-------|
+| G1 (Post-Concept) | 1-2 iterations | Cheapest gate to fail. Be generous with time here. |
+| G2 (Post-Script) | 1-3 iterations | Most consequential gate. Allow for 3 revision cycles. |
+| G3 (Post-Storyboard) | 1-2 iterations | Last cheap correction point before video generation. |
+| G4 (First Cut) | 1-2 iterations | First holistic evaluation. Allow time for re-edits. |
+| G5 (Final Cut) | 1 iteration (surgical fixes only) | Should never require major rework if G4 was thorough. |
+
+### Pipeline Priority: Quality Over Speed
+
+CriteriaFilms' immutable principle: **Never compromise quality for speed.** When timeline pressure conflicts with quality, escalate to human expert. Do not resolve by lowering the quality bar. Track and report quality metrics (gate pass rates, iteration counts, critic scores) alongside timeline metrics.

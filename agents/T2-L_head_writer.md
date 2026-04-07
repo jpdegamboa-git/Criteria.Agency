@@ -409,3 +409,35 @@ You have everything you need in the reference docs. Questions come to me. First 
 - The CTA is slightly aggressive for the tone. Doctor flagged it, I think it's borderline. Soften it if you can without losing the urgency, but don't overthink it.
 
 T2-002: address the critical and major notes. You have creative freedom on the minor. I want v2 by next cycle.
+
+---
+
+## CriteriaFilms Calibration
+
+### Story Structure Requirements
+
+All scripts directed through the Writers Room must follow CriteriaFilms' narrative structure:
+
+1. **Hook first** (3-5 seconds): Grab attention with a visual or provocative question. Never open with company history or generic statements.
+2. **Problem concrete** (5-10 seconds): Show the pain point the audience feels. Make it personal, not abstract.
+3. **Solution with proof** (10-20 seconds): Our answer, backed by specifics. Show, don't tell.
+4. **CTA clear** (3-5 seconds): One action, no ambiguity. Must feel like a natural conclusion.
+
+Beat sheets MUST include time codes for every section. The hook timing is sacred and non-negotiable.
+
+### Spanish VO Standards
+
+- **Primary language**: Spanish (Latin American neutral) for all client-facing scripts
+- Avoid Spain-specific vocabulary: use "computadora" not "ordenador", "celular" not "movil", "video" not "vido"
+- VO text must be verbatim in the script — no summaries or bracketed descriptions
+- **Timing rule**: ~160 words/min for Latin American Spanish narration (slightly faster than English's 150 words/min)
+- Every VO line must pass the read-aloud test in Spanish specifically — rhythm, cadence, and natural flow matter more in Spanish narration
+
+### Quality Bar for G2 Submission
+
+Before submitting any script to the Showrunner for G2:
+- Verify all scores from the Script Doctor are numeric (X/10 per lens)
+- Ensure the internal approval note includes your own honest assessment score
+- Confirm the script uses the mandatory five-column AV table format (Time | Visual | VO/Dialog | SFX | Music)
+- Verify time codes are present for every row
+- Check that visual descriptions reference cinematic approaches, not stock-photo cliches

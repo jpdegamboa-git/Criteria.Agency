@@ -331,3 +331,58 @@ If you need the focus pull to land later in the shot for narrative timing reason
 Active project impact: Project 041 currently uses Kling for video generation and is entering the video generation step. T3-L, T3-003 — please confirm your Kling API is on v1.6 before beginning generation for Project 041. The improvement in background stability on slow 6-10 second shots is directly relevant to this project's visual language. If you're running on v1.5, coordinate with T8-003 to update the API parameter.
 
 Model strategy update published at `shared/team9/model_strategy_update_2026-04-06.md`.
+
+---
+
+## CriteriaFilms Calibration
+
+### Model Selection Priorities
+
+CriteriaFilms prioritizes **cinematic quality over speed** in all model recommendations:
+
+- **Visual quality is non-negotiable**: A slower model that produces cinematic output is always preferred over a faster model with mediocre quality
+- **Anti-AI-artifact priority**: Models must produce output where AI generation is not detectable. If a model consistently produces artifacts (plastic skin, hand distortion, temporal flickering), downgrade it regardless of other metrics
+- **Cost-efficiency is secondary to quality**: Recommend the model that produces the best output first, then optimize for cost within that quality tier
+
+### Default Model Preferences (CriteriaFilms)
+
+| Task type | Preferred approach | Rationale |
+|-----------|-------------------|-----------|
+| Text generation (scripts, evaluations) | Gemini Flash for speed tasks, Claude for creative/evaluation | Balance cost and quality per task complexity |
+| Image generation (storyboards) | Prioritize visual consistency and cinematic look | Consistency across 40+ frames matters more than single-frame beauty |
+| Video generation | Prioritize motion quality and temporal consistency | Smooth, natural movement is the hardest quality to achieve |
+| Audio (VO) | Prioritize natural, human-like voice | If VO sounds AI-generated, it fails CriteriaFilms standard |
+| Audio (music) | Verify commercial licensing before recommending | Licensing compliance is non-negotiable |
+
+### Quality Benchmark Standards
+
+All model benchmarks should include a CriteriaFilms-specific "cinematic quality" dimension:
+- Does the output look like professional production or AI generation?
+- Would this pass G5 (final quality gate) scrutiny?
+- Is the output indistinguishable from traditional production at viewing distance?
+
+---
+
+## CriteriaFilms Calibration
+
+### Model Selection Priorities
+
+CriteriaFilms prioritizes **cinematic quality over speed** in all model selections:
+
+1. **Visual quality** is the primary selection criterion. A model that produces cinematic-quality output in 5 minutes beats a model that produces generic output in 30 seconds.
+2. **Consistency** is the secondary criterion. A model that produces 8/10 quality reliably beats one that alternates between 10/10 and 4/10.
+3. **Cost** is tertiary. Never sacrifice visual quality to save credits — but do optimize cost when quality is equal between options.
+
+### Default Model Recommendations (CriteriaFilms)
+
+| Task type | Primary recommendation | Rationale |
+|-----------|----------------------|-----------|
+| Text (scripts, evaluation, concepts) | Gemini Flash for drafts, Claude for evaluation | Gemini Flash for speed on structured output; Claude for nuanced creative judgment |
+| Image (storyboards, references) | Flux Dev / Midjourney | Flux for controllability; Midjourney for aesthetic quality |
+| Video (clip generation) | Runway Gen-4 / Kling | Runway for cinematic camera movement; Kling for subject consistency |
+| Audio (VO) | ElevenLabs | Best natural voice quality for Spanish narration |
+| Audio (music) | Suno (Creator plan) | Best energy arc control for background scoring |
+
+### Anti-AI-Artifact Standard
+
+When evaluating models, weight anti-artifact performance heavily. CriteriaFilms' standard: "If it looks generated, it fails." Models that consistently produce plastic skin, hand distortion, or temporal flickering should be deprioritized regardless of other quality metrics.

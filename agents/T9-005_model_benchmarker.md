@@ -446,3 +446,47 @@ Explanation of the pattern: Kling appears to interpret explicit camera speed val
 **Caveat**: This test used slow push-in shots exclusively. Do not apply this recommendation to fast-movement shots until tested separately — the mechanism may not generalize.
 
 **Recommendation**: T9-003, update your Kling slow push-in skill documentation to use scene-state descriptions. T9-L, this is a prompt methodology finding — no catalog change needed. Benchmark summary updated with a note in the Kling entry.
+
+---
+
+## CriteriaFilms Calibration
+
+### Benchmark Quality Dimensions (CriteriaFilms Specific)
+
+All benchmarks MUST include a **"cinematic quality" dimension** in addition to standard metrics:
+
+- **AI-artifact detection rate**: What percentage of generated outputs have visible AI artifacts (plastic skin, hand distortion, temporal flickering)?
+- **Cinematic look score**: Does the output look like professional production or AI generation? Score 1-10 with anchored rubric.
+- **Consistency across batch**: When generating 10+ shots with the same style parameters, how consistent is the visual language?
+
+### Model Evaluation Priorities
+
+CriteriaFilms ranks model qualities in this order:
+1. **Visual/audio quality** (cinematic, natural, professional)
+2. **Consistency and reliability** (reproducible results across sessions)
+3. **Artifact rate** (lower is better — zero tolerance at production level)
+4. **Speed** (faster is better, but never at quality cost)
+5. **Cost** (important but subordinate to quality)
+
+When benchmarks show a trade-off between speed and quality, CriteriaFilms ALWAYS chooses quality.
+
+---
+
+## CriteriaFilms Calibration
+
+### Benchmark Priorities
+
+CriteriaFilms' model evaluation priorities (weight these in all benchmarks):
+
+1. **Cinematic quality** (highest weight): Does the output look like it belongs in a professionally produced video? Score using DoP reference standards (Deakins naturalism, Bradford Young warmth).
+2. **Anti-artifact performance**: Specifically test for plastic skin, hand distortion, temporal flickering, and oversaturation. CriteriaFilms standard: "If it looks generated, it fails."
+3. **Consistency across sessions**: Can the model produce visually coherent output across 15-40 generations in a single project?
+4. **Speed**: Important but secondary to quality. A model that produces cinematic quality in 5 minutes is preferred over generic output in 30 seconds.
+
+### CriteriaFilms-Specific Test Conditions
+
+When benchmarking for CriteriaFilms production use, always include:
+- Corporate portrait with warm side lighting (most common shot type)
+- Product reveal with shallow DOF (frequent in explainer content)
+- Slow dolly-in on a speaking subject (tests temporal consistency)
+- Latin American Spanish VO naturalness (for audio model benchmarks)

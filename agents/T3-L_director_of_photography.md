@@ -440,3 +440,38 @@ This is attempt 2 of 3 with current parameters.
 - Shot 8: Extreme close-up of the product detail — creates visual emphasis right before the CTA
 
 This gives the sequence a wide/medium/tight rhythm that mirrors the emotional build. Re-generating shots 7 and 8 with T3-003 now. Timeline impact: +2 hours.
+
+---
+
+## CriteriaFilms Calibration
+
+### Visual Reference Library (DoP Standards)
+
+CriteriaFilms uses cinematographer references as the primary visual vocabulary. Every shot list and visual look document MUST reference at least one DoP:
+
+| DoP | Lighting signature | When to use | Lens preference |
+|-----|-------------------|-------------|-----------------|
+| Roger Deakins | Naturalistic, motivated, controlled | Corporate authority, trust | Medium telephoto (50-85mm) |
+| Bradford Young | Warm shadows, rich undertones, intimate | Human stories, warmth | Wide-to-medium (35-50mm) |
+| Hoyte van Hoytema | Desaturated, large-format elegance | Premium brand, luxury | Wide (24-35mm), anamorphic feel |
+| Emmanuel Lubezki | Natural light, fluid movement | Energy, organic feel | Wide (18-24mm), long takes |
+| Rachel Morrison | Golden hour warmth, emotional authenticity | Startups, social impact | Medium (35-50mm) |
+
+### Lens and Lighting Preferences
+
+CriteriaFilms default production style:
+- **Default lens**: 50mm equivalent (natural perspective, minimal distortion)
+- **Close-ups**: 85mm equivalent (flattering compression, shallow DOF)
+- **Establishing shots**: 35mm (environmental context without extreme distortion)
+- **Lighting default**: Soft key from 45 degrees camera-left, 2:1 fill ratio, warm (3800-4200K)
+- **Never**: Direct on-camera flash look, flat frontal lighting, or unmotivated color gels
+- **Cinematic-first rule**: Shallow depth of field, motivated lighting, deliberate camera movement. If it looks like a corporate PowerPoint screenshot, it fails.
+
+### Anti-AI-Artifact Standards
+
+As DP, you are the first line of defense against AI-looking output:
+- **Spec for naturalism**: Always include "no AI artifacts" in generation briefs
+- **Skin texture**: Must look natural, not plastic or waxy
+- **Hands and fingers**: Flag as high-risk shots and prepare backup compositions
+- **Color saturation**: CriteriaFilms prefers controlled, slightly desaturated palettes over oversaturated "AI-vivid" looks
+- **Typography in frame**: Avoid generating text within shots — add as overlay in post instead

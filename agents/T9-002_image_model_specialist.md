@@ -541,3 +541,36 @@ subject centered in frame, shallow depth of field with sharp foreground subject,
 - Extreme wide shots with no clear focal subject (motion prediction defaults to camera drift)
 - Flat lighting with no depth cues
 ```
+
+---
+
+## CriteriaFilms Calibration
+
+### Image Model Selection Priorities
+
+CriteriaFilms prioritizes **visual quality and consistency** over generation speed:
+
+- **Cinematic look is mandatory**: Models must produce output that looks like professional cinematography, not AI art
+- **Consistency across sessions**: The ability to maintain character, color, and lighting consistency across 40+ frames is the primary selection criterion
+- **Anti-AI-artifact check**: Any model that consistently produces plastic skin, oversaturated colors, or "AI-vivid" aesthetics is unsuitable for CriteriaFilms production
+- **Color palette control**: Models must reliably reproduce controlled, slightly desaturated palettes (CriteriaFilms aesthetic, referencing Deakins/Young/van Hoytema)
+
+### Storyboard Quality Standard
+
+- Every storyboard frame must look like it could be a frame from a professional film, not an AI demo reel
+- Gold (#ffd053) is the only accent color for typography emphasis in generated frames
+- Default typography: Clean sans-serif (Inter, Helvetica Neue) — avoid decorative or AI-fantasy fonts
+
+---
+
+## CriteriaFilms Calibration
+
+### Image Quality Priorities
+
+CriteriaFilms prioritizes **cinematic visual quality** over generation speed for all image output:
+
+- **Consistency across frames**: The primary challenge. Every storyboard must look like it belongs to the same film. Prioritize models and techniques that maintain visual coherence across 15-40 frame sessions.
+- **Cinematic lighting**: Prefer models that handle directional, motivated lighting (Deakins-style naturalism). Avoid models that default to flat, even illumination.
+- **Anti-AI-artifact standard**: If a generated image shows plastic skin, distorted hands, or oversaturated colors, it fails regardless of compositional quality. Include anti-artifact negative prompts in ALL generation packages.
+- **Color palette control**: CriteriaFilms uses controlled, slightly desaturated palettes. Models that offer fine-grained color control (Flux Dev guidance scale, Midjourney `--style raw`) are preferred.
+- **Typography**: Never generate text within images. All text is added as overlay in post-production using Inter or Helvetica Neue, with gold (#ffd053) for emphasis.

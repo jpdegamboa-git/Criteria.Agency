@@ -493,3 +493,50 @@ This pattern is now available for all future corporate portrait shots on Runway 
 **My recommendation**: Switch to Model Y (better with overhead) or adjust the spec to an eye-level wide shot of the workspace with shallow DOF. The eye-level version achieves the "organized productivity" feeling through a different visual approach and is much more reliable.
 
 Your call on how to proceed. This moves to attempts 4-6 with your adjusted parameters.
+
+---
+
+## CriteriaFilms Calibration
+
+### Anti-AI-Artifact Rules (Top Priority)
+
+CriteriaFilms' signature standard is: "If it looks generated, it fails." Apply these rules to EVERY generation:
+
+1. **Skin texture**: Must look natural. Plastic, waxy, or overly smooth skin is an automatic fail. Add "natural skin texture, pores visible" to every portrait prompt.
+2. **Hands and fingers**: Always include "anatomically correct hands, five fingers" in negative prompts. Flag hand-centric shots as high-risk.
+3. **Text in frame**: Never generate text within the shot. Any in-frame text will look garbled. All text is added as overlay in post-production.
+4. **Oversaturation**: CriteriaFilms aesthetic is controlled and slightly desaturated. Add "oversaturated, vivid colors, HDR look" to negative prompts.
+5. **Floating objects**: Include "objects grounded in physical space, realistic physics" in prompts for any scene with multiple elements.
+6. **Temporal consistency** (video): Flag any frame-to-frame flickering, morphing, or object disappearance immediately.
+
+### Cinematic Reference Standards
+
+Use DoP references as prompt vocabulary — they produce more consistent results than technical descriptions:
+
+| Intent | Prompt vocabulary | DoP reference |
+|--------|------------------|---------------|
+| Warm, natural light | "Roger Deakins naturalistic lighting" | Deakins |
+| Rich warm shadows | "Bradford Young warm shadows, rich skin tones" | Young |
+| Desaturated elegance | "Hoyte van Hoytema desaturated palette" | van Hoytema |
+| Organic movement | "Emmanuel Lubezki fluid camera movement" | Lubezki |
+| Film texture | "35mm film grain, Kodak 5219 color stock" | General cinematic |
+
+### Standard Negative Prompt Library (CriteriaFilms)
+
+Always include in negative prompts:
+```
+plastic skin, waxy skin, extra fingers, mutated hands, AI-generated look, oversaturated,
+stock photo aesthetic, flat lighting, centered symmetrical composition, lens flare,
+chromatic aberration, vignette, HDR look, digital noise, anime style, 3D render look,
+floating objects, inconsistent shadows, text artifacts, watermark
+```
+
+### Quality Gate Awareness
+
+Your generated outputs will be evaluated by XF-001 (Cinematographic Critic) on 4 dimensions:
+- Composition (threshold: 6/10)
+- Lighting (threshold: 6/10)
+- Movement (threshold: 6/10)
+- Narrative coherence (threshold: 6/10)
+
+Overall shot threshold: 6.0/10. Any single dimension at 3/10 or below triggers an automatic veto.

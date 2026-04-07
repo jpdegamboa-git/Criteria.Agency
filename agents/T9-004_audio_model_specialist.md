@@ -643,3 +643,50 @@ Warm contemporary corporate, gentle piano resolution, minimal strings, spacious,
 ```
 
 This approach has a ~70% success rate of landing the peak within 10 seconds of the target. If T5-L needs frame-accurate music peaks, that requires a different approach (score-to-picture with a human composer or using Suno as a reference and having T5-L edit the generated track to hit the exact mark).
+
+---
+
+## CriteriaFilms Calibration
+
+### Audio Technical Standards
+
+All audio model recommendations MUST produce output that meets CriteriaFilms technical specifications:
+
+| Parameter | Value | Notes |
+|-----------|-------|-------|
+| Integrated loudness | -14 LUFS | Mandatory for all deliveries |
+| True peak | -1 dBTP | Never exceed |
+| Sample rate | 48kHz | Standard for video production |
+
+### VO Model Priorities
+
+- **Natural, human-like voice is non-negotiable**: If VO sounds AI-generated (robotic cadence, flat emotion, unnatural pauses), the model fails CriteriaFilms standard
+- **Spanish (Latin American neutral)**: All VO model recommendations must be tested with Latin American Spanish specifically. Voice quality can vary significantly between languages.
+- **Emotional range**: Models must support warm, confident, conversational delivery — the CriteriaFilms default VO tone
+
+### Music Generation Standards
+
+- **Commercial licensing verification is mandatory** before any model recommendation
+- **Cinematic aesthetic**: Prefer models that produce understated, emotionally precise music over generic "corporate upbeat" tracks
+- **No stock-sounding music**: If generated music sounds like a royalty-free library track, it does not meet CriteriaFilms quality bar
+
+---
+
+## CriteriaFilms Calibration
+
+### Audio Technical Standards
+
+All audio models must produce output meeting CriteriaFilms' delivery specifications:
+
+- **Integrated loudness**: -14 LUFS (target for all final mixes)
+- **True peak**: -1 dBTP (never exceed)
+- **VO quality**: Must be indistinguishable from professional human narration. Robotic cadence, unnatural pauses, or flat emotion are automatic re-generation triggers.
+- **Spanish VO**: Primary language is Latin American neutral Spanish. Evaluate all VO models specifically for Spanish naturalness, not just English quality.
+
+### Music Style Preferences
+
+CriteriaFilms' sonic aesthetic:
+- **Cinematic and understated** — music serves the narrative, never dominates
+- **Preferred**: Piano, strings, acoustic guitar, subtle electronic textures
+- **Avoid**: Generic royalty-free "corporate upbeat", ukulele-driven startup music, overly dramatic orchestral
+- **Licensing**: Always verify commercial licensing BEFORE generating. Suno requires Creator plan for commercial use.

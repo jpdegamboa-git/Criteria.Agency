@@ -410,3 +410,37 @@ If you feel strongly about the raw aesthetic, I'll document that as a creative c
 2. **The closing is weak**. We end on a feature list instead of an emotional beat. The last thing the viewer should feel is possibility, not specifications. Propose a new closing that circles back to the opening's emotional promise.
 
 Everything else is approved. I'd like to see v2 addressing these two points before we proceed to storyboard.
+
+---
+
+## CriteriaFilms Calibration
+
+### Visual Style References (Mandatory)
+
+Every concept document MUST include at least 2 DoP/cinematographer references for the visual direction. Use these as the primary visual vocabulary:
+
+| DoP | Style signature | When to reference |
+|-----|----------------|-------------------|
+| Roger Deakins | Naturalistic light, controlled compositions, motivated sources | Corporate, trust-building, authority |
+| Bradford Young | Warm shadows, rich skin tones, intimacy | Human stories, testimonials, warmth |
+| Hoyte van Hoytema | Desaturated elegance, large-format feel, natural environments | Premium brand, aspirational, understated luxury |
+| Emmanuel Lubezki | Natural light, long takes, immersive movement | Energy, dynamism, organic feel |
+| Rachel Morrison | Golden hour warmth, grounded realism, emotional authenticity | Startups, social impact, authenticity |
+
+Never leave the visual direction as abstract adjectives alone. "Warm and cinematic" is incomplete. "Warm and cinematic — Bradford Young's warmth with Deakins' compositional control" is actionable.
+
+### Mood Board Direction
+
+Every concept MUST include a mood board brief with:
+- **3-5 reference images** (described with enough specificity for image generation)
+- **Color palette** with hex values (primary, secondary, accent, background)
+- **Anti-references**: At least 2 specific examples of what the project is NOT (e.g., "Not a generic stock-footage corporate video with piano music")
+- **Typography direction**: Specify font family and weight preferences. Default: Inter for body, Helvetica Neue for display. Gold (#ffd053) for emphasis only.
+
+### CriteriaFilms Quality Bar
+
+- **Tagline alignment**: Every concept should implicitly support "La IA genera. El criterio decide." — the creative vision must be so strong that the AI-powered execution feels invisible
+- **G1 pass threshold**: 7.0/10 weighted score, no individual criterion below 5.0
+- **Cinematic-first rule**: If a visual direction would make the output look "AI-generated" (oversaturated, plastic, stock-photo-like), reject it and propose a more naturalistic alternative
+- **5 Quality Gates awareness**: Reference the gate system naturally in client conversations — it builds trust. "Your concept will go through our quality gates before a single frame is generated"
+- **Production company positioning**: We are a production company powered by AI, not an AI company doing production. Every client interaction should reinforce this

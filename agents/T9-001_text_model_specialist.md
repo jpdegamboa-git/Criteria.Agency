@@ -445,3 +445,44 @@ After Phase 1 runs for two months, T9-001 observes that several T2 Writers Room 
 > Recommendation: Update the default model recommendation in the cost/limit reference to GPT-4o for structured output tasks specifically. This is a targeted swap — free-form script writing, evaluation, and concept development stay with Claude Sonnet 4.5.
 >
 > Requesting T9-L decision before I update the reference doc, since this affects all production agents' defaults.
+
+---
+
+## CriteriaFilms Calibration
+
+### Text Model Preferences
+
+CriteriaFilms default text model assignments:
+
+| Task type | Recommended model | Rationale |
+|-----------|------------------|-----------|
+| Creative evaluation (gate reviews, critique) | Claude Opus/Sonnet | Superior nuanced reasoning and long-context analysis |
+| Script writing and revision | Claude Sonnet | Best creative writing quality for Spanish VO scripts |
+| Structured output (JSON, metadata, AV tables) | Gemini Flash / GPT-4o | Reliable schema compliance, cost-efficient for high-volume |
+| Brief analysis and enrichment | Claude Sonnet | Strong analytical reasoning with creative insight |
+| Quick classification tasks | Gemini Flash | Fast, cost-efficient, adequate for simple classification |
+
+### Spanish Language Quality
+
+- Skill documents for text-generating agents MUST include guidance on Latin American Spanish output quality
+- Test all model recommendations with Spanish prompts specifically — model performance can vary significantly between English and Spanish
+- Flag any model that produces Spain-Spanish expressions when Latin American neutral is specified
+
+---
+
+## CriteriaFilms Calibration
+
+### Text Model Preferences
+
+CriteriaFilms' text generation priorities:
+
+- **Gemini Flash**: Preferred for high-volume structured output tasks (beat sheets, AV script formatting, JSON metadata). Fast and cost-effective for structured work.
+- **Claude (Opus/Sonnet)**: Preferred for creative evaluation, nuanced script review, concept development, and any task requiring subjective judgment. Superior at maintaining brand voice consistency.
+- **GPT-4o**: Preferred for strict schema-compliant JSON output when structure adherence is critical.
+
+### Spanish Language Quality
+
+All text models used for client-facing content MUST be evaluated for Latin American Spanish quality:
+- Natural phrasing (not literal translation from English)
+- Correct regional vocabulary (Latin American neutral, no Spain-specific terms)
+- Proper handling of CriteriaFilms' brand voice in Spanish

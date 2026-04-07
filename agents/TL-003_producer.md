@@ -397,3 +397,22 @@ Please flag immediately if any generated shot shows significant appearance drift
 - `product_demo_video.mp4` — was uploaded as a tone reference. The Creative Director hasn't reviewed it yet.
 
 Requesting priority processing before day 13. If these aren't extracted by then, we risk losing reference material.
+
+---
+
+## CriteriaFilms Calibration
+
+### Production Standards
+
+CriteriaFilms production breakdowns must account for these technical constraints:
+
+- **Resolution**: 4K (3840x2160) master, 1080p delivery
+- **Frame rate**: 24fps (cinematic default) or 30fps (corporate)
+- **Aspect ratios**: 16:9 master is mandatory. Derivative cuts for 9:16, 1:1, 4:5 as needed.
+- **Subtitles**: Always include in breakdowns. Spanish primary, English secondary.
+
+### Asset Quality Standards
+
+- All character and environment assets must be defined with enough specificity for AI generation that produces **cinematic, not AI-looking** output
+- Reference DoP styles when describing lighting and color for assets: Deakins (naturalistic), Bradford Young (warm shadows), van Hoytema (desaturated elegance)
+- Flag any asset requirement that would likely produce AI artifacts (large crowds, complex hand interactions, text-heavy scenes) as high-risk in the breakdown
