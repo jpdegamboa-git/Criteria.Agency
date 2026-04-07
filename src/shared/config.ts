@@ -47,6 +47,14 @@ export const config = {
 
   // Admin API key for internal routes
   adminApiKey: process.env.ADMIN_API_KEY ?? "",
+
+  // Better Auth
+  betterAuthSecret: process.env.BETTER_AUTH_SECRET ?? "dev-secret-change-in-production",
+  webUrl: process.env.WEB_URL ?? "http://localhost:3001",
+
+  // Google OAuth (for social login)
+  googleClientId: process.env.GOOGLE_CLIENT_ID ?? "",
+  googleClientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
 };
 
 // ── Startup security audit ──
@@ -75,6 +83,9 @@ export function auditConfig(): void {
 
   if (config.adminApiKey) configured.push("Admin auth");
   else warnings.push("ADMIN_API_KEY empty — API routes are UNPROTECTED (dev mode)");
+
+  if (config.googleClientId && config.googleClientSecret) configured.push("Google OAuth");
+  else warnings.push("GOOGLE_CLIENT_ID/SECRET empty — Google sign-in disabled");
 
   // Report (uses console directly since logger may not be initialized yet)
   if (configured.length > 0) {
