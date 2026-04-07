@@ -272,6 +272,30 @@ export const invoiceStatusEnum = pgEnum("invoice_status", [
   "pending", "partial", "paid", "overdue", "canceled",
 ]);
 
+export const listenerTypeEnum = pgEnum("listener_type", [
+  "brand", "culture", "industry", "competitive", "opportunity",
+]);
+
+export const alertSeverityEnum = pgEnum("alert_severity", [
+  "info", "warning", "critical",
+]);
+
+export const alertStatusEnum = pgEnum("alert_status", [
+  "open", "acknowledged", "resolved", "dismissed",
+]);
+
+export const approvalStatusEnum = pgEnum("approval_status", [
+  "pending", "approved", "rejected", "escalated", "expired",
+]);
+
+export const actorTypeEnum = pgEnum("actor_type", [
+  "agent", "human", "system",
+]);
+
+export const continuousRunStatusEnum = pgEnum("continuous_run_status", [
+  "pending", "running", "completed", "failed",
+]);
+
 // ── Tables ──
 
 export const clients = pgTable("clients", {
@@ -785,6 +809,117 @@ export const waitlistEntries = pgTable("waitlist_entries", {
   source: varchar("source", { length: 100 }).default("landing").notNull(),
   status: waitlistStatusEnum("status").default("pending").notNull(),
   nurtureStep: integer("nurture_step").default(0).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// ── Engine Infrastructure Tables ──
+
+export const continuousAgentRuns = pgTable("continuous_agent_runs", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  clientId: uuid("client_id").references(() => clients.id).notNull(),
+  agentId: varchar("agent_id", { length: 20 }).notNull(),
+  listenerType: listenerTypeEnum("listener_type").notNull(),
+  step: varchar("step", { length: 30 }).notNull(),
+  status: continuousRunStatusEnum("status").default("pending").notNull(),
+  inputData: jsonb("input_data"),
+  outputData: jsonb("output_data"),
+  artifactsProduced: jsonb("artifacts_produced").default([]),
+  startedAt: timestamp("started_at"),
+  completedAt: timestamp("completed_at"),
+  costUsd: numeric("cost_usd", { precision: 10, scale: 4 }),
+  error: text("error"),
+  cycleId: uuid("cycle_id").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+}, (table) => [
+  index("car_client_listener_idx").on(table.clientId, table.listenerType),
+  index("car_cycle_idx").on(table.cycleId),
+]);
+
+export const alertRules = pgTable("alert_rules", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  clientId: uuid("client_id").references(() => clients.id).notNull(),
+  listenerType: listenerTypeEnum("listener_type").notNull(),
+  ruleName: varchar("rule_name", { length: 100 }).notNull(),
+  condition: jsonb("condition").notNull(),
+  severity: alertSeverityEnum("severity").notNull(),
+  notificationChannels: jsonb("notification_channels").default([]),
+  enabled: boolean("enabled").default(true).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const alerts = pgTable("alerts", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  clientId: uuid("client_id").references(() => clients.id).notNull(),
+  alertRuleId: uuid("alert_rule_id").references(() => alertRules.id),
+  listenerType: listenerTypeEnum("listener_type").notNull(),
+  severity: alertSeverityEnum("severity").notNull(),
+  title: varchar("title", { length: 200 }).notNull(),
+  description: text("description").notNull(),
+  context: jsonb("context"),
+  status: alertStatusEnum("status").default("open").notNull(),
+  resolvedAt: timestamp("resolved_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+}, (table) => [
+  index("alerts_client_status_idx").on(table.clientId, table.status),
+]);
+
+export const dataSourceConfigs = pgTable("data_source_configs", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  clientId: uuid("client_id").references(() => clients.id).notNull(),
+  listenerType: listenerTypeEnum("listener_type").notNull(),
+  config: jsonb("config").notNull(),
+  schedule: varchar("schedule", { length: 50 }).default("0 6 * * *").notNull(),
+  enabled: boolean("enabled").default(true).notNull(),
+  lastRunAt: timestamp("last_run_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const auditLog = pgTable("audit_log", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  clientId: uuid("client_id").references(() => clients.id).notNull(),
+  actor: varchar("actor", { length: 100 }).notNull(),
+  actorType: actorTypeEnum("actor_type").notNull(),
+  action: varchar("action", { length: 100 }).notNull(),
+  resourceType: varchar("resource_type", { length: 50 }),
+  resourceId: uuid("resource_id"),
+  details: jsonb("details"),
+  autonomyLevel: integer("autonomy_level"),
+  approvalId: uuid("approval_id"),
+  ipAddress: varchar("ip_address", { length: 45 }),
+  timestamp: timestamp("timestamp").defaultNow().notNull(),
+}, (table) => [
+  index("audit_client_time_idx").on(table.clientId, table.timestamp),
+  index("audit_action_idx").on(table.action),
+]);
+
+export const approvalRequests = pgTable("approval_requests", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  clientId: uuid("client_id").references(() => clients.id).notNull(),
+  projectId: uuid("project_id").references(() => projects.id),
+  motor: varchar("motor", { length: 50 }).notNull(),
+  actionType: varchar("action_type", { length: 50 }).notNull(),
+  description: text("description").notNull(),
+  context: jsonb("context").notNull(),
+  urgency: varchar("urgency", { length: 10 }).default("normal").notNull(),
+  status: approvalStatusEnum("status").default("pending").notNull(),
+  respondedAt: timestamp("responded_at"),
+  respondedBy: varchar("responded_by", { length: 100 }),
+  responseNote: text("response_note"),
+  expiresAt: timestamp("expires_at").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+}, (table) => [
+  index("approval_pending_idx").on(table.clientId, table.status),
+]);
+
+export const autonomyConfigs = pgTable("autonomy_configs", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  clientId: uuid("client_id").references(() => clients.id).notNull().unique(),
+  globalLevel: integer("global_level").default(3).notNull(),
+  overrides: jsonb("overrides").default([]),
+  escalation: jsonb("escalation").notNull(),
+  schedule: jsonb("schedule"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
