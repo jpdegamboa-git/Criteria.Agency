@@ -1,6 +1,6 @@
 # criteria.agency — Project Status
 
-> Last updated: April 6, 2026
+> Last updated: April 7, 2026
 
 ---
 
@@ -9,10 +9,13 @@
 ### Infrastructure
 - [x] Hono API server (port 3000) with 40+ endpoints
 - [x] Next.js frontend (port 3001) with Tailwind v4
-- [x] PostgreSQL database with 19 tables (Drizzle ORM)
+- [x] PostgreSQL database with 23 tables (Drizzle ORM)
 - [x] Docker Compose for local PostgreSQL
 - [x] CLI for project management
-- [x] Cron scheduler for subscription tasks
+- [x] Cron scheduler for 7 subscription/nurture tasks
+- [x] **Auth (Better Auth)** — email+password, session cookies, admin role, API key fallback
+- [x] **Gemini rate limiter** — sliding window RPM/RPD tracking with auto-wait
+- [x] **Vercel deploy prep** — SSL auto-detect, Dockerfile for Hono, production env docs
 - [x] Startup security audit (reports configured vs mock services)
 - [x] Design System document (`DESIGN_SYSTEM.md`)
 
@@ -34,6 +37,19 @@
 - [x] Welcome email via Resend (console fallback)
 - [x] Success page (`/waitlist/success`)
 - [x] Database table with nurture step tracking
+- [x] **Nurture email sequence** — 4 emails (day 3, 7, 14, 21), daily cron at 1pm
+
+### Admin Dashboard (Next.js)
+- [x] Auth-protected layout with session guard + sign-out
+- [x] Dashboard homepage with 3 active sections
+- [x] `/admin/projects` — project list with status filters, colored badges
+- [x] `/admin/projects/[id]` — pipeline progress bar, artifacts/gates/executions tabs
+- [x] `/admin/agents` — 20 agents in 8 teams, execution stats, success rates
+- [x] `/admin/finances` — KPI cards, top entities, recent transactions
+- [x] `/admin/finances/transactions` — filterable list (26 real bank transactions)
+- [x] `/admin/finances/reconciliation` — two-panel matching with auto-match detection
+- [x] `/admin/finances/import` — drag & drop CSV upload with preview/import flow
+- [x] Sign-in / Sign-up pages (dark theme, gold accents)
 
 ### Client Delivery Portal
 - [x] Token-based review pages (`/review/:token`)
@@ -83,16 +99,42 @@
 
 ---
 
+## Capability Maturity (Client Value)
+
+> Source: `docs/superpowers/specs/2026-04-07-capabilities-map-design.md`
+> 49 capabilities mapped to 62 client pain points across 11 categories
+
+| Level | Count | Capabilities |
+|-------|-------|-------------|
+| 🟢 Producción | 0 | — |
+| 🟡 Beta | 4 | C-009 Video, C-044 Equipo virtual, C-045 Autonomía, C-047 Gates de calidad |
+| 🟠 Alpha | 5 | C-011 Copywriting, C-013 Audio, C-018 Email, C-033 Dashboard, C-039 Control de gasto |
+| 🔴 En desarrollo | 37 | Strategy, Brand, Distribution, Sales, Intelligence, most Production |
+| ⚪ Roadmap | 3 | C-008 Manual de marca, C-043 Reutilización de activos, C-049 Reposicionamiento |
+
+**Key gap:** The #1 client pain point ("No tengo estrategia") has 0 capabilities built. The Strategist and Brand Builder motors are fully designed but have no code. Phase 2 must address this.
+
+**Next capabilities to activate (Tier PyME critical path):**
+1. C-001 Diagnóstico de marketing (Strategist motor)
+2. C-002 Plan de marketing completo (Strategist motor)
+3. C-006 Construcción de marca desde cero (Brand Builder motor)
+4. C-048 Diagnóstico de posicionamiento (Brand Builder + Strategist)
+5. C-007 Guardián de marca (Brand Guardian transversal)
+
+---
+
 ## What's NOT Built Yet (Code Needed)
 
 ### High Priority (blocks beta launch)
-- [ ] **Auth (Better Auth)** — login/signup before opening beta to public
-- [ ] **Nurture email sequence** — 4 automated emails for waitlist (content exists, cron trigger needed)
+- [x] **Auth (Better Auth)** — login/signup, session-based auth, admin role (April 7, 2026)
+- [x] **Nurture email sequence** — 4 automated emails on days 3, 7, 14, 21 (April 7, 2026)
 
 ### Medium Priority (needed for beta quality)
 - [ ] **Real multimedia generation** — activate Imagen/Veo/PiAPI with billing (currently mock)
-- [ ] **Agent calibration** — tune skill files and prompts for your production style
-- [ ] **Admin dashboard** — project list, agent monitoring, gate review UI
+- [x] **Agent calibration** — 20 agents calibrated with CriteriaFilms brand voice + production constraints (April 7, 2026)
+- [x] **Admin dashboard** — projects, agents, finances (KPIs, transactions, reconciliation, import) (April 7, 2026)
+- [x] **Gemini rate limiter** — auto-wait for free tier limits (10 RPM Flash, 5 RPM Pro) (April 7, 2026)
+- [x] **Vercel deploy prep** — SSL auto-detect, Dockerfile, .env.example production docs (April 7, 2026)
 - [ ] **Payment groups** — link wire transfer fees to the income transaction they relate to
 - [ ] **Invoice matching automation** — auto-suggest invoice↔transaction links by entity + amount + date
 
@@ -154,6 +196,7 @@
 | `docs/superpowers/specs/2026-04-06-marketing-engine-design.md` | 24-Motor Architecture | Spec complete (vision doc) |
 | `docs/superpowers/specs/2026-04-06-security-framework-design.md` | Security Framework | Spec complete, P0 fixes pending |
 | `docs/superpowers/specs/2026-04-06-schema-api-design.md` | Schema & API | Spec complete |
+| `docs/superpowers/specs/2026-04-07-capabilities-map-design.md` | **Capabilities Map** | **62 pain points → 49 capabilities → 24 motors** |
 | `docs/superpowers/plans/2026-04-06-business-agents.md` | Business Agents Plan | ✅ Executed (11 tasks) |
 | `docs/superpowers/plans/2026-04-06-real-agents.md` | Real Agents Plan | ✅ Executed (11 tasks) |
 | `docs/superpowers/plans/2026-04-06-csv-import-dashboard.md` | CSV Import Plan | ✅ Executed (10 tasks) |
@@ -176,23 +219,26 @@
 | Payments | Stripe | ⚠️ Needs test keys |
 | Email | Resend | ⚠️ Needs API key (console fallback working) |
 | Bank | Conexion BG (Banco General) | 📋 CSV import working, API access pending |
-| Hosting | Local development | 📋 Not deployed yet |
+| Hosting | Local development | 📋 Vercel-ready (frontend), Dockerfile ready (backend) |
 
 ---
 
-## Session Stats (April 6, 2026)
+## Session Stats (April 6-7, 2026)
 
 | Metric | Count |
 |--------|-------|
 | Specs written | 9 |
-| Plans written | 4 |
-| Plans executed | 4 (42 tasks total) |
+| Plans written | 5 |
+| Plans executed | 5 (50+ tasks total) |
 | Commits | 50+ |
-| Files created | 80+ |
-| Database tables | 19 |
+| Files created | 100+ |
+| Database tables | 23 |
 | API endpoints | 40+ |
-| SSR/SSG pages | 10 |
+| Next.js pages | 16 (landing, pricing, auth, admin, finances) |
 | AI agents (code) | 25 (20 video + 5 business) |
+| Capabilities mapped | 49 (4 Beta, 5 Alpha, 37 In dev, 3 Roadmap) |
+| Client pain points mapped | 62 across 11 categories |
+| Agents calibrated | 20 (with brand voice + production constraints) |
 | Real AI executions tested | 13 (Gemini 2.5 Flash) |
 | Real bank transactions imported | 26 |
 | Business entities auto-created | 18 |
@@ -201,8 +247,8 @@
 
 ## Next Development Session Priority
 
-1. **Auth (Better Auth)** — secure the platform before beta
-2. **Deploy landing page** — Vercel deployment
-3. **Nurture email cron** — trigger 4-email sequence for waitlist
-4. **Agent calibration** — tune prompts for production style
-5. **Multimedia billing** — activate Imagen/Veo/PiAPI for real media generation
+1. **Deploy landing page** — `cd web && vercel` (Vercel-ready)
+2. **Multimedia billing** — activate Imagen/Veo/PiAPI for real media generation
+3. **Payment groups** — link wire transfer fees to income transactions
+4. **Invoice matching** — auto-suggest invoice↔transaction links
+5. **Agent Canvas** (weavy.ai-style) — visual node editor for agent orchestration

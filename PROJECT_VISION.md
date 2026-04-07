@@ -1,7 +1,7 @@
 # criteria.agency — Project Vision
 
-> Last updated: April 6, 2026
-> Status: Active — Specification phase
+> Last updated: April 7, 2026
+> Status: Active — Phase 1 complete, Phase 2 planning
 
 ---
 
@@ -22,6 +22,26 @@ Build a fully automated marketing agency platform powered by ~125 hyper-speciali
 ---
 
 ## Platform Structure
+
+### The Hierarchy: Pain → Capability → Motor → Agent
+
+The platform is organized around **client pain points**, not technology:
+
+```
+Client Pain Points (62 identified, open inventory)
+  └── Capabilities (49 — what criteria.agency CAN DO for the client)
+        └── Motors (24 — technical infrastructure that serves capabilities)
+              └── Agents (~125 — specialized AI workers within motors)
+```
+
+- **Pain points** are discovered from real client conversations. They drive prioritization.
+- **Capabilities** are the product — named from the client's perspective (e.g., "Diagnóstico de marketing", not "Strategist pipeline step 1").
+- **Motors** are infrastructure — they serve one or more capabilities.
+- **Agents** are workers — they execute within motors.
+
+A single capability may require multiple motors (e.g., "Plan de marketing completo" needs Strategist + Financial Agent + Channel Manager + Brand Guardian). A single motor may serve multiple capabilities (e.g., Brand Guardian serves both "Guardián de marca" and "Gates de calidad").
+
+> See `docs/superpowers/specs/2026-04-07-capabilities-map-design.md` for the full mapping.
 
 ### 24 Motors in 6 Categories
 
@@ -64,25 +84,29 @@ Uses Marketing + Sales motors to market itself and acquire new SaaS clients.
 
 ## SaaS Business Model
 
-### Subscription Tiers
+### Subscription Tiers (capability-based)
 
-| Tier | Access | Support | Price Range |
-|------|--------|---------|-------------|
-| **Free** | Limited motors, basic features, AI Copilot | Self-service | $0 |
-| **Pro** | All motors, full features, AI Copilot | Self-service + priority support | $500-$5,000/month |
-| **Enterprise** | All motors + human Account Executive + custom integrations | Dedicated support | Custom |
+Tiers are defined by **capabilities included**, not by motor access. This makes pricing tangible to clients — they buy solutions to their problems, not infrastructure.
+
+| Tier | Target Client | Capabilities | Price Range |
+|------|--------------|-------------|-------------|
+| **PyME** | 1-20 employees, no marketing dept | 14 capabilities: Strategy + Brand + Basic Production + Dashboard | $0-$500/month |
+| **Mediana** | 20-200 employees, limited marketing team | All PyME + Distribution + Sales + Measurement (29 capabilities) | $500-$5,000/month |
+| **Agencia** | Marketing agency automating operations | All capabilities (49) + Marketplace + White-label | Custom |
+
+> See Capabilities Map §5.4 for the full tier breakdown.
 
 ### 6 Client Spaces (outcome-based navigation)
-Clients navigate by outcomes, not by the 24 motors underneath:
+Clients navigate by outcomes, not by the 24 motors underneath. Each Space groups capabilities that solve related pain points:
 
-| Space | Outcome | Motors Behind |
-|-------|---------|--------------|
-| **Crear** | "I need content" | Video, Design, Web, Audio, Events, Print |
-| **Comunicar** | "I need to reach people" | Ads, Community Management, Email, SEO/Content |
-| **Entender** | "I need to understand my market" | 4 Listeners, Opportunity Agent, Analytics |
-| **Vender** | "I need to sell" | Sales/CRM |
-| **Mi Marca** | "I need my brand defined/protected" | Brand Builder, Brand Guardian |
-| **Cuenta** | "I need to manage my account" | Settings, billing, team, integrations |
+| Space | Outcome | Capabilities | Motors Behind |
+|-------|---------|-------------|--------------|
+| **Crear** | "I need content" | C-009 to C-015, C-042, C-043 | Video, Design, Web, Audio, Events, Print |
+| **Comunicar** | "I need to reach people" | C-016 to C-022 | Ads, Community Management, Email, SEO/Content |
+| **Entender** | "I need to understand my market" | C-023 to C-027, C-033 to C-037 | 4 Listeners, Opportunity Agent, Analytics |
+| **Vender** | "I need to sell" | C-028 to C-032 | Sales/CRM |
+| **Mi Marca** | "I need my brand defined/protected" | C-006 to C-008, C-048, C-049 | Brand Builder, Brand Guardian |
+| **Cuenta** | "I need to manage my account" | C-038 to C-041, C-045, C-046 | Settings, billing, team, integrations |
 
 ---
 
@@ -153,5 +177,6 @@ Mission Control for the entire platform. Real structure visibility (24 motors or
 - `PORTAL_SPECS.md` — Full UI/UX spec for all 3 portals
 - `DECISION_LOG.md` — All key architectural decisions
 - `SESSION_CONTEXT.md` — Complete project briefing
+- `docs/superpowers/specs/2026-04-07-capabilities-map-design.md` — **Capabilities Map: 62 pain points → 49 capabilities → 24 motors**
 - `docs/superpowers/specs/2026-04-06-marketing-engine-design.md` — 24-motor architecture spec
 - `docs/superpowers/specs/2026-04-06-security-framework-design.md` — Security framework spec

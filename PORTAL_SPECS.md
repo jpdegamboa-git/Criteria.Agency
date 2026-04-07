@@ -102,8 +102,25 @@ When the admin portal loads with zero data (fresh install or new org):
 | About | Team and methodology | Story, agentic methodology, quality promise |
 | Contact | Lead capture | Form with interest selector (which motors), company size, budget range → feeds Sales/CRM |
 
-### Onboarding flow
+### Onboarding flow (pain-based)
 
+The onboarding starts with a **pain diagnostic**, not a feature tour. This guides the client to the right capabilities immediately.
+
+```
+Visitor → Landing → Pricing → Signup
+    → Pain Diagnostic ("¿Qué te duele más?")
+        → "No tengo estrategia"     → C-001 Diagnóstico → C-002 Plan → C-006 Brand
+        → "No sé si funciona"       → C-033 Dashboard → C-034 Attribution
+        → "No tengo marca"          → C-006 Brand Builder → C-048 Positioning
+        → "Necesito contenido"      → C-009 Video / C-010 Design / C-011 Copy
+        → "Necesito vender más"     → C-028 Leads → C-029 Scoring → C-030 Pipeline
+    → Guided first action (Quick Win for selected capability)
+    → Dashboard (Client Portal)
+```
+
+> See `docs/superpowers/specs/2026-04-07-capabilities-map-design.md` for the full pain→capability mapping. Each capability defines a Quick Win that can be achieved in the first week.
+
+**Previous flow (still valid as alternative):**
 ```
 Visitor → Landing → Engines/Pricing → Signup (Free tier)
     → Brand Builder wizard (create Brand DNA)

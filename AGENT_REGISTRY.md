@@ -1,8 +1,38 @@
-# CriteriaFilms.com — Agent registry (technical reference)
+# criteria.agency — Agent Registry (technical reference)
 
-> Last updated: April 5, 2026
-> Total agents: 47 | Phase 1: 20 | Phase 2: 10 | Phase 3: 17
+> Last updated: April 7, 2026
+> Total agents: 47 (video pipeline) + ~78 (other motors) = ~125
+> Phase 1: 20 | Phase 2: 10 | Phase 3: 17 (video pipeline agents)
 > Format: Technical reference cards — for team structure and communication protocols, see TEAM_STRUCTURE.md
+
+## Capability Mapping
+
+Each agent serves one or more platform capabilities. The Capabilities Map (`docs/superpowers/specs/2026-04-07-capabilities-map-design.md`) defines 49 capabilities that solve 62 client pain points. Below is the mapping for Phase 1 active agents:
+
+| Agent | Serves Capabilities |
+|-------|-------------------|
+| TL-001 Project Manager | C-009, C-044, C-045 |
+| TL-002 Showrunner | C-009, C-047 |
+| TL-003 Producer | C-009, C-015 |
+| T1-L Creative Director | C-009, C-005 |
+| T2-L Head Writer | C-009, C-011 |
+| T2-002 AV Copywriter | C-009, C-011 |
+| T2-006 Script Doctor | C-009, C-011 |
+| T3-L Director of Photography | C-009 |
+| T3-003 Cinematic Prompt Engineer | C-009 |
+| T5-L Sonorizador | C-009, C-013 |
+| T6-L Editor | C-009 |
+| T6-003 Delivery Master | C-009, C-042 |
+| T7-L Client Service | C-009, C-047 |
+| XF-001 Cinematographic Critic | C-009, C-047 |
+| T9-L AI Model Director | C-009, C-044 |
+| T9-001 Text Model Specialist | C-009, C-011, C-044 |
+| T9-002 Image Model Specialist | C-009, C-010, C-044 |
+| T9-003 Video Model Specialist | C-009, C-044 |
+| T9-004 Audio Model Specialist | C-009, C-013, C-044 |
+| T9-005 Model Benchmarker | C-009, C-044 |
+
+> Agents for non-video motors (Strategy, Brand, Distribution, Sales, Analytics, Intelligence) are defined in the marketing-engine-design spec and will be added to this registry as they are implemented.
 
 ---
 

@@ -3,6 +3,7 @@
 > Date: April 6, 2026
 > Status: Approved design — pending implementation planning
 > Scope: Full platform engine architecture (not just "marketing" — all engines)
+> **Capability mapping:** This document defines the 24 motors and their pipelines. For the client-facing view (pain points → capabilities → motors), see `2026-04-07-capabilities-map-design.md`. Motors serve capabilities; capabilities solve client pain points.
 
 ---
 

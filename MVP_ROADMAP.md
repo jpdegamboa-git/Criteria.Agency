@@ -1,22 +1,46 @@
-# CriteriaFilms.com — MVP Roadmap
+# criteria.agency — MVP Roadmap
 
-> Last updated: April 5, 2026
-> Phases: 3 | Total agents: 47 (20 → 30 → 47)
-> Status: Active — Phase 1 planning
+> Last updated: April 7, 2026
+> Phases: 3 | Total agents: 47 video + ~78 platform = ~125
+> Capabilities: 49 (4 Beta, 5 Alpha, 37 En desarrollo, 3 Roadmap)
+> Status: Active — Phase 1 complete (video pipeline), Phase 2 planning
 
 ---
 
 ## Rollout philosophy
 
-The system launches in 3 phases, adding agents and capabilities incrementally. Each phase must prove itself before advancing to the next. This is not a feature roadmap — it's a capability expansion plan.
+The system launches in 3 phases. Each phase must prove itself before advancing to the next.
 
-**Principle:** A working system with 20 agents producing real videos is infinitely more valuable than a design for 47 agents that hasn't been tested.
+**Principle:** A working system with 20 agents producing real videos is infinitely more valuable than a design for 125 agents that hasn't been tested.
+
+**Capability-first prioritization:** Phases are defined by **client value delivered** (capabilities), not by agent count. The Capabilities Map (`docs/superpowers/specs/2026-04-07-capabilities-map-design.md`) defines 49 capabilities organized by client pain points. Each phase targets a specific tier of client.
+
+### How capabilities relate to phases
+
+```
+Phase 1 (DONE):  Video pipeline → 9 capabilities partially active
+Phase 2 (NEXT):  Tier PyME viable → 14 critical capabilities for smallest clients
+Phase 3 (LATER): Tier Mediana viable → full distribution + sales + measurement
+```
+
+See the Capabilities Map for the full dolor→capacidad→motor hierarchy.
 
 ---
 
-## Phase 1: Foundation (20 agents)
+## Phase 1: Foundation (20 agents) — COMPLETE
 
 **Goal:** Produce a corporate/explainer video (1-3 minutes) end-to-end using the agentic pipeline.
+
+**Capabilities activated (partially):**
+- C-009 Producción de video end-to-end (🟡 Beta)
+- C-011 Copywriting especializado (🟠 Alpha — solo guiones AV)
+- C-013 Producción de audio (🟠 Alpha — solo dentro de video)
+- C-018 Email marketing (🟠 Alpha — nurture sequence básica)
+- C-033 Dashboard ejecutivo unificado (🟠 Alpha — solo financiero)
+- C-039 Control de gasto por campaña (🟠 Alpha — control financiero básico)
+- C-044 Equipo virtual escalable (🟡 Beta — 20/125 agentes)
+- C-045 Autonomía configurable (🟡 Beta — gates en video)
+- C-047 Gates de calidad humanos (🟡 Beta — 5 gates en video)
 
 ### Agents active
 
@@ -86,9 +110,23 @@ The system launches in 3 phases, adding agents and capabilities incrementally. E
 
 ---
 
-## Phase 2: Quality and specialization (+10 agents = 30 total)
+## Phase 2: Tier PyME Viable (+10 video agents + Strategy/Brand motors)
 
-**Goal:** Expand project types to include more complex corporate work and first documentary/short film attempts. Activate full quality gate system.
+**Goal:** Make criteria.agency usable for a small business client. This means solving the #1 pain point ("No tengo estrategia") AND expanding video quality. A PyME client should be able to: get a marketing diagnosis, build their brand, produce content, and see results in a dashboard.
+
+**New capabilities to activate:**
+- C-001 Diagnóstico de marketing (CRÍTICA — dolor #1)
+- C-002 Plan de marketing completo (CRÍTICA)
+- C-003 Definición de audiencias (CRÍTICA)
+- C-006 Construcción de marca desde cero (CRÍTICA)
+- C-007 Guardián de marca (CRÍTICA)
+- C-010 Diseño gráfico on-demand (ALTA)
+- C-012 Desarrollo web (ALTA)
+- C-017 Community management (ALTA)
+- C-048 Diagnóstico y definición de posicionamiento (CRÍTICA)
+
+**Video pipeline expansion (original Phase 2 goal preserved):**
+Expand project types to include more complex corporate work and first documentary/short film attempts. Activate full quality gate system.
 
 ### New agents added
 
@@ -122,6 +160,7 @@ The system launches in 3 phases, adding agents and capabilities incrementally. E
 
 ### Advance criteria
 
+**Video pipeline:**
 - [ ] 10 total projects completed (cumulative)
 - [ ] Average critic score > 7/10
 - [ ] Client first-attempt approval rate > 60%
@@ -129,11 +168,36 @@ The system launches in 3 phases, adding agents and capabilities incrementally. E
 - [ ] Compliance and brand checks automated (no manual intervention)
 - [ ] Average brief-to-delivery time < 5 calendar days for corporate/explainer
 
+**Platform capabilities (NEW):**
+- [ ] 1 real PyME client has completed onboarding (Brand DNA + Marketing Plan)
+- [ ] Brand Guardian actively validating outputs across video + design
+- [ ] Dashboard showing marketing KPIs (not just financial)
+- [ ] At least 5 capabilities at 🟡 Beta or higher
+
 ---
 
-## Phase 3: Full system (+17 agents = 47 total)
+## Phase 3: Tier Mediana Viable (+17 video agents + Distribution/Sales/Analytics motors)
 
-**Goal:** Activate all agents. Support all project types including fiction, documentary, and school. Prepare for scale.
+**Goal:** Activate all video agents AND distribution, sales, and measurement capabilities. Support all project types including fiction, documentary, and school. A mediana company should be able to: run campaigns across channels, track leads, measure ROI, and see everything in one dashboard.
+
+**New capabilities to activate:**
+- C-004 Análisis competitivo
+- C-005 Generación de briefs de campaña
+- C-016 Gestión de pauta digital
+- C-018 Email marketing (upgrade a producción completa)
+- C-019 SEO y contenido orgánico
+- C-028 Captura y enriquecimiento de leads
+- C-029 Lead scoring automático
+- C-030 Pipeline de ventas
+- C-034 Atribución multicanal
+- C-035 Cálculo automático de CAC y LTV
+- C-036 Reportes automatizados
+- C-038 Asignación inteligente de presupuesto
+- C-023 Escucha de marca
+- C-026 Monitoreo competitivo continuo
+
+**Video pipeline expansion (original Phase 3 goal preserved):**
+Activate all video agents. Support all project types including fiction, documentary, and school. Prepare for scale.
 
 ### New agents added
 
@@ -167,12 +231,20 @@ The system launches in 3 phases, adding agents and capabilities incrementally. E
 
 ### Advance criteria
 
+**Video pipeline:**
 - [ ] 25 total projects completed (cumulative)
 - [ ] At least 1 fiction short film completed
 - [ ] School beta launched with 10+ students
 - [ ] Operations team functional (automated billing, contracts)
 - [ ] System running without human intervention for standard projects
 - [ ] Average brief-to-delivery time improving quarter over quarter
+
+**Platform capabilities (NEW):**
+- [ ] 5 Mediana clients active with full distribution + measurement
+- [ ] CAC and LTV calculated for at least 3 clients
+- [ ] At least 1 client running paid campaigns through the platform
+- [ ] At least 20 capabilities at 🟡 Beta or higher
+- [ ] 0 capabilities still at 🔴 in the Tier PyME set
 
 ---
 
@@ -221,4 +293,6 @@ The original documentation states 38 agents. A careful count of the agent regist
 - `TECH_ARCHITECTURE.md` — Technical stack and implementation
 - `PORTAL_SPECS.md` — Portal design specifications
 - `DECISION_LOG.md` — Chronological log of all key decisions
+- `docs/superpowers/specs/2026-04-07-capabilities-map-design.md` — **Capabilities Map: 62 pain points → 49 capabilities → 24 motors** (defines what each phase must deliver in client value)
+- `docs/superpowers/specs/2026-04-06-marketing-engine-design.md` — 24-motor technical architecture
 - `MVP_ROADMAP.md` — This document: phased rollout plan
