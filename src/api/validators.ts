@@ -10,15 +10,62 @@ const positiveAmount = z.string().regex(/^\d+(\.\d{1,2})?$/, "Must be a positive
 
 export const createProjectSchema = z.object({
   name: z.string().min(1).max(200).optional(),
-  type: z.enum(["corporate", "social", "commercial", "music_video", "shortfilm"]).optional(),
-  pipelineType: z.enum(["video-production", "brand-builder", "strategist"]).optional(),
+  type: z.enum(["corporate", "explainer", "documentary", "fiction", "micro_content", "commercial"]).optional(),
+  pipelineType: z.enum([
+    "video-production", "brand-builder", "strategist", "graphic-design",
+    "writers-room", "audio", "web", "marketplace", "print-production",
+    "events", "ads", "community-management", "email-marketing",
+    "seo-content", "channel-manager", "sales-crm", "financial",
+    "analytics", "security",
+  ]).optional(),
   parentProjectId: z.string().uuid().optional(),
   clientName: z.string().min(1).max(200).optional(),
   clientEmail: z.string().email().optional(),
 });
 
 export const resumeProjectSchema = z.object({
-  resumeTo: z.enum(["brief", "concept", "script", "visual_look", "storyboard", "video_gen", "edit", "audio", "polish", "delivered", "paused"]).optional(),
+  resumeTo: z.enum([
+    // Video production
+    "brief", "concept", "script", "visual_look", "storyboard", "video_gen", "edit", "audio", "polish",
+    // Brand builder
+    "discovery", "research", "positioning", "identity", "brand_dna",
+    // Strategist
+    "diagnostic", "objectives", "audiences", "value_prop", "media_plan", "budget", "briefs",
+    // Graphic design
+    "design_system", "moodboard", "production", "adaptation",
+    // Writers Room
+    "wr_brief", "wr_research", "wr_draft", "wr_adaptation", "wr_delivery",
+    // Audio
+    "au_brief", "au_sound_design", "au_production", "au_mix_master", "au_delivery",
+    // Web
+    "wb_brief", "wb_architecture", "wb_content", "wb_seo", "wb_build", "wb_qa", "wb_delivery",
+    // Marketplace
+    "mk_request", "mk_search", "mk_quote", "mk_compare", "mk_contract", "mk_tracking", "mk_delivery",
+    // Print Production
+    "pp_brief", "pp_prepress", "pp_vendor_request", "pp_production_tracking", "pp_quality_check", "pp_delivery",
+    // Events
+    "ev_brief", "ev_concept", "ev_planning", "ev_vendor_setup", "ev_pre_event", "ev_live_event", "ev_post_event", "ev_delivery",
+    // Ads
+    "ad_brief", "ad_strategy", "ad_creative", "ad_targeting", "ad_launch_kit", "ad_delivery",
+    // Community Management
+    "cm_brief", "cm_calendar", "cm_content_production", "cm_scheduling", "cm_monitoring", "cm_reporting", "cm_delivery",
+    // Email Marketing
+    "em_brief", "em_strategy", "em_production", "em_segmentation", "em_send", "em_analysis", "em_delivery",
+    // SEO/Content
+    "se_brief", "se_audit", "se_keyword_strategy", "se_content_plan", "se_optimization", "se_reporting", "se_delivery",
+    // Channel Manager
+    "ch_request", "ch_analysis", "ch_specs", "ch_delivery",
+    // Sales/CRM
+    "sl_capture", "sl_enrich", "sl_score", "sl_nurture", "sl_proposal", "sl_negotiate", "sl_close", "sl_attribution", "sl_delivery",
+    // Financial
+    "fn_request", "fn_budget", "fn_tracking", "fn_pl", "fn_deliver",
+    // Analytics
+    "an_request", "an_collect", "an_analyze", "an_visualize", "an_deliver",
+    // Security
+    "sec_audit", "sec_scan", "sec_remediate", "sec_report", "sec_deliver",
+    // Shared
+    "delivered", "paused",
+  ]).optional(),
 });
 
 // ── Transactions ──
