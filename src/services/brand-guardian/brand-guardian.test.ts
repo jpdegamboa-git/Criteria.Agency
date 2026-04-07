@@ -6,6 +6,7 @@ import { computeOverallScore, determineVerdict } from "./guardian-engine.js";
 import { extractRuleFromFeedback } from "./rule-learner.js";
 import { DEFAULT_DIMENSION_WEIGHTS } from "./types.js";
 import type { BrandGuardianConfig, BrandDimensionResult } from "./types.js";
+import { generateManualContent } from "./manual-generator.js";
 
 vi.mock("../../providers/generate-text.js", () => ({
   generateText: vi.fn(),
@@ -217,5 +218,43 @@ describe("RuleLearner", () => {
 
     expect(result.source).toBe("human_feedback");
     expect(result.confidence).toBe(0.8);
+  });
+});
+
+describe("ManualGenerator", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("should generate markdown with all 8 sections", async () => {
+    mockGenerateText.mockResolvedValueOnce([
+      "# Brand Manual: TestCo",
+      "## 1. Brand Overview",
+      "TestCo is an innovative technology company.",
+      "## 2. Brand Personality",
+      "Professional, warm, innovative.",
+      "## 3. Verbal Identity",
+      "Use professional tone. Avoid slang.",
+      "## 4. Visual Identity",
+      "Primary: #2563EB. Font: Inter.",
+      "## 5. Logo Usage",
+      "Always on white background.",
+      "## 6. Application Examples",
+      "See recent content validations.",
+      "## 7. Channel Guidelines",
+      "LinkedIn: formal. Instagram: casual.",
+      "## 8. Do's and Don'ts",
+      "DO: Use warm language. DON'T: Use jargon.",
+    ].join("\n"));
+
+    const markdown = await generateManualContent(
+      "TestCo Brand DNA here",
+      [{ id: "r1", clientId: "c1", dimension: "tone", type: "always" as const, rule: "Be warm", source: "brand_dna" as const, examples: [], confidence: 1.0, enabled: true }],
+      [],
+    );
+
+    expect(markdown).toContain("# Brand Manual");
+    expect(markdown).toContain("Brand Overview");
+    expect(markdown).toContain("Do's and Don'ts");
   });
 });
