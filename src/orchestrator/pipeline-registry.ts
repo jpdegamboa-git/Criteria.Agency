@@ -282,3 +282,96 @@ PipelineRegistry.register({
     "ev-g3": { afterStep: "ev_post_event", evaluators: ["EV-L"], maxIterations: 2, failReturnTo: "ev_post_event" },
   },
 });
+
+// ── Ads Pipeline ──
+PipelineRegistry.register({
+  type: "ads",
+  steps: ["ad_brief", "ad_strategy", "ad_creative", "ad_targeting", "ad_launch_kit", "ad_delivery"],
+  stepAgents: {
+    ad_brief: ["AD-L"],
+    ad_strategy: ["AD-001"],
+    ad_creative: ["AD-002"],
+    ad_targeting: ["AD-003"],
+    ad_launch_kit: ["AD-004"],
+    ad_delivery: ["AD-L"],
+  },
+  gates: {
+    "ad-g1": { afterStep: "ad_strategy", evaluators: ["AD-L", "XA-001"], maxIterations: 3, failReturnTo: "ad_strategy" },
+    "ad-g2": { afterStep: "ad_targeting", evaluators: ["AD-L", "XA-003"], maxIterations: 3, failReturnTo: "ad_creative" },
+  },
+});
+
+// ── Community Management Pipeline ──
+PipelineRegistry.register({
+  type: "community-management",
+  steps: ["cm_brief", "cm_calendar", "cm_content_production", "cm_scheduling", "cm_monitoring", "cm_reporting", "cm_delivery"],
+  stepAgents: {
+    cm_brief: ["CM-L"],
+    cm_calendar: ["CM-001"],
+    cm_content_production: ["CM-002"],
+    cm_scheduling: ["CM-002"],
+    cm_monitoring: ["CM-003"],
+    cm_reporting: ["CM-004"],
+    cm_delivery: ["CM-L"],
+  },
+  gates: {
+    "cm-g1": { afterStep: "cm_calendar", evaluators: ["CM-L"], maxIterations: 3, failReturnTo: "cm_calendar" },
+    "cm-g2": { afterStep: "cm_scheduling", evaluators: ["CM-L", "XA-003"], maxIterations: 3, failReturnTo: "cm_content_production" },
+  },
+});
+
+// ── Email Marketing Pipeline ──
+PipelineRegistry.register({
+  type: "email-marketing",
+  steps: ["em_brief", "em_strategy", "em_production", "em_segmentation", "em_send", "em_analysis", "em_delivery"],
+  stepAgents: {
+    em_brief: ["EM-L"],
+    em_strategy: ["EM-001"],
+    em_production: ["EM-002"],
+    em_segmentation: ["EM-003"],
+    em_send: ["EM-002"],
+    em_analysis: ["EM-004"],
+    em_delivery: ["EM-L"],
+  },
+  gates: {
+    "em-g1": { afterStep: "em_strategy", evaluators: ["EM-L"], maxIterations: 3, failReturnTo: "em_strategy" },
+    "em-g2": { afterStep: "em_segmentation", evaluators: ["EM-L", "XA-003"], maxIterations: 3, failReturnTo: "em_production" },
+  },
+});
+
+// ── SEO/Content Pipeline ──
+PipelineRegistry.register({
+  type: "seo-content",
+  steps: ["se_brief", "se_audit", "se_keyword_strategy", "se_content_plan", "se_optimization", "se_reporting", "se_delivery"],
+  stepAgents: {
+    se_brief: ["SE-L"],
+    se_audit: ["SE-001"],
+    se_keyword_strategy: ["SE-002"],
+    se_content_plan: ["SE-003"],
+    se_optimization: ["SE-004"],
+    se_reporting: ["SE-004"],
+    se_delivery: ["SE-L"],
+  },
+  gates: {
+    "se-g1": { afterStep: "se_audit", evaluators: ["SE-L"], maxIterations: 2, failReturnTo: "se_audit" },
+    "se-g2": { afterStep: "se_content_plan", evaluators: ["SE-L"], maxIterations: 3, failReturnTo: "se_keyword_strategy" },
+  },
+});
+
+// ── Channel Manager Pipeline ──
+PipelineRegistry.register({
+  type: "channel-manager",
+  steps: ["ch_request", "ch_analysis", "ch_specs", "ch_delivery"],
+  stepAgents: {
+    ch_request: ["CH-L"],
+    ch_analysis: ["CH-001", "CH-002"],
+    ch_specs: ["CH-003"],
+    ch_delivery: ["CH-L"],
+  },
+  gates: {
+    "ch-g1": { afterStep: "ch_analysis", evaluators: ["CH-L"], maxIterations: 2, failReturnTo: "ch_analysis" },
+  },
+});
+
+// NOTE: Opportunity Agent is NOT a pipeline — it operates as a scheduled loop.
+// Agents OP-L, OP-001, OP-002 are registered in agent-registry but not in PipelineRegistry.
