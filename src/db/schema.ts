@@ -296,6 +296,22 @@ export const continuousRunStatusEnum = pgEnum("continuous_run_status", [
   "pending", "running", "completed", "failed",
 ]);
 
+export const brandRuleTypeEnum = pgEnum("brand_rule_type", [
+  "always", "never", "prefer", "avoid",
+]);
+
+export const brandRuleSourceEnum = pgEnum("brand_rule_source", [
+  "brand_dna", "human_feedback", "learned",
+]);
+
+export const brandValidationVerdictEnum = pgEnum("brand_validation_verdict", [
+  "pass", "needs_revision", "fail",
+]);
+
+export const brandIssueSeverityEnum = pgEnum("brand_issue_severity", [
+  "critical", "major", "minor",
+]);
+
 // ── Tables ──
 
 export const clients = pgTable("clients", {
@@ -925,3 +941,65 @@ export const autonomyConfigs = pgTable("autonomy_configs", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
+
+// ── Brand Guardian ──
+
+export const brandRules = pgTable("brand_rules", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  clientId: uuid("client_id").references(() => clients.id).notNull(),
+  dimension: varchar("dimension", { length: 50 }).notNull(),
+  type: brandRuleTypeEnum("type").notNull(),
+  rule: text("rule").notNull(),
+  source: brandRuleSourceEnum("source").notNull(),
+  examples: jsonb("examples").default([]),
+  confidence: numeric("confidence", { precision: 3, scale: 2 }).default("1.00"),
+  enabled: boolean("enabled").default(true).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  lastAppliedAt: timestamp("last_applied_at"),
+}, (table) => [
+  index("brand_rules_client_idx").on(table.clientId),
+  index("brand_rules_dimension_idx").on(table.clientId, table.dimension),
+]);
+
+export const brandValidations = pgTable("brand_validations", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  clientId: uuid("client_id").references(() => clients.id).notNull(),
+  projectId: uuid("project_id").references(() => projects.id),
+  contentType: varchar("content_type", { length: 50 }).notNull(),
+  overallScore: integer("overall_score").notNull(),
+  verdict: brandValidationVerdictEnum("verdict").notNull(),
+  dimensions: jsonb("dimensions").notNull(),
+  summary: text("summary").notNull(),
+  autoFixable: boolean("auto_fixable").default(false).notNull(),
+  autoFixSuggestions: jsonb("auto_fix_suggestions").default([]),
+  humanOverride: varchar("human_override", { length: 20 }),
+  humanFeedback: text("human_feedback"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+}, (table) => [
+  index("brand_validations_client_idx").on(table.clientId),
+  index("brand_validations_project_idx").on(table.projectId),
+]);
+
+export const brandGuardianConfigs = pgTable("brand_guardian_configs", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  clientId: uuid("client_id").references(() => clients.id).notNull().unique(),
+  passThreshold: integer("pass_threshold").default(80).notNull(),
+  autoPassThreshold: integer("auto_pass_threshold").default(95).notNull(),
+  strictMode: boolean("strict_mode").default(false).notNull(),
+  weightsByDimension: jsonb("weights_by_dimension").default({}),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const brandManuals = pgTable("brand_manuals", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  clientId: uuid("client_id").references(() => clients.id).notNull(),
+  version: integer("version").default(1).notNull(),
+  contentMarkdown: text("content_markdown").notNull(),
+  shareToken: varchar("share_token", { length: 64 }).notNull().unique(),
+  published: boolean("published").default(true).notNull(),
+  generatedAt: timestamp("generated_at").defaultNow().notNull(),
+}, (table) => [
+  index("brand_manuals_client_idx").on(table.clientId),
+  index("brand_manuals_token_idx").on(table.shareToken),
+]);
