@@ -133,3 +133,40 @@ PipelineRegistry.register({
     "st-g3": { afterStep: "budget", evaluators: ["human"], maxIterations: 1, failReturnTo: "budget" },
   },
 });
+
+// ── Graphic Design Pipeline ──
+
+PipelineRegistry.register({
+  type: "graphic-design",
+  steps: [
+    "brief", "design_system", "moodboard", "production", "adaptation", "delivery",
+  ],
+  stepAgents: {
+    brief: ["GD-L"],
+    design_system: ["GD-L", "GD-001"],
+    moodboard: ["GD-L", "GD-002"],
+    production: ["GD-L", "GD-002", "GD-004", "GD-005", "CW-001"],
+    adaptation: ["GD-003", "GD-004"],
+    delivery: ["GD-003"],
+  },
+  gates: {
+    "gd-g1": {
+      afterStep: "moodboard",
+      evaluators: ["GD-L", "XA-003"],
+      maxIterations: 3,
+      failReturnTo: "moodboard",
+    },
+    "gd-g2": {
+      afterStep: "production",
+      evaluators: ["GD-L", "TL-002", "XA-003"],
+      maxIterations: 3,
+      failReturnTo: "production",
+    },
+    "gd-g3": {
+      afterStep: "delivery",
+      evaluators: ["GD-L"],
+      maxIterations: 1,
+      failReturnTo: "adaptation",
+    },
+  },
+});

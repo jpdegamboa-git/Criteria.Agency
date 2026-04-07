@@ -18,7 +18,7 @@ export const AGENT_REGISTRY: Record<string, AgentRegistryEntry> = {
     team: 0,
     level: "top",
     steps: [],
-    gates: ["g1", "g2", "g3", "g4", "g5"],
+    gates: ["g1", "g2", "g3", "g4", "g5", "gd-g2"],
     autonomy: 90,
   },
   "TL-003": {
@@ -201,4 +201,35 @@ export const AGENT_REGISTRY: Record<string, AgentRegistryEntry> = {
     gates: [],
     autonomy: 80,
   },
+
+  // ── Brand Builder Motor ──
+  "BB-L": { id: "BB-L", name: "Brand Architect", skillFile: "agents/BB-L_brand_architect.md", team: 10, level: "leader", steps: ["discovery", "positioning", "brand_dna"] as any, gates: ["bb-g1", "bb-g2"] as any, autonomy: 75 },
+  "BB-001": { id: "BB-001", name: "Workshop Facilitator", skillFile: "agents/BB-001_workshop_facilitator.md", team: 10, level: "sub", steps: ["discovery"] as any, gates: [], autonomy: 80 },
+  "BB-002": { id: "BB-002", name: "Sociologist", skillFile: "agents/BB-002_sociologist.md", team: 10, level: "sub", steps: ["research"] as any, gates: [], autonomy: 85 },
+  "BB-003": { id: "BB-003", name: "Verbal Identity Designer", skillFile: "agents/BB-003_verbal_identity_designer.md", team: 10, level: "sub", steps: ["identity"] as any, gates: [], autonomy: 70 },
+  "BB-004": { id: "BB-004", name: "Visual Identity Advisor", skillFile: "agents/BB-004_visual_identity_advisor.md", team: 10, level: "sub", steps: ["identity"] as any, gates: [], autonomy: 70 },
+  // ── Strategist Motor ──
+  "ST-L": { id: "ST-L", name: "Chief Strategist", skillFile: "agents/ST-L_chief_strategist.md", team: 11, level: "leader", steps: ["diagnostic", "objectives", "value_prop", "briefs"] as any, gates: ["st-g1", "st-g2"] as any, autonomy: 75 },
+  "ST-001": { id: "ST-001", name: "Audience Analyst", skillFile: "agents/ST-001_audience_analyst.md", team: 11, level: "sub", steps: ["audiences"] as any, gates: [], autonomy: 80 },
+  "ST-002": { id: "ST-002", name: "Media Planner", skillFile: "agents/ST-002_media_planner.md", team: 11, level: "sub", steps: ["media_plan"] as any, gates: [], autonomy: 75 },
+  "ST-003": { id: "ST-003", name: "Budget Allocator", skillFile: "agents/ST-003_budget_allocator.md", team: 11, level: "sub", steps: ["budget"] as any, gates: [], autonomy: 80 },
+  // ── Listener Stubs ──
+  "LI-001": { id: "LI-001", name: "Brand Listener", skillFile: "agents/LI-001_brand_listener.md", team: 12, level: "sub", steps: ["diagnostic"] as any, gates: [], autonomy: 90 },
+  "LI-002": { id: "LI-002", name: "Culture Listener", skillFile: "agents/LI-002_culture_listener.md", team: 12, level: "sub", steps: ["research", "diagnostic", "audiences"] as any, gates: [], autonomy: 90 },
+  "LI-003": { id: "LI-003", name: "Industry Listener", skillFile: "agents/LI-003_industry_listener.md", team: 12, level: "sub", steps: ["diagnostic"] as any, gates: [], autonomy: 90 },
+  "LI-004": { id: "LI-004", name: "Competitive Listener", skillFile: "agents/LI-004_competitive_listener.md", team: 12, level: "sub", steps: ["research", "diagnostic", "value_prop"] as any, gates: [], autonomy: 90 },
+  // ── Transversal Stubs ──
+  "XA-001": { id: "XA-001", name: "Financial Agent", skillFile: "agents/XA-001_financial_agent.md", team: 13, level: "cross_functional", steps: ["budget"] as any, gates: ["st-g1"] as any, autonomy: 85 },
+  "XA-002": { id: "XA-002", name: "Channel Manager", skillFile: "agents/XA-002_channel_manager.md", team: 13, level: "cross_functional", steps: ["media_plan"] as any, gates: [], autonomy: 85 },
+  "XA-003": { id: "XA-003", name: "Brand Guardian", skillFile: "agents/XA-003_brand_guardian.md", team: 13, level: "cross_functional", steps: [], gates: ["bb-g2", "st-g2", "gd-g1", "gd-g2"] as any, autonomy: 80 },
+  "XA-004": { id: "XA-004", name: "Media Scout", skillFile: "agents/XA-004_media_scout.md", team: 13, level: "cross_functional", steps: ["media_plan"] as any, gates: [], autonomy: 85 },
+  // ── Graphic Design Motor ──
+  "GD-L": { id: "GD-L", name: "Art Director", skillFile: "agents/GD-L_art_director.md", team: 14, level: "leader", steps: ["brief", "design_system", "moodboard", "production"] as any, gates: ["gd-g1", "gd-g2", "gd-g3"] as any, autonomy: 75 },
+  "GD-001": { id: "GD-001", name: "Design System Architect", skillFile: "agents/GD-001_design_system_architect.md", team: 14, level: "sub", steps: ["design_system"] as any, gates: [], autonomy: 80 },
+  "GD-002": { id: "GD-002", name: "Graphic Composer", skillFile: "agents/GD-002_graphic_composer.md", team: 14, level: "sub", steps: ["moodboard", "production"] as any, gates: [], autonomy: 70 },
+  "GD-003": { id: "GD-003", name: "Format Adapter", skillFile: "agents/GD-003_format_adapter.md", team: 14, level: "sub", steps: ["adaptation", "delivery"] as any, gates: [], autonomy: 85 },
+  "GD-004": { id: "GD-004", name: "Motion Designer", skillFile: "agents/GD-004_motion_designer.md", team: 14, level: "sub", steps: ["production", "adaptation"] as any, gates: [], autonomy: 70 },
+  "GD-005": { id: "GD-005", name: "Infographic Designer", skillFile: "agents/GD-005_infographic_designer.md", team: 14, level: "sub", steps: ["production"] as any, gates: [], autonomy: 75 },
+  // ── Copywriter (cross-motor) ──
+  "CW-001": { id: "CW-001", name: "Copywriter", skillFile: "agents/CW-001_copywriter.md", team: 15, level: "sub", steps: ["production"] as any, gates: [], autonomy: 75 },
 };

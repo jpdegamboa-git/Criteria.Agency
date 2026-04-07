@@ -53,6 +53,8 @@ export const artifactStepEnum = pgEnum("artifact_step", [
   "discovery", "research", "positioning", "identity", "brand_dna",
   // Strategist
   "diagnostic", "objectives", "audiences", "value_prop", "media_plan", "budget", "briefs",
+  // Graphic design
+  "design_system", "moodboard", "production", "adaptation",
   // Shared
   "model_config", "gate_review",
 ]);
