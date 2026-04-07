@@ -1,4 +1,5 @@
-import { AGENT_OUTPUTS, type ArtifactStep } from "../shared/types.js";
+import type { ArtifactStep } from "../shared/types.js";
+import { AGENT_OUTPUTS } from "./mock-outputs.js";
 import { createArtifact } from "../storage/artifacts.js";
 import { db, schema } from "../db/index.js";
 import { eq } from "drizzle-orm";
