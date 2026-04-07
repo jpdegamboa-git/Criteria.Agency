@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { db, schema } from "../db/index.js";
-import { eq, desc, sql } from "drizzle-orm";
+import { eq, desc, sql, and } from "drizzle-orm";
 import { learnFromCorrection } from "../services/categorizer.js";
 import { addEntityPattern } from "../services/entity-matcher.js";
 import { applyReconciliation } from "../services/reconciler.js";
@@ -29,17 +29,26 @@ export const financeRoutes = new Hono();
 financeRoutes.get("/api/transactions", async (c) => {
   const limit = Math.min(Number(c.req.query("limit") ?? 50), 200);
   const offset = Number(c.req.query("offset") ?? 0);
+  const tenantId = c.get("tenantId") as string | undefined;
+  const user = c.get("user") as { role?: string } | undefined;
+  const isAdmin = user?.role === "admin";
+
+  const whereClause = tenantId && !isAdmin
+    ? eq(schema.transactions.clientId, tenantId)
+    : undefined;
 
   const data = await db
     .select()
     .from(schema.transactions)
+    .where(whereClause)
     .orderBy(desc(schema.transactions.date))
     .limit(limit)
     .offset(offset);
 
   const [countResult] = await db
     .select({ count: sql<number>`count(*)::int` })
-    .from(schema.transactions);
+    .from(schema.transactions)
+    .where(whereClause);
 
   return c.json({ data, total: countResult.count, limit, offset });
 });
@@ -189,15 +198,28 @@ financeRoutes.post("/api/expected-payments", async (c) => {
 // GET /api/expected-payments — list
 financeRoutes.get("/api/expected-payments", async (c) => {
   const status = c.req.query("status");
+  const tenantId = c.get("tenantId") as string | undefined;
+  const user = c.get("user") as { role?: string } | undefined;
+  const isAdmin = user?.role === "admin";
 
-  const query = db.select().from(schema.expectedPayments);
+  const tenantFilter = tenantId && !isAdmin
+    ? eq(schema.expectedPayments.clientId, tenantId)
+    : undefined;
 
-  if (status) {
-    const data = await query.where(eq(schema.expectedPayments.status, status as any));
-    return c.json(data);
+  let whereClause;
+  if (status && tenantFilter) {
+    whereClause = and(tenantFilter, eq(schema.expectedPayments.status, status as any));
+  } else if (status) {
+    whereClause = eq(schema.expectedPayments.status, status as any);
+  } else {
+    whereClause = tenantFilter;
   }
 
-  const data = await query;
+  const data = await db
+    .select()
+    .from(schema.expectedPayments)
+    .where(whereClause);
+
   return c.json(data);
 });
 

@@ -11,6 +11,7 @@ import {
 } from "../orchestrator/state-machine.js";
 import { getArtifacts, readArtifact } from "../storage/artifacts.js";
 import { requireSession, requireAdmin } from "./auth.js";
+import { requireTenantMatch } from "../middleware/tenant-guard.js";
 import { parseBody, createProjectSchema, resumeProjectSchema } from "./validators.js";
 import { reviewRoutes } from "./review-routes.js";
 import { checkoutRoutes } from "./checkout-routes.js";
@@ -27,18 +28,51 @@ import { config } from "../shared/config.js";
 
 export const app = new Hono();
 
-// ── CORS (allow frontend origin) ──
+// ── Security headers (all responses) ──
+app.use("*", async (c, next) => {
+  await next();
+  c.header("X-Content-Type-Options", "nosniff");
+  c.header("X-Frame-Options", "DENY");
+  c.header("X-XSS-Protection", "1; mode=block");
+  c.header("Referrer-Policy", "strict-origin-when-cross-origin");
+  c.header("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+  if (process.env.NODE_ENV === "production") {
+    c.header("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+  }
+});
+
+// ── CORS for all API routes ──
 app.use(
-  "/api/auth/*",
+  "/api/*",
   cors({
     origin: config.webUrl,
-    allowHeaders: ["Content-Type", "Authorization"],
-    allowMethods: ["POST", "GET", "OPTIONS"],
+    allowHeaders: ["Content-Type", "Authorization", "X-API-Key", "X-Requested-With"],
+    allowMethods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     exposeHeaders: ["Content-Length"],
     maxAge: 600,
     credentials: true,
   }),
 );
+
+// ── CSRF protection for state-changing API requests ──
+// Exceptions: /api/auth/* (Better Auth handles its own), /api/webhooks/* (Stripe)
+app.use("/api/*", async (c, next) => {
+  const method = c.req.method;
+  const path = new URL(c.req.url).pathname;
+
+  // Skip CSRF for auth routes and webhook routes
+  const isExempt =
+    path.startsWith("/api/auth/") ||
+    path.startsWith("/api/webhooks/");
+
+  if (!isExempt && ["POST", "PUT", "PATCH", "DELETE"].includes(method)) {
+    const xrw = c.req.header("X-Requested-With");
+    if (!xrw) {
+      return c.json({ error: "Missing X-Requested-With header" }, 403);
+    }
+  }
+  await next();
+});
 
 // ── Better Auth handler ──
 app.on(["POST", "GET"], "/api/auth/*", (c) => {
@@ -50,13 +84,19 @@ app.route("/", reviewRoutes);     // Token-based auth (client portal)
 app.route("/", checkoutRoutes);   // Public pricing + Stripe webhook
 
 // ── Protected routes (require session) ──
-app.use("/projects/*", requireSession);
+app.use("/projects", requireSession, requireTenantMatch);
+app.use("/projects/*", requireSession, requireTenantMatch);
 app.use("/agents", requireSession);
 app.use("/artifacts/*", requireSession);
-app.use("/api/transactions/*", requireSession);
-app.use("/api/expected-payments/*", requireSession);
-app.use("/api/categorization-rules/*", requireSession);
-app.use("/api/subscriptions/*", requireSession);
+app.use("/api/transactions", requireSession, requireTenantMatch);
+app.use("/api/transactions/*", requireSession, requireTenantMatch);
+app.use("/api/expected-payments", requireSession, requireTenantMatch);
+app.use("/api/expected-payments/*", requireSession, requireTenantMatch);
+app.use("/api/categorization-rules", requireSession, requireTenantMatch);
+app.use("/api/categorization-rules/*", requireSession, requireTenantMatch);
+app.use("/api/subscriptions", requireSession, requireTenantMatch);
+app.use("/api/subscriptions/*", requireSession, requireTenantMatch);
+app.use("/api/engines/*", requireSession, requireTenantMatch);
 app.use("/api/content/*", requireSession);
 app.use("/api/copilot/*", requireSession);
 app.use("/api/entities/*", requireSession);
@@ -132,7 +172,20 @@ app.post("/projects", async (c) => {
 
 // Projects - List
 app.get("/projects", async (c) => {
-  const projects = await db.select().from(schema.projects);
+  const tenantId = c.get("tenantId") as string | undefined;
+  const user = c.get("user") as { role?: string } | undefined;
+  const isAdmin = user?.role === "admin";
+
+  let projects;
+  if (tenantId && !isAdmin) {
+    projects = await db
+      .select()
+      .from(schema.projects)
+      .where(eq(schema.projects.clientId, tenantId));
+  } else {
+    projects = await db.select().from(schema.projects);
+  }
+
   return c.json(projects);
 });
 

@@ -1,6 +1,13 @@
 import { Hono } from "hono";
 import { db, schema } from "../db/index.js";
 import { eq, and, desc } from "drizzle-orm";
+import {
+  createAlertRuleSchema,
+  updateAlertStatusSchema,
+  approvalResponseSchema,
+  upsertDataSourceConfigSchema,
+  parseBody,
+} from "./validators.js";
 
 export const engineRoutes = new Hono();
 
@@ -18,15 +25,17 @@ engineRoutes.get("/api/engines/alerts/rules/:clientId", async (c) => {
 engineRoutes.post("/api/engines/alerts/rules/:clientId", async (c) => {
   const clientId = c.req.param("clientId");
   const body = await c.req.json();
+  const parsed = parseBody(createAlertRuleSchema, body);
+  if (!parsed.success) return c.json({ error: parsed.error }, 400);
   const [rule] = await db
     .insert(schema.alertRules)
     .values({
       clientId,
-      listenerType: body.listenerType,
-      ruleName: body.ruleName,
-      condition: body.condition,
-      severity: body.severity,
-      notificationChannels: body.notificationChannels || [],
+      listenerType: parsed.data.listenerType,
+      ruleName: parsed.data.ruleName,
+      condition: parsed.data.condition,
+      severity: parsed.data.severity,
+      notificationChannels: parsed.data.notificationChannels,
     })
     .returning();
   return c.json(rule, 201);
@@ -48,11 +57,13 @@ engineRoutes.get("/api/engines/alerts/:clientId", async (c) => {
 engineRoutes.patch("/api/engines/alerts/:clientId/:alertId", async (c) => {
   const { alertId } = c.req.param();
   const body = await c.req.json();
+  const parsed = parseBody(updateAlertStatusSchema, body);
+  if (!parsed.success) return c.json({ error: parsed.error }, 400);
   const [updated] = await db
     .update(schema.alerts)
     .set({
-      status: body.status,
-      resolvedAt: body.status === "resolved" ? new Date() : undefined,
+      status: parsed.data.status,
+      resolvedAt: parsed.data.status === "resolved" ? new Date() : undefined,
     })
     .where(eq(schema.alerts.id, alertId))
     .returning();
@@ -80,13 +91,15 @@ engineRoutes.get("/api/engines/approvals/:clientId", async (c) => {
 engineRoutes.post("/api/engines/approvals/:clientId/:approvalId/respond", async (c) => {
   const { approvalId } = c.req.param();
   const body = await c.req.json();
+  const parsed = parseBody(approvalResponseSchema, body);
+  if (!parsed.success) return c.json({ error: parsed.error }, 400);
   const [updated] = await db
     .update(schema.approvalRequests)
     .set({
-      status: body.status,
+      status: parsed.data.status,
       respondedAt: new Date(),
-      respondedBy: body.respondedBy,
-      responseNote: body.note,
+      respondedBy: parsed.data.respondedBy,
+      responseNote: parsed.data.note,
     })
     .where(eq(schema.approvalRequests.id, approvalId))
     .returning();

@@ -174,6 +174,53 @@ export const reviewStatusSchema = z.object({
   action: z.enum(["approve", "revision_requested"]),
 });
 
+// ── Engine: Alert Rules ──
+
+export const createAlertRuleSchema = z.object({
+  listenerType: z.enum(["brand", "culture", "industry", "competitive", "opportunity"]),
+  ruleName: z.string().min(1).max(255),
+  condition: z.record(z.unknown()),
+  severity: z.enum(["info", "warning", "critical"]),
+  notificationChannels: z.array(z.string()).default([]),
+});
+
+// ── Engine: Alerts ──
+
+export const updateAlertStatusSchema = z.object({
+  status: z.enum(["open", "acknowledged", "resolved", "dismissed"]),
+});
+
+// ── Engine: Approval Responses ──
+
+export const approvalResponseSchema = z.object({
+  status: z.enum(["approved", "rejected", "escalated", "expired"]),
+  respondedBy: z.string().min(1).max(255),
+  note: z.string().max(2000).optional(),
+});
+
+// ── Engine: Data Source Configs ──
+
+export const upsertDataSourceConfigSchema = z.object({
+  config: z.record(z.unknown()),
+  schedule: z.string().regex(/^(@(annually|yearly|monthly|weekly|daily|hourly|reboot))|(@every (\d+(ns|us|µs|ms|s|m|h))+)|((((\d+,)+\d+|(\d+(\/|-)\d+)|\d+|\*) ?){5,7})$/).optional(),
+});
+
+// ── Canvas: Agent Skill File ──
+
+export const updateAgentFileSchema = z.object({
+  content: z.string().min(1),
+});
+
+// ── Checkout ──
+
+export const createCheckoutSchema = z.object({
+  tier: z.enum(["starter", "pro"]),
+  billingPeriod: z.enum(["monthly", "yearly"]),
+  name: z.string().min(1).max(200),
+  email: z.string().email(),
+  company: z.string().min(1).max(200),
+});
+
 // ── Helper: parse with nice error response ──
 
 export function parseBody<T>(schema: z.ZodType<T>, body: unknown): { success: true; data: T } | { success: false; error: string } {
