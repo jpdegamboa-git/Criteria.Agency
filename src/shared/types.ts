@@ -109,6 +109,8 @@ export const ARTIFACT_STEPS = [
   "industry_collect", "industry_analyze", "industry_report", "industry_alert_eval",
   "competitive_collect", "competitive_analyze", "competitive_report", "competitive_alert_eval",
   "opportunity_aggregate", "opportunity_evaluate", "opportunity_generate", "opportunity_prioritize",
+  // Brand Guardian
+  "bg_validate", "bg_verbal", "bg_visual", "bg_score", "bg_manual",
 ] as const;
 export type ArtifactStep = (typeof ARTIFACT_STEPS)[number];
 
