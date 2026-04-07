@@ -21,6 +21,7 @@ import { entityRoutes } from "./entity-routes.js";
 import { invoiceRoutes } from "./invoice-routes.js";
 import { dashboardRoutes } from "./dashboard-routes.js";
 import { canvasRoutes } from "./canvas-routes.js";
+import { engineRoutes } from "./engine-routes.js";
 import { auth } from "../auth.js";
 import { config } from "../shared/config.js";
 
@@ -74,6 +75,7 @@ app.route("/", entityRoutes);
 app.route("/", invoiceRoutes);
 app.route("/", dashboardRoutes);
 app.route("/", canvasRoutes);
+app.route("/", engineRoutes);
 
 // Health
 app.get("/health", (c) => c.json({ status: "ok", version: "0.1.0" }));
