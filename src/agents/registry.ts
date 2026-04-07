@@ -221,7 +221,7 @@ export const AGENT_REGISTRY: Record<string, AgentRegistryEntry> = {
   // ── Transversal Stubs ──
   "XA-001": { id: "XA-001", name: "Financial Agent", skillFile: "agents/XA-001_financial_agent.md", team: 13, level: "cross_functional", steps: ["budget"] as any, gates: ["st-g1", "ad-g1"] as any, autonomy: 85 },
   "XA-002": { id: "XA-002", name: "Channel Manager", skillFile: "agents/XA-002_channel_manager.md", team: 13, level: "cross_functional", steps: ["media_plan"] as any, gates: [], autonomy: 85 },
-  "XA-003": { id: "XA-003", name: "Brand Guardian", skillFile: "agents/XA-003_brand_guardian.md", team: 13, level: "cross_functional", steps: [], gates: ["bb-g2", "st-g2", "gd-g1", "gd-g2", "wr-g2", "au-g2", "wb-g2", "pp-g1", "ad-g2", "cm-g2", "em-g2"] as any, autonomy: 80 },
+  "XA-003": { id: "XA-003", name: "Brand Guardian", skillFile: "agents/XA-003_brand_guardian.md", team: 13, level: "cross_functional", steps: [], gates: ["bb-g2", "st-g2", "gd-g1", "gd-g2", "wr-g2", "au-g2", "wb-g2", "pp-g1", "ad-g2", "cm-g2", "em-g2", "sl-g2"] as any, autonomy: 80 },
   "XA-004": { id: "XA-004", name: "Media Scout", skillFile: "agents/XA-004_media_scout.md", team: 13, level: "cross_functional", steps: ["media_plan"] as any, gates: [], autonomy: 85 },
   // ── Graphic Design Motor ──
   "GD-L": { id: "GD-L", name: "Art Director", skillFile: "agents/GD-L_art_director.md", team: 14, level: "leader", steps: ["brief", "design_system", "moodboard", "production"] as any, gates: ["gd-g1", "gd-g2", "gd-g3"] as any, autonomy: 75 },
@@ -318,4 +318,12 @@ export const AGENT_REGISTRY: Record<string, AgentRegistryEntry> = {
   "CO-L": { id: "CO-L", name: "Competitive Listener Director", skillFile: "agents/CO-L_competitive_listener_director.md", team: 31, level: "leader", steps: [], gates: [], autonomy: 70 },
   "CO-001": { id: "CO-001", name: "Competitor Scanner", skillFile: "agents/CO-001_competitor_scanner.md", team: 31, level: "sub", steps: [], gates: [], autonomy: 80 },
   "CO-002": { id: "CO-002", name: "Gap Analyst", skillFile: "agents/CO-002_gap_analyst.md", team: 31, level: "sub", steps: [], gates: [], autonomy: 75 },
+  // ── Sales/CRM Motor ──
+  "SL-L": { id: "SL-L", name: "Sales Director", skillFile: "agents/SL-L_sales_director.md", team: 32, level: "leader", steps: ["sl_capture", "sl_negotiate", "sl_close", "sl_delivery"] as any, gates: ["sl-g1", "sl-g2"] as any, autonomy: 70 },
+  "SL-001": { id: "SL-001", name: "Lead Capture Agent", skillFile: "agents/SL-001_lead_capture_agent.md", team: 32, level: "sub", steps: ["sl_capture"] as any, gates: [], autonomy: 85 },
+  "SL-002": { id: "SL-002", name: "Lead Enricher", skillFile: "agents/SL-002_lead_enricher.md", team: 32, level: "sub", steps: ["sl_enrich"] as any, gates: [], autonomy: 80 },
+  "SL-003": { id: "SL-003", name: "Lead Scorer", skillFile: "agents/SL-003_lead_scorer.md", team: 32, level: "sub", steps: ["sl_score"] as any, gates: [], autonomy: 80 },
+  "SL-004": { id: "SL-004", name: "Nurture Coordinator", skillFile: "agents/SL-004_nurture_coordinator.md", team: 32, level: "sub", steps: ["sl_nurture"] as any, gates: [], autonomy: 75 },
+  "SL-005": { id: "SL-005", name: "Proposal Generator", skillFile: "agents/SL-005_proposal_generator.md", team: 32, level: "sub", steps: ["sl_proposal"] as any, gates: [], autonomy: 65 },
+  "SL-006": { id: "SL-006", name: "Attribution Analyst", skillFile: "agents/SL-006_attribution_analyst.md", team: 32, level: "sub", steps: ["sl_attribution"] as any, gates: [], autonomy: 80 },
 };

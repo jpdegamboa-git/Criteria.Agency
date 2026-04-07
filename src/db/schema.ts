@@ -55,6 +55,8 @@ export const projectStatusEnum = pgEnum("project_status", [
   "se_brief", "se_audit", "se_keyword_strategy", "se_content_plan", "se_optimization", "se_reporting", "se_delivery",
   // Channel Manager
   "ch_request", "ch_analysis", "ch_specs", "ch_delivery",
+  // Sales/CRM
+  "sl_capture", "sl_enrich", "sl_score", "sl_nurture", "sl_proposal", "sl_negotiate", "sl_close", "sl_attribution", "sl_delivery",
   // Shared
   "delivered", "paused",
 ]);
@@ -79,6 +81,7 @@ export const gateTypeEnum = pgEnum("gate_type", [
   "em-g1", "em-g2",
   "se-g1", "se-g2",
   "ch-g1",
+  "sl-g1", "sl-g2",
 ]);
 
 export const gateDecisionEnum = pgEnum("gate_decision", ["pass", "fail"]);
@@ -115,6 +118,8 @@ export const artifactStepEnum = pgEnum("artifact_step", [
   "se_brief", "se_audit", "se_keyword_strategy", "se_content_plan", "se_optimization", "se_reporting", "se_delivery",
   // Channel Manager
   "ch_request", "ch_analysis", "ch_specs", "ch_delivery",
+  // Sales/CRM
+  "sl_capture", "sl_enrich", "sl_score", "sl_nurture", "sl_proposal", "sl_negotiate", "sl_close", "sl_attribution", "sl_delivery",
   // Opportunity Agent (loop, not pipeline)
   "op_scan", "op_evaluate", "op_alert",
   // Brand Listener
@@ -670,6 +675,80 @@ export const vendorReviews = pgTable("vendor_reviews", {
   communication: integer("communication").notNull(),
   notes: text("notes"),
   reviewDate: timestamp("review_date").defaultNow().notNull(),
+});
+
+// ── Sales/CRM ──
+
+export const leadStatusEnum = pgEnum("lead_status", [
+  "new", "enriched", "scored", "qualified", "nurturing", "proposal", "negotiation", "won", "lost",
+]);
+
+export const leadClassificationEnum = pgEnum("lead_classification", ["hot", "warm", "cold"]);
+
+export const dealStageEnum = pgEnum("deal_stage", [
+  "qualification", "nurture", "proposal", "negotiation", "closing", "won", "lost",
+]);
+
+export const proposalStatusEnum = pgEnum("proposal_status", [
+  "draft", "sent", "viewed", "accepted", "rejected",
+]);
+
+export const leads = pgTable("leads", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  clientId: uuid("client_id").references(() => clients.id).notNull(),
+  name: varchar("name", { length: 255 }).notNull(),
+  email: varchar("email", { length: 255 }).notNull(),
+  company: varchar("company", { length: 255 }),
+  title: varchar("title", { length: 255 }),
+  phone: varchar("phone", { length: 50 }),
+  source: varchar("source", { length: 50 }).notNull(),
+  sourceDetail: varchar("source_detail", { length: 255 }),
+  fitScore: integer("fit_score").default(0),
+  intentScore: integer("intent_score").default(0),
+  bantScore: jsonb("bant_score").default({}),
+  totalScore: integer("total_score").default(0),
+  classification: leadClassificationEnum("classification").default("cold"),
+  status: leadStatusEnum("status").default("new"),
+  enrichmentData: jsonb("enrichment_data").default({}),
+  assignedTo: varchar("assigned_to", { length: 50 }),
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+}, (table) => [
+  index("leads_client_id_idx").on(table.clientId),
+  index("leads_email_idx").on(table.email),
+]);
+
+export const deals = pgTable("deals", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  leadId: uuid("lead_id").references(() => leads.id).notNull(),
+  clientId: uuid("client_id").references(() => clients.id).notNull(),
+  name: varchar("name", { length: 255 }).notNull(),
+  value: numeric("value", { precision: 12, scale: 2 }),
+  currency: varchar("currency", { length: 3 }).default("USD"),
+  stage: dealStageEnum("stage").default("qualification"),
+  probability: integer("probability").default(10),
+  expectedCloseDate: timestamp("expected_close_date"),
+  actualCloseDate: timestamp("actual_close_date"),
+  lostReason: varchar("lost_reason", { length: 50 }),
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+}, (table) => [
+  index("deals_lead_id_idx").on(table.leadId),
+  index("deals_client_id_idx").on(table.clientId),
+]);
+
+export const proposals = pgTable("proposals", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  dealId: uuid("deal_id").references(() => deals.id).notNull(),
+  clientId: uuid("client_id").references(() => clients.id).notNull(),
+  version: integer("version").default(1),
+  content: text("content"),
+  pricing: jsonb("pricing"),
+  validUntil: timestamp("valid_until"),
+  status: proposalStatusEnum("status").default("draft"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
 // ── Waitlist ──

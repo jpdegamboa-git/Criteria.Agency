@@ -153,6 +153,14 @@ export const MODEL_DEFAULTS: Record<string, string> = {
   "CO-L": "claude-sonnet-4",
   "CO-001": "gemini-2.5-flash",
   "CO-002": "gemini-2.5-flash",
+  // Sales/CRM
+  "SL-L": "claude-sonnet-4",
+  "SL-001": "gemini-2.5-flash",
+  "SL-002": "gemini-2.5-flash",
+  "SL-003": "gemini-2.5-flash",
+  "SL-004": "gemini-2.5-flash",
+  "SL-005": "gemini-2.5-flash",
+  "SL-006": "gemini-2.5-flash",
 };
 
 const DEFAULT_FALLBACK = "gemini-2.5-flash";
