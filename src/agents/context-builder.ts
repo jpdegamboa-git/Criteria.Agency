@@ -60,6 +60,11 @@ const SHARED_DIRECTIVES = [
 const PIPELINE_DIRECTIVES: Record<string, string[]> = {
   strategist: ["agents/_shared/harvard-frameworks.md"],
   "graphic-design": ["agents/_shared/design-constraints.md"],
+  "writers-room": ["agents/_shared/writing-guidelines.md"],
+  audio: ["agents/_shared/audio-specs.md"],
+  web: ["agents/_shared/web-standards.md"],
+  "print-production": ["agents/_shared/print-specs.md"],
+  events: ["agents/_shared/event-playbooks.md"],
 };
 
 async function loadDirectives(paths: string[]): Promise<string[]> {
