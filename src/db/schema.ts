@@ -31,6 +31,8 @@ export const projectStatusEnum = pgEnum("project_status", [
   "discovery", "research", "positioning", "identity", "brand_dna",
   // Strategist
   "diagnostic", "objectives", "audiences", "value_prop", "media_plan", "budget", "briefs",
+  // Graphic design
+  "design_system", "moodboard", "production", "adaptation",
   // Shared
   "delivered", "paused",
 ]);
@@ -41,6 +43,9 @@ export const gateTypeEnum = pgEnum("gate_type", [
   "g3",
   "g4",
   "g5",
+  "gd-g1",
+  "gd-g2",
+  "gd-g3",
 ]);
 
 export const gateDecisionEnum = pgEnum("gate_decision", ["pass", "fail"]);

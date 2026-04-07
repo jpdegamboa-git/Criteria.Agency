@@ -18,7 +18,7 @@ export const AGENT_REGISTRY: Record<string, AgentRegistryEntry> = {
     team: 0,
     level: "top",
     steps: [],
-    gates: ["g1", "g2", "g3", "g4", "g5", "gd-g2"],
+    gates: ["g1", "g2", "g3", "g4", "g5", "gd-g2"] as any,
     autonomy: 90,
   },
   "TL-003": {
