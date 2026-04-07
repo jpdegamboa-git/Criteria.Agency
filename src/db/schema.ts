@@ -363,7 +363,9 @@ export const gateReviews = pgTable("gate_reviews", {
   notes: text("notes"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
-});
+}, (table) => [
+  index("gate_reviews_project_id_gate_idx").on(table.projectId, table.gate),
+]);
 
 export const agentExecutions = pgTable("agent_executions", {
   id: uuid("id").primaryKey().defaultRandom(),
