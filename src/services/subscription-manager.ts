@@ -1,30 +1,15 @@
-import { Resend } from "resend";
 import { eq, and, lt, gt, sql, desc } from "drizzle-orm";
 import { db, schema } from "../db/index.js";
 import { config } from "../shared/config.js";
 import { logger } from "../shared/logger.js";
+import { sendEmail } from "./email-client.js";
 
 // ── Internal notify helper ──
 
-const FROM_EMAIL = "criteria.agency <noreply@criteria.agency>";
-
-const resend = config.resendApiKey ? new Resend(config.resendApiKey) : null;
-
 async function notify(to: string, subject: string, html: string) {
-  if (!resend) {
-    logger.info("subscription.email.mock", { to, subject });
-    return;
-  }
-
-  const { error } = await resend.emails.send({
-    from: FROM_EMAIL,
-    to,
-    subject,
-    html,
-  });
-
-  if (error) {
-    logger.error("subscription.email.failed", { to, error: String(error) });
+  const ok = await sendEmail(to, subject, html);
+  if (!ok) {
+    logger.error("subscription.email.failed", { to, subject });
   }
 }
 

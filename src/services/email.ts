@@ -1,29 +1,13 @@
-import { Resend } from "resend";
-import { config } from "../shared/config.js";
+import { sendEmail } from "./email-client.js";
 import { logger } from "../shared/logger.js";
 import { escapeHtml, sanitizeUrl } from "../shared/sanitize.js";
 
-const resend = config.resendApiKey
-  ? new Resend(config.resendApiKey)
-  : null;
-
-const FROM_EMAIL = "criteria.agency <noreply@criteria.agency>";
-
 async function send(to: string, subject: string, html: string) {
-  if (!resend) {
-    logger.info("email.mock", { to, subject });
-    return;
-  }
-
-  const { error } = await resend.emails.send({
-    from: FROM_EMAIL,
-    to,
-    subject,
-    html,
-  });
-
-  if (error) {
-    logger.error("email.failed", { to, error: String(error) });
+  const ok = await sendEmail(to, subject, html);
+  if (!ok) {
+    logger.error("email.failed", { to, subject });
+  } else {
+    logger.info("email.sent", { to, subject });
   }
 }
 
