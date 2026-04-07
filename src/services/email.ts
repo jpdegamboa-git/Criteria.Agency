@@ -1,5 +1,6 @@
 import { Resend } from "resend";
 import { config } from "../shared/config.js";
+import { logger } from "../shared/logger.js";
 import { escapeHtml, sanitizeUrl } from "../shared/sanitize.js";
 
 const resend = config.resendApiKey
@@ -10,10 +11,7 @@ const FROM_EMAIL = "criteria.agency <noreply@criteria.agency>";
 
 async function send(to: string, subject: string, html: string) {
   if (!resend) {
-    console.log(`[EMAIL] To: ${to}`);
-    console.log(`[EMAIL] Subject: ${subject}`);
-    console.log(`[EMAIL] Body: ${html.replace(/<[^>]*>/g, "").trim()}`);
-    console.log(`[EMAIL] ---`);
+    logger.info("email.mock", { to, subject });
     return;
   }
 
@@ -25,7 +23,7 @@ async function send(to: string, subject: string, html: string) {
   });
 
   if (error) {
-    console.error(`[EMAIL ERROR] Failed to send to ${to}:`, error);
+    logger.error("email.failed", { to, error: String(error) });
   }
 }
 

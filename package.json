@@ -8,7 +8,8 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "tsx src/db/migrate.ts",
     "db:seed": "tsx src/db/seed.ts",
-    "stripe:setup": "tsx src/scripts/setup-stripe.ts"
+    "stripe:setup": "tsx src/scripts/setup-stripe.ts",
+    "test": "vitest run"
   },
   "bin": {
     "criteriafilms": "./src/cli/index.ts"
@@ -22,6 +23,7 @@
     "drizzle-orm": "^0.45.2",
     "hono": "^4.7.0",
     "node-cron": "^4.2.1",
+    "pino": "^10.3.1",
     "postgres": "^3.4.0",
     "resend": "^6.10.0",
     "stripe": "^22.0.0",
@@ -34,6 +36,7 @@
     "@types/uuid": "^10.0.0",
     "drizzle-kit": "^0.30.0",
     "tsx": "^4.19.0",
-    "typescript": "^5.7.0"
+    "typescript": "^5.7.0",
+    "vitest": "^4.1.2"
   }
 }

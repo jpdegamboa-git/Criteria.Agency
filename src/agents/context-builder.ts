@@ -72,9 +72,7 @@ export async function buildAgentContext(
     try {
       systemPrompt = await fs.readFile(skillPath, "utf-8");
     } catch {
-      console.warn(
-        `[CONTEXT] Could not load skill file for ${agentId}: ${skillPath}`,
-      );
+      // Skill file not found — agent runs without custom system prompt
     }
   }
 

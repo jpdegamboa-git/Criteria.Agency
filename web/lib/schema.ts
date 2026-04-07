@@ -1,7 +1,6 @@
 /**
- * Re-export waitlist schema table for use in Next.js API routes.
- * This avoids importing from outside the web/ directory which causes
- * TypeScript/bundler issues with the Next.js compilation.
+ * Waitlist schema for Next.js API routes.
+ * IMPORTANT: Keep in sync with src/db/schema.ts (waitlistEntries table).
  */
 import {
   pgTable,
@@ -30,4 +29,5 @@ export const waitlistEntries = pgTable("waitlist_entries", {
   status: waitlistStatusEnum("status").default("pending").notNull(),
   nurtureStep: integer("nurture_step").default(0).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });

@@ -1,6 +1,7 @@
 import { serve } from "@hono/node-server";
 import { app } from "./routes.js";
 import { config, auditConfig } from "../shared/config.js";
+import { logger } from "../shared/logger.js";
 import cron from "node-cron";
 import {
   checkExpiringTrials,
@@ -16,38 +17,22 @@ auditConfig();
 
 // Start HTTP server
 serve({ fetch: app.fetch, port: config.port }, (info) => {
-  console.log(`CriteriaFilms API running on http://localhost:${info.port}`);
+  logger.info("server.started", { port: info.port });
 });
 
 // Schedule subscription management tasks
-cron.schedule("0 9 * * *", () => {
-  console.log("[CRON] Running: checkExpiringTrials");
-  checkExpiringTrials().catch(console.error);
-});
+const cronJob = (schedule: string, name: string, fn: () => Promise<unknown>) => {
+  cron.schedule(schedule, () => {
+    logger.info("cron.run", { job: name });
+    fn().catch((err) => logger.error("cron.failed", { job: name, error: String(err) }));
+  });
+};
 
-cron.schedule("0 10 * * *", () => {
-  console.log("[CRON] Running: checkExpiredTrials");
-  checkExpiredTrials().catch(console.error);
-});
+cronJob("0 9 * * *", "checkExpiringTrials", checkExpiringTrials);
+cronJob("0 10 * * *", "checkExpiredTrials", checkExpiredTrials);
+cronJob("0 11 * * *", "checkOverduePayments", checkOverduePayments);
+cronJob("0 9 * * 1", "detectChurnRisk", detectChurnRisk);
+cronJob("0 8 1 * *", "createRecurringPayments", createRecurringPayments);
+cronJob("0 12 * * *", "sendEarlyAdopterTransitionNotice", sendEarlyAdopterTransitionNotice);
 
-cron.schedule("0 11 * * *", () => {
-  console.log("[CRON] Running: checkOverduePayments");
-  checkOverduePayments().catch(console.error);
-});
-
-cron.schedule("0 9 * * 1", () => {
-  console.log("[CRON] Running: detectChurnRisk");
-  detectChurnRisk().catch(console.error);
-});
-
-cron.schedule("0 8 1 * *", () => {
-  console.log("[CRON] Running: createRecurringPayments");
-  createRecurringPayments().catch(console.error);
-});
-
-cron.schedule("0 12 * * *", () => {
-  console.log("[CRON] Running: sendEarlyAdopterTransitionNotice");
-  sendEarlyAdopterTransitionNotice().catch(console.error);
-});
-
-console.log("[CRON] Subscription management tasks scheduled");
+logger.info("cron.scheduled", { jobs: 6 });

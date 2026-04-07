@@ -76,13 +76,13 @@ export function auditConfig(): void {
   if (config.adminApiKey) configured.push("Admin auth");
   else warnings.push("ADMIN_API_KEY empty — API routes are UNPROTECTED (dev mode)");
 
-  // Report
+  // Report (uses console directly since logger may not be initialized yet)
   if (configured.length > 0) {
     console.log(`[CONFIG] Services configured: ${configured.join(", ")}`);
   }
   if (warnings.length > 0) {
     for (const w of warnings) {
-      console.warn(`[CONFIG] ${w}`);
+      console.warn(`[CONFIG] ⚠ ${w}`);
     }
   }
 }

@@ -230,6 +230,7 @@ export const artifacts = pgTable("artifacts", {
   storagePath: text("storage_path").notNull(),
   createdByAgent: varchar("created_by_agent", { length: 20 }).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
   metadata: jsonb("metadata").default({}),
 }, (table) => [
   index("artifacts_project_id_idx").on(table.projectId),
@@ -247,6 +248,7 @@ export const gateReviews = pgTable("gate_reviews", {
   scores: jsonb("scores").default({}),
   notes: text("notes"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
 export const agentExecutions = pgTable("agent_executions", {
@@ -264,6 +266,7 @@ export const agentExecutions = pgTable("agent_executions", {
   completedAt: timestamp("completed_at"),
   cost: jsonb("cost").default({}),
   error: text("error"),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
 export const modelConfigs = pgTable("model_configs", {
@@ -277,6 +280,7 @@ export const modelConfigs = pgTable("model_configs", {
   parameters: jsonb("parameters").default({}),
   costEstimate: numeric("cost_estimate", { precision: 10, scale: 2 }),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
 // ── Review & Delivery ──
@@ -291,6 +295,7 @@ export const reviewTokens = pgTable("review_tokens", {
   expiresAt: timestamp("expires_at").notNull(),
   lastAccessedAt: timestamp("last_accessed_at").defaultNow().notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
 export const comments = pgTable("comments", {
@@ -302,6 +307,7 @@ export const comments = pgTable("comments", {
   authorName: varchar("author_name", { length: 255 }),
   text: text("text").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 }, (table) => [
   index("comments_project_id_idx").on(table.projectId),
 ]);
@@ -329,6 +335,7 @@ export const transactions = pgTable("transactions", {
   notes: text("notes"),
   metadata: jsonb("metadata").default({}),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 }, (table) => [
   index("transactions_date_idx").on(table.date),
   index("transactions_client_id_idx").on(table.clientId),
@@ -347,6 +354,7 @@ export const expectedPayments = pgTable("expected_payments", {
   status: expectedPaymentStatusEnum("status").default("pending").notNull(),
   reconciledTransactionId: uuid("reconciled_transaction_id"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 }, (table) => [
   index("expected_payments_client_id_idx").on(table.clientId),
   index("expected_payments_status_idx").on(table.status),
@@ -359,6 +367,7 @@ export const clientAliases = pgTable("client_aliases", {
     .notNull(),
   alias: varchar("alias", { length: 255 }).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
 export const categorizationRules = pgTable("categorization_rules", {
@@ -371,6 +380,7 @@ export const categorizationRules = pgTable("categorization_rules", {
   source: ruleSourceEnum("source").default("manual").notNull(),
   priority: integer("priority").default(0).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
 export const bankSyncLog = pgTable("bank_sync_log", {
@@ -383,6 +393,7 @@ export const bankSyncLog = pgTable("bank_sync_log", {
   transactionsReconciled: integer("transactions_reconciled").default(0).notNull(),
   status: syncStatusEnum("status").notNull(),
   error: text("error"),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
 // ── Content Module ──
@@ -427,6 +438,7 @@ export const businessEntities = pgTable("business_entities", {
   defaultCategory: varchar("default_category", { length: 50 }),
   notes: text("notes"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
 export const invoices = pgTable("invoices", {
@@ -443,6 +455,7 @@ export const invoices = pgTable("invoices", {
   notes: text("notes"),
   metadata: jsonb("metadata").default({}),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 }, (table) => [
   index("invoices_entity_id_idx").on(table.entityId),
   index("invoices_status_idx").on(table.status),
@@ -454,6 +467,7 @@ export const transactionInvoices = pgTable("transaction_invoices", {
   invoiceId: uuid("invoice_id").references(() => invoices.id).notNull(),
   amount: numeric("amount", { precision: 12, scale: 2 }).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
 // ── Waitlist ──
@@ -476,4 +490,5 @@ export const waitlistEntries = pgTable("waitlist_entries", {
   status: waitlistStatusEnum("status").default("pending").notNull(),
   nurtureStep: integer("nurture_step").default(0).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });

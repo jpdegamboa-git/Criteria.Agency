@@ -2,23 +2,20 @@ import { Resend } from "resend";
 import { eq, and, lt, gt, sql, desc } from "drizzle-orm";
 import { db, schema } from "../db/index.js";
 import { config } from "../shared/config.js";
+import { logger } from "../shared/logger.js";
 
 // ── Internal notify helper ──
 
 const FROM_EMAIL = "criteria.agency <noreply@criteria.agency>";
 
+const resend = config.resendApiKey ? new Resend(config.resendApiKey) : null;
+
 async function notify(to: string, subject: string, html: string) {
-  if (!config.resendApiKey) {
-    console.log(`[SUBSCRIPTION] To: ${to}`);
-    console.log(`[SUBSCRIPTION] Subject: ${subject}`);
-    console.log(
-      `[SUBSCRIPTION] Body: ${html.replace(/<[^>]*>/g, "").trim()}`
-    );
-    console.log(`[SUBSCRIPTION] ---`);
+  if (!resend) {
+    logger.info("subscription.email.mock", { to, subject });
     return;
   }
 
-  const resend = new Resend(config.resendApiKey);
   const { error } = await resend.emails.send({
     from: FROM_EMAIL,
     to,
@@ -27,7 +24,7 @@ async function notify(to: string, subject: string, html: string) {
   });
 
   if (error) {
-    console.error(`[SUBSCRIPTION EMAIL ERROR] Failed to send to ${to}:`, error);
+    logger.error("subscription.email.failed", { to, error: String(error) });
   }
 }
 

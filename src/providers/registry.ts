@@ -4,6 +4,7 @@ import { AnthropicProvider } from "./anthropic.js";
 import { GeminiProvider } from "./gemini.js";
 import { PiAPIProvider } from "./piapi.js";
 import { MockProvider } from "./mock.js";
+import { logger } from "../shared/logger.js";
 
 const providers: Record<string, ModelProvider> = {};
 
@@ -25,7 +26,7 @@ export async function getProviderForModel(modelId: string): Promise<ModelProvide
   initProviders();
   const model = getModel(modelId);
   if (!model) {
-    console.warn(`[REGISTRY] Unknown model "${modelId}", using mock`);
+    logger.warn("registry.unknownModel", { modelId });
     return providers["mock:text"];
   }
   const key = `${model.provider}:${model.type}`;
@@ -35,7 +36,7 @@ export async function getProviderForModel(modelId: string): Promise<ModelProvide
   }
   const status = await provider.getStatus();
   if (!status.available) {
-    console.warn(`[REGISTRY] Provider ${key} unavailable (${status.error}), using mock`);
+    logger.warn("registry.providerUnavailable", { provider: key, error: status.error });
     return providers[`mock:${model.type}`] ?? providers["mock:text"];
   }
   return provider;
