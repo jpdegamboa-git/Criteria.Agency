@@ -45,6 +45,16 @@ export const projectStatusEnum = pgEnum("project_status", [
   "pp_brief", "pp_prepress", "pp_vendor_request", "pp_production_tracking", "pp_quality_check", "pp_delivery",
   // Events
   "ev_brief", "ev_concept", "ev_planning", "ev_vendor_setup", "ev_pre_event", "ev_live_event", "ev_post_event", "ev_delivery",
+  // Ads
+  "ad_brief", "ad_strategy", "ad_creative", "ad_targeting", "ad_launch_kit", "ad_delivery",
+  // Community Management
+  "cm_brief", "cm_calendar", "cm_content_production", "cm_scheduling", "cm_monitoring", "cm_reporting", "cm_delivery",
+  // Email Marketing
+  "em_brief", "em_strategy", "em_production", "em_segmentation", "em_send", "em_analysis", "em_delivery",
+  // SEO/Content
+  "se_brief", "se_audit", "se_keyword_strategy", "se_content_plan", "se_optimization", "se_reporting", "se_delivery",
+  // Channel Manager
+  "ch_request", "ch_analysis", "ch_specs", "ch_delivery",
   // Shared
   "delivered", "paused",
 ]);
@@ -64,6 +74,11 @@ export const gateTypeEnum = pgEnum("gate_type", [
   "mk-g1", "mk-g2",
   "pp-g1", "pp-g2",
   "ev-g1", "ev-g2", "ev-g3",
+  "ad-g1", "ad-g2",
+  "cm-g1", "cm-g2",
+  "em-g1", "em-g2",
+  "se-g1", "se-g2",
+  "ch-g1",
 ]);
 
 export const gateDecisionEnum = pgEnum("gate_decision", ["pass", "fail"]);
@@ -90,6 +105,18 @@ export const artifactStepEnum = pgEnum("artifact_step", [
   "pp_brief", "pp_prepress", "pp_vendor_request", "pp_production_tracking", "pp_quality_check", "pp_delivery",
   // Events
   "ev_brief", "ev_concept", "ev_planning", "ev_vendor_setup", "ev_pre_event", "ev_live_event", "ev_post_event", "ev_delivery",
+  // Ads
+  "ad_brief", "ad_strategy", "ad_creative", "ad_targeting", "ad_launch_kit", "ad_delivery",
+  // Community Management
+  "cm_brief", "cm_calendar", "cm_content_production", "cm_scheduling", "cm_monitoring", "cm_reporting", "cm_delivery",
+  // Email Marketing
+  "em_brief", "em_strategy", "em_production", "em_segmentation", "em_send", "em_analysis", "em_delivery",
+  // SEO/Content
+  "se_brief", "se_audit", "se_keyword_strategy", "se_content_plan", "se_optimization", "se_reporting", "se_delivery",
+  // Channel Manager
+  "ch_request", "ch_analysis", "ch_specs", "ch_delivery",
+  // Opportunity Agent (loop, not pipeline)
+  "op_scan", "op_evaluate", "op_alert",
   // Shared
   "model_config", "gate_review",
 ]);
