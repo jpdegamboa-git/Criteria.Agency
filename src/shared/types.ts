@@ -275,3 +275,11 @@ export const AGENT_OUTPUTS: Record<string, Record<string, MockArtifactDef[]>> = 
   "T9-004": {},
   "T9-005": {},
 };
+
+// ── Pipeline-generic types ──
+
+/** All possible step names across all pipelines */
+export type PipelineStep = string;
+
+/** All possible gate names across all pipelines */
+export type PipelineGate = string;

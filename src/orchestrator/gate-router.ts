@@ -1,28 +1,23 @@
 import { db, schema } from "../db/index.js";
 import { eq, and } from "drizzle-orm";
-import {
-  type GateType,
-  type ProjectStatus,
-  GATE_FAIL_RETURN,
-  GATE_MAX_ITERATIONS,
-  GATE_AGENTS,
-} from "../shared/types.js";
+import type { GateConfig } from "./pipeline-registry.js";
 import { config } from "../shared/config.js";
 import { logger } from "../shared/logger.js";
 
 export interface GateResult {
-  gate: GateType;
+  gate: string;
   decision: "pass" | "fail";
   iteration: number;
   scores: Record<string, number>;
   notes: string;
   maxIterationsReached: boolean;
-  returnToStep?: ProjectStatus;
+  returnToStep?: string;
 }
 
 export async function evaluateGate(
   projectId: string,
-  gate: GateType
+  gate: string,
+  gateConfig: GateConfig
 ): Promise<GateResult> {
   // Count previous iterations for this gate
   const previousReviews = await db
@@ -36,7 +31,7 @@ export async function evaluateGate(
     );
 
   const iteration = previousReviews.length + 1;
-  const maxIterations = GATE_MAX_ITERATIONS[gate];
+  const maxIterations = gateConfig.maxIterations;
 
   // Mock decision: pass based on configurable rate, higher chance on subsequent attempts
   const adjustedPassRate = Math.min(
@@ -47,17 +42,16 @@ export async function evaluateGate(
     Math.random() < adjustedPassRate ? "pass" : "fail";
 
   // Mock scores
-  const agents = GATE_AGENTS[gate];
   const scores: Record<string, number> = {};
-  for (const agentId of agents) {
+  for (const agentId of gateConfig.evaluators) {
     scores[agentId] = decision === "pass"
-      ? 7 + Math.random() * 3   // 7-10 for pass
-      : 4 + Math.random() * 3;  // 4-7 for fail
+      ? 7 + Math.random() * 3
+      : 4 + Math.random() * 3;
   }
 
   const notes = decision === "pass"
     ? `[MOCK] Gate ${gate.toUpperCase()} passed on iteration ${iteration}. All criteria met.`
-    : `[MOCK] Gate ${gate.toUpperCase()} failed on iteration ${iteration}. Returning to ${GATE_FAIL_RETURN[gate]} for revision.`;
+    : `[MOCK] Gate ${gate.toUpperCase()} failed on iteration ${iteration}. Returning to ${gateConfig.failReturnTo} for revision.`;
 
   // Record gate review
   await db.insert(schema.gateReviews).values({
@@ -65,7 +59,7 @@ export async function evaluateGate(
     gate,
     iteration,
     decision,
-    reviewer: "TL-002",
+    reviewer: gateConfig.evaluators[0] ?? "unknown",
     scores,
     notes,
   });
@@ -89,6 +83,6 @@ export async function evaluateGate(
     scores,
     notes,
     maxIterationsReached,
-    returnToStep: decision === "fail" ? GATE_FAIL_RETURN[gate] : undefined,
+    returnToStep: decision === "fail" ? gateConfig.failReturnTo : undefined,
   };
 }
