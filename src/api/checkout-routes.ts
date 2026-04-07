@@ -8,6 +8,7 @@ import {
   handleInvoicePaymentFailed,
 } from "../services/stripe.js";
 import { renderPricingPage, renderCheckoutSuccess, renderCheckoutCancel } from "../views/pricing-page.js";
+import { createCheckoutSchema, parseBody } from "./validators.js";
 
 export const checkoutRoutes = new Hono();
 
@@ -19,22 +20,15 @@ checkoutRoutes.get("/pricing", (c) => {
 // POST /api/checkout — Create Stripe Checkout Session
 checkoutRoutes.post("/api/checkout", async (c) => {
   const body = await c.req.json();
-  const { tier, billingPeriod, name, email, company } = body;
+  const parsed = parseBody(createCheckoutSchema, body);
+  if (!parsed.success) return c.json({ error: parsed.error }, 400);
 
-  if (!tier || !["starter", "pro"].includes(tier)) {
-    return c.json({ error: "Tier invalido" }, 400);
-  }
-  if (!billingPeriod || !["monthly", "yearly"].includes(billingPeriod)) {
-    return c.json({ error: "Periodo de facturacion invalido" }, 400);
-  }
-  if (!name || !email || !company) {
-    return c.json({ error: "Todos los campos son requeridos" }, 400);
-  }
+  const { tier, billingPeriod, name, email, company } = parsed.data;
 
   try {
     const url = await createCheckoutSession({
-      tier: tier as "starter" | "pro",
-      billingPeriod: billingPeriod as "monthly" | "yearly",
+      tier,
+      billingPeriod,
       name,
       email,
       company,

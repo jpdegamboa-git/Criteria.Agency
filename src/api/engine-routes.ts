@@ -135,6 +135,8 @@ engineRoutes.get("/api/engines/datasources/:clientId", async (c) => {
 engineRoutes.put("/api/engines/datasources/:clientId/:listenerType", async (c) => {
   const { clientId, listenerType } = c.req.param();
   const body = await c.req.json();
+  const parsed = parseBody(upsertDataSourceConfigSchema, body);
+  if (!parsed.success) return c.json({ error: parsed.error }, 400);
 
   const existing = await db
     .select()
@@ -149,7 +151,7 @@ engineRoutes.put("/api/engines/datasources/:clientId/:listenerType", async (c) =
   if (existing.length > 0) {
     const [updated] = await db
       .update(schema.dataSourceConfigs)
-      .set({ config: body.config, schedule: body.schedule, updatedAt: new Date() })
+      .set({ config: parsed.data.config, schedule: parsed.data.schedule, updatedAt: new Date() })
       .where(eq(schema.dataSourceConfigs.id, existing[0].id))
       .returning();
     return c.json(updated);
@@ -160,8 +162,8 @@ engineRoutes.put("/api/engines/datasources/:clientId/:listenerType", async (c) =
     .values({
       clientId,
       listenerType: listenerType as any,
-      config: body.config,
-      schedule: body.schedule || "0 6 * * *",
+      config: parsed.data.config,
+      schedule: parsed.data.schedule ?? "0 6 * * *",
     })
     .returning();
   return c.json(created, 201);

@@ -5,6 +5,7 @@ import { config } from "../shared/config.js";
 import { sanitizeAgentId } from "../shared/sanitize.js";
 import { readFile, writeFile } from "fs/promises";
 import { join } from "path";
+import { updateAgentFileSchema, parseBody } from "./validators.js";
 
 export const canvasRoutes = new Hono();
 
@@ -138,13 +139,15 @@ canvasRoutes.get("/api/agents/:id/file", async (c) => {
 canvasRoutes.put("/api/agents/:id/file", async (c) => {
   const agentId = sanitizeAgentId(c.req.param("id"));
   if (!agentId) return c.json({ error: "Invalid agent id" }, 400);
-  const body = await c.req.json<{ content: string }>();
+  const body = await c.req.json();
+  const parsed = parseBody(updateAgentFileSchema, body);
+  if (!parsed.success) return c.json({ error: parsed.error }, 400);
   const agentsDir = config.agentsPath;
   const { readdirSync } = await import("fs");
   const files = readdirSync(agentsDir);
   const match = files.find((f: string) => f.startsWith(agentId) && f.endsWith(".md"));
   if (!match) return c.json({ error: "Agent file not found" }, 404);
-  await writeFile(join(agentsDir, match), body.content, "utf-8");
+  await writeFile(join(agentsDir, match), parsed.data.content, "utf-8");
   return c.json({ ok: true, filename: match });
 });
 
