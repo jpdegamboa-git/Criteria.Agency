@@ -2,6 +2,10 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { validateVerbal } from "./verbal-validator.js";
 import { validateVisual } from "./visual-validator.js";
 import type { BrandRule, VerbalValidationInput, VisualValidationInput } from "./types.js";
+import { computeOverallScore, determineVerdict } from "./guardian-engine.js";
+import { extractRuleFromFeedback } from "./rule-learner.js";
+import { DEFAULT_DIMENSION_WEIGHTS } from "./types.js";
+import type { BrandGuardianConfig, BrandDimensionResult } from "./types.js";
 
 vi.mock("../../providers/generate-text.js", () => ({
   generateText: vi.fn(),
@@ -105,5 +109,113 @@ describe("VisualValidator", () => {
 
     const result = await validateVisual({ content: "Just a plain text email", brandDna, rules });
     expect(result.every((d) => d.score === 100)).toBe(true);
+  });
+});
+
+describe("GuardianEngine", () => {
+  const allPassDimensions: BrandDimensionResult[] = [
+    { name: "tone", score: 90, status: "pass", issues: [] },
+    { name: "vocabulary", score: 85, status: "pass", issues: [] },
+    { name: "key_messages", score: 80, status: "pass", issues: [] },
+    { name: "audience_fit", score: 88, status: "pass", issues: [] },
+    { name: "visual_palette", score: 95, status: "pass", issues: [] },
+    { name: "typography", score: 82, status: "pass", issues: [] },
+    { name: "imagery_style", score: 78, status: "warning", issues: [] },
+    { name: "logo_usage", score: 90, status: "pass", issues: [] },
+  ];
+
+  describe("computeOverallScore", () => {
+    it("should compute weighted average from dimension scores", () => {
+      const score = computeOverallScore(allPassDimensions, DEFAULT_DIMENSION_WEIGHTS);
+      expect(score).toBeGreaterThan(80);
+      expect(score).toBeLessThan(100);
+    });
+
+    it("should use custom weights when provided", () => {
+      const customWeights = { tone: 50, vocabulary: 10, key_messages: 10, audience_fit: 10, visual_palette: 5, typography: 5, imagery_style: 5, logo_usage: 5 };
+      const score = computeOverallScore(allPassDimensions, customWeights);
+      expect(score).toBeGreaterThan(85);
+    });
+  });
+
+  describe("determineVerdict", () => {
+    const defaultConfig: BrandGuardianConfig = {
+      clientId: "c1",
+      passThreshold: 80,
+      autoPassThreshold: 95,
+      strictMode: false,
+      weightsByDimension: {},
+    };
+
+    it("should return pass for score >= passThreshold", () => {
+      expect(determineVerdict(85, allPassDimensions, defaultConfig)).toBe("pass");
+    });
+
+    it("should return fail for score < 60", () => {
+      expect(determineVerdict(55, allPassDimensions, defaultConfig)).toBe("fail");
+    });
+
+    it("should return needs_revision for score between 60 and threshold", () => {
+      expect(determineVerdict(70, allPassDimensions, defaultConfig)).toBe("needs_revision");
+    });
+
+    it("should return fail in strict mode if any critical issue exists", () => {
+      const dims: BrandDimensionResult[] = [
+        ...allPassDimensions.slice(0, 7),
+        { name: "logo_usage", score: 40, status: "fail", issues: [
+          { description: "Logo on wrong bg", severity: "critical", suggestion: "Use white bg", reference: "Logo" }
+        ]},
+      ];
+      const strictConfig = { ...defaultConfig, strictMode: true };
+      expect(determineVerdict(82, dims, strictConfig)).toBe("fail");
+    });
+  });
+});
+
+describe("RuleLearner", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("should extract a rule from human feedback", async () => {
+    mockGenerateText.mockResolvedValueOnce(JSON.stringify({
+      dimension: "tone",
+      type: "prefer",
+      rule: "Use conversational tone for social media posts",
+      examples: [
+        { correct: "Check out our latest update!", incorrect: "We hereby announce the release of..." }
+      ],
+    }));
+
+    const result = await extractRuleFromFeedback(
+      "The tone is too formal for Instagram. We want casual and fun.",
+      "pass",
+      [{ name: "tone", score: 85, status: "pass", issues: [] }],
+    );
+
+    expect(result.dimension).toBe("tone");
+    expect(result.type).toBe("prefer");
+    expect(result.source).toBe("human_feedback");
+    expect(result.examples).toHaveLength(1);
+  });
+
+  it("should return learned source and default confidence", async () => {
+    mockGenerateText.mockResolvedValueOnce(JSON.stringify({
+      dimension: "vocabulary",
+      type: "never",
+      rule: "Never use the word 'synergy'",
+      examples: [
+        { correct: "collaboration", incorrect: "synergy" }
+      ],
+    }));
+
+    const result = await extractRuleFromFeedback(
+      "Stop using 'synergy', it's cringe",
+      "fail",
+      [],
+    );
+
+    expect(result.source).toBe("human_feedback");
+    expect(result.confidence).toBe(0.8);
   });
 });
