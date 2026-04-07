@@ -23,16 +23,25 @@ export interface ReconciliationResult {
   autoReconciled: boolean;
 }
 
+// ── Types ──
+
+export interface ClientAlias {
+  id: string;
+  clientId: string;
+  alias: string;
+}
+
 // ── Client Lookup ──
 
 export async function findClientByName(
   counterpartyName: string,
+  aliases?: ClientAlias[],
 ): Promise<{ clientId: string; score: number } | null> {
   const normalized = normalizeName(counterpartyName);
 
   // 1. Check clientAliases for exact normalized match
-  const aliases = await db.select().from(schema.clientAliases);
-  for (const alias of aliases) {
+  const resolvedAliases = aliases ?? await db.select().from(schema.clientAliases);
+  for (const alias of resolvedAliases) {
     if (normalizeName(alias.alias) === normalized) {
       return { clientId: alias.clientId, score: 100 };
     }
@@ -61,6 +70,7 @@ export async function findClientByName(
 
 export async function reconcileTransaction(
   transaction: TransactionInput,
+  aliases?: ClientAlias[],
 ): Promise<ReconciliationResult> {
   const NO_MATCH: ReconciliationResult = {
     matched: false,
@@ -90,7 +100,7 @@ export async function reconcileTransaction(
 
   // Try to find client by counterparty name
   const clientMatch = transaction.counterpartyName
-    ? await findClientByName(transaction.counterpartyName)
+    ? await findClientByName(transaction.counterpartyName, aliases)
     : null;
 
   // ── Level 1: EXACT MATCH ──

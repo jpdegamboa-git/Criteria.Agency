@@ -11,12 +11,21 @@ export interface MatchResult {
   created: boolean;
 }
 
+// ── Types ──
+
+export interface ClientAlias {
+  id: string;
+  clientId: string;
+  alias: string;
+}
+
 // ── Main Matching ──
 
 export async function matchEntity(
   counterpartyName: string | null,
   description: string,
   amount: string | number,
+  aliases?: ClientAlias[],
 ): Promise<MatchResult> {
   const NO_MATCH: MatchResult = { entityId: null, confidence: 0, created: false };
 
@@ -54,9 +63,9 @@ export async function matchEntity(
   // ── 3. Client alias match ──
   if (counterpartyName) {
     const normalizedCp = normalizeName(counterpartyName);
-    const aliases = await db.select().from(schema.clientAliases);
+    const resolvedAliases = aliases ?? await db.select().from(schema.clientAliases);
 
-    for (const alias of aliases) {
+    for (const alias of resolvedAliases) {
       if (normalizeName(alias.alias) === normalizedCp) {
         // Check if entity already exists for this client
         const existing = allEntities.find(

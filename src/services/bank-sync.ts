@@ -46,7 +46,10 @@ export async function importCSV(
   const newTransactions = parsed.filter((t) => !existingIds.has(t.externalId));
   const duplicates = parsed.length - newTransactions.length;
 
-  // 3. Process each new transaction
+  // 3. Load clientAliases once for the entire import batch
+  const clientAliases = await db.select().from(schema.clientAliases);
+
+  // 4. Process each new transaction
   let entitiesCreated = 0;
   let categorized = 0;
   let reconciled = 0;
@@ -54,11 +57,12 @@ export async function importCSV(
   const insertedIds: string[] = [];
 
   for (const txn of newTransactions) {
-    // 3a. Match / create entity
+    // 4a. Match / create entity
     const entityResult = await matchEntity(
       txn.counterpartyName,
       txn.description,
       txn.amount,
+      clientAliases,
     );
     if (entityResult.created) entitiesCreated++;
 
@@ -83,13 +87,14 @@ export async function importCSV(
 
     insertedIds.push(inserted.id);
 
-    // 3c. Categorize
+    // 4c. Categorize
     const catResult = await categorizeTransaction({
       date: txn.date,
       description: txn.description,
       counterpartyName: txn.counterpartyName,
       amount: txn.amount,
       reference: txn.reference,
+      aliases: clientAliases,
     });
 
     await db
@@ -103,7 +108,7 @@ export async function importCSV(
 
     categorized++;
 
-    // 3d. Reconcile income transactions
+    // 4d. Reconcile income transactions
     if (txn.type === "income") {
       const reconResult = await reconcileTransaction({
         id: inserted.id,
@@ -112,7 +117,7 @@ export async function importCSV(
         date: txn.date,
         description: txn.description,
         type: txn.type,
-      });
+      }, clientAliases);
 
       if (reconResult.autoReconciled && reconResult.expectedPaymentId && reconResult.clientId) {
         await applyReconciliation(
@@ -128,10 +133,10 @@ export async function importCSV(
     }
   }
 
-  // 4. Auto-link fees to parent income transactions
+  // 5. Auto-link fees to parent income transactions
   const feesLinked = await linkFeesToParents(insertedIds);
 
-  // 5. Log sync
+  // 6. Log sync
   const [logEntry] = await db
     .insert(schema.bankSyncLog)
     .values({
@@ -145,7 +150,7 @@ export async function importCSV(
     })
     .returning();
 
-  // 6. Return result
+  // 7. Return result
   return {
     syncLogId: logEntry.id,
     found: parsed.length,

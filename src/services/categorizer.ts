@@ -18,6 +18,7 @@ interface TransactionInput {
   amount: string | number;
   date?: Date | null;
   reference?: string | null;
+  aliases?: { id: string; clientId: string; alias: string }[];
 }
 
 // ── Stop words for learning ──
@@ -59,7 +60,7 @@ export async function categorizeTransaction(
 
   // 3. Client alias match (income only)
   if (amount > 0 && counterparty) {
-    const aliasResult = await matchClientAlias(counterparty);
+    const aliasResult = await matchClientAlias(counterparty, transaction.aliases);
     if (aliasResult) return aliasResult;
   }
 
@@ -148,11 +149,12 @@ async function matchLearnedRules(
 // ── Step 3: Client alias match ──
 
 async function matchClientAlias(
-  counterparty: string
+  counterparty: string,
+  aliases?: { id: string; clientId: string; alias: string }[],
 ): Promise<CategorizationResult | null> {
-  const aliases = await db.select().from(schema.clientAliases);
+  const resolvedAliases = aliases ?? await db.select().from(schema.clientAliases);
 
-  for (const entry of aliases) {
+  for (const entry of resolvedAliases) {
     if (counterparty.includes(entry.alias.toUpperCase())) {
       return {
         category: "client_payment",
