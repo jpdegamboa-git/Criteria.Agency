@@ -221,7 +221,7 @@ export const AGENT_REGISTRY: Record<string, AgentRegistryEntry> = {
   // ── Transversal Stubs ──
   "XA-001": { id: "XA-001", name: "Financial Agent", skillFile: "agents/XA-001_financial_agent.md", team: 13, level: "cross_functional", steps: ["budget"] as any, gates: ["st-g1"] as any, autonomy: 85 },
   "XA-002": { id: "XA-002", name: "Channel Manager", skillFile: "agents/XA-002_channel_manager.md", team: 13, level: "cross_functional", steps: ["media_plan"] as any, gates: [], autonomy: 85 },
-  "XA-003": { id: "XA-003", name: "Brand Guardian", skillFile: "agents/XA-003_brand_guardian.md", team: 13, level: "cross_functional", steps: [], gates: ["bb-g2", "st-g2", "gd-g1", "gd-g2"] as any, autonomy: 80 },
+  "XA-003": { id: "XA-003", name: "Brand Guardian", skillFile: "agents/XA-003_brand_guardian.md", team: 13, level: "cross_functional", steps: [], gates: ["bb-g2", "st-g2", "gd-g1", "gd-g2", "wr-g2", "au-g2", "wb-g2", "pp-g1"] as any, autonomy: 80 },
   "XA-004": { id: "XA-004", name: "Media Scout", skillFile: "agents/XA-004_media_scout.md", team: 13, level: "cross_functional", steps: ["media_plan"] as any, gates: [], autonomy: 85 },
   // ── Graphic Design Motor ──
   "GD-L": { id: "GD-L", name: "Art Director", skillFile: "agents/GD-L_art_director.md", team: 14, level: "leader", steps: ["brief", "design_system", "moodboard", "production"] as any, gates: ["gd-g1", "gd-g2", "gd-g3"] as any, autonomy: 75 },
@@ -232,4 +232,41 @@ export const AGENT_REGISTRY: Record<string, AgentRegistryEntry> = {
   "GD-005": { id: "GD-005", name: "Infographic Designer", skillFile: "agents/GD-005_infographic_designer.md", team: 14, level: "sub", steps: ["production"] as any, gates: [], autonomy: 75 },
   // ── Copywriter (cross-motor) ──
   "CW-001": { id: "CW-001", name: "Copywriter", skillFile: "agents/CW-001_copywriter.md", team: 15, level: "sub", steps: ["production"] as any, gates: [], autonomy: 75 },
+  // ── Writers Room Motor ──
+  "WR-L": { id: "WR-L", name: "Head Writer", skillFile: "agents/WR-L_head_writer.md", team: 16, level: "leader", steps: ["wr_brief", "wr_delivery"] as any, gates: ["wr-g1", "wr-g2"] as any, autonomy: 75 },
+  "WR-001": { id: "WR-001", name: "Research Writer", skillFile: "agents/WR-001_research_writer.md", team: 16, level: "sub", steps: ["wr_research"] as any, gates: [], autonomy: 80 },
+  "WR-002": { id: "WR-002", name: "AV Copywriter", skillFile: "agents/WR-002_av_copywriter.md", team: 16, level: "sub", steps: ["wr_draft", "wr_adaptation"] as any, gates: [], autonomy: 70 },
+  "WR-003": { id: "WR-003", name: "Digital Copywriter", skillFile: "agents/WR-003_digital_copywriter.md", team: 16, level: "sub", steps: ["wr_draft", "wr_adaptation"] as any, gates: [], autonomy: 75 },
+  "WR-004": { id: "WR-004", name: "SEO Content Writer", skillFile: "agents/WR-004_seo_content_writer.md", team: 16, level: "sub", steps: ["wr_draft", "wr_adaptation"] as any, gates: [], autonomy: 75 },
+  "WR-005": { id: "WR-005", name: "Brand Copywriter", skillFile: "agents/WR-005_brand_copywriter.md", team: 16, level: "sub", steps: ["wr_draft", "wr_adaptation"] as any, gates: [], autonomy: 65 },
+  // ── Audio Motor ──
+  "AU-L": { id: "AU-L", name: "Sound Director", skillFile: "agents/AU-L_sound_director.md", team: 17, level: "leader", steps: ["au_brief", "au_delivery"] as any, gates: ["au-g1", "au-g2"] as any, autonomy: 75 },
+  "AU-001": { id: "AU-001", name: "Sound Designer & SFX", skillFile: "agents/AU-001_sound_designer.md", team: 17, level: "sub", steps: ["au_sound_design"] as any, gates: [], autonomy: 75 },
+  "AU-002": { id: "AU-002", name: "Music Producer", skillFile: "agents/AU-002_music_producer.md", team: 17, level: "sub", steps: ["au_production"] as any, gates: [], autonomy: 70 },
+  "AU-003": { id: "AU-003", name: "Voice Director", skillFile: "agents/AU-003_voice_director.md", team: 17, level: "sub", steps: ["au_production"] as any, gates: [], autonomy: 70 },
+  "AU-004": { id: "AU-004", name: "Mix Engineer", skillFile: "agents/AU-004_mix_engineer.md", team: 17, level: "sub", steps: ["au_mix_master"] as any, gates: [], autonomy: 80 },
+  // ── Web Motor ──
+  "WB-L": { id: "WB-L", name: "Web Director", skillFile: "agents/WB-L_web_director.md", team: 18, level: "leader", steps: ["wb_brief", "wb_delivery"] as any, gates: ["wb-g1", "wb-g2", "wb-g3"] as any, autonomy: 75 },
+  "WB-001": { id: "WB-001", name: "Information Architect", skillFile: "agents/WB-001_information_architect.md", team: 18, level: "sub", steps: ["wb_architecture"] as any, gates: [], autonomy: 80 },
+  "WB-002": { id: "WB-002", name: "Web Content Composer", skillFile: "agents/WB-002_web_content_composer.md", team: 18, level: "sub", steps: ["wb_content"] as any, gates: [], autonomy: 75 },
+  "WB-003": { id: "WB-003", name: "SEO Specialist", skillFile: "agents/WB-003_seo_specialist.md", team: 18, level: "sub", steps: ["wb_seo"] as any, gates: [], autonomy: 80 },
+  "WB-004": { id: "WB-004", name: "QA Tester", skillFile: "agents/WB-004_qa_tester.md", team: 18, level: "sub", steps: ["wb_qa"] as any, gates: [], autonomy: 85 },
+  "WB-005": { id: "WB-005", name: "Build Engineer", skillFile: "agents/WB-005_build_engineer.md", team: 18, level: "sub", steps: ["wb_build"] as any, gates: [], autonomy: 80 },
+  // ── Marketplace Motor (Transversal) ──
+  "MK-L": { id: "MK-L", name: "Procurement Director", skillFile: "agents/MK-L_procurement_director.md", team: 19, level: "leader", steps: ["mk_request", "mk_delivery"] as any, gates: ["mk-g1", "mk-g2"] as any, autonomy: 70 },
+  "MK-001": { id: "MK-001", name: "Vendor Scout", skillFile: "agents/MK-001_vendor_scout.md", team: 19, level: "sub", steps: ["mk_search", "mk_quote"] as any, gates: [], autonomy: 80 },
+  "MK-002": { id: "MK-002", name: "Comparator", skillFile: "agents/MK-002_comparator.md", team: 19, level: "sub", steps: ["mk_compare"] as any, gates: [], autonomy: 85 },
+  "MK-003": { id: "MK-003", name: "Contract Manager", skillFile: "agents/MK-003_contract_manager.md", team: 19, level: "sub", steps: ["mk_contract", "mk_tracking", "pp_production_tracking"] as any, gates: [], autonomy: 75 },
+  // ── Print Production Motor ──
+  "PP-L": { id: "PP-L", name: "Print Director", skillFile: "agents/PP-L_print_director.md", team: 20, level: "leader", steps: ["pp_brief", "pp_delivery"] as any, gates: ["pp-g1", "pp-g2"] as any, autonomy: 70 },
+  "PP-001": { id: "PP-001", name: "Prepress Specialist", skillFile: "agents/PP-001_prepress_specialist.md", team: 20, level: "sub", steps: ["pp_prepress"] as any, gates: [], autonomy: 80 },
+  "PP-002": { id: "PP-002", name: "Print Buyer", skillFile: "agents/PP-002_print_buyer.md", team: 20, level: "sub", steps: ["pp_vendor_request"] as any, gates: [], autonomy: 75 },
+  "PP-003": { id: "PP-003", name: "Quality Inspector", skillFile: "agents/PP-003_quality_inspector.md", team: 20, level: "sub", steps: ["pp_quality_check"] as any, gates: [], autonomy: 70 },
+  // ── Events Motor ──
+  "EV-L": { id: "EV-L", name: "Event Director", skillFile: "agents/EV-L_event_director.md", team: 21, level: "leader", steps: ["ev_brief", "ev_concept", "ev_delivery"] as any, gates: ["ev-g1", "ev-g2", "ev-g3"] as any, autonomy: 70 },
+  "EV-001": { id: "EV-001", name: "Event Planner", skillFile: "agents/EV-001_event_planner.md", team: 21, level: "sub", steps: ["ev_planning"] as any, gates: [], autonomy: 75 },
+  "EV-002": { id: "EV-002", name: "Logistics Coordinator", skillFile: "agents/EV-002_logistics_coordinator.md", team: 21, level: "sub", steps: ["ev_vendor_setup"] as any, gates: [], autonomy: 70 },
+  "EV-003": { id: "EV-003", name: "Content Activator", skillFile: "agents/EV-003_content_activator.md", team: 21, level: "sub", steps: ["ev_pre_event", "ev_live_event", "ev_post_event"] as any, gates: [], autonomy: 65 },
+  "EV-004": { id: "EV-004", name: "Event Analyst", skillFile: "agents/EV-004_event_analyst.md", team: 21, level: "sub", steps: ["ev_post_event"] as any, gates: [], autonomy: 80 },
+  "EV-005": { id: "EV-005", name: "Guest Manager", skillFile: "agents/EV-005_guest_manager.md", team: 21, level: "sub", steps: ["ev_pre_event", "ev_live_event"] as any, gates: [], autonomy: 75 },
 };
