@@ -24,6 +24,7 @@ import { invoiceRoutes } from "./invoice-routes.js";
 import { dashboardRoutes } from "./dashboard-routes.js";
 import { canvasRoutes } from "./canvas-routes.js";
 import { engineRoutes } from "./engine-routes.js";
+import { intelligenceRoutes } from "./intelligence-routes.js";
 import { auth } from "../auth.js";
 import { config } from "../shared/config.js";
 
@@ -102,6 +103,7 @@ app.use("/api/categorization-rules/*", requireSession, requireTenantMatch);
 app.use("/api/subscriptions", requireSession, requireTenantMatch);
 app.use("/api/subscriptions/*", requireSession, requireTenantMatch);
 app.use("/api/engines/*", requireSession, requireTenantMatch);
+app.use("/api/intelligence/*", requireSession, requireTenantMatch);
 app.use("/api/content/*", requireSession);
 app.use("/api/copilot/*", requireSession);
 app.use("/api/entities/*", requireSession);
@@ -121,6 +123,7 @@ app.route("/", invoiceRoutes);
 app.route("/", dashboardRoutes);
 app.route("/", canvasRoutes);
 app.route("/", engineRoutes);
+app.route("/", intelligenceRoutes);
 
 // Health
 app.get("/health", (c) => c.json({ status: "ok", version: "0.1.0" }));
