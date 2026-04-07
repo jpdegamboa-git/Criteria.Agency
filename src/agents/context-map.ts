@@ -293,6 +293,81 @@ export const AGENT_CONTEXT_MAP: Record<string, AgentContextEntry> = {
     taskInstruction:
       "Generate Campaign Briefs from the approved marketing plan. Create one brief per channel/campaign combination. Each brief must include: objective (linked to SMART goal), target audience (linked to buyer persona), channel and format requirements, assigned budget, expected KPIs (CAC, ROAS, CTR), timeline, and creative direction notes from Brand DNA. These briefs will feed directly into production and distribution motors. Output as individual brief documents separated by --- dividers.",
   },
+
+  // ── Graphic Design Pipeline ──
+
+  "GD-L:brief": {
+    artifactSteps: [],
+    attachmentTypes: [],
+    taskInstruction:
+      "Analyze the design brief. Determine: what pieces are needed, formats per channel, quantities, and priority order. If this brief comes from a Campaign Brief (Strategist), extract the visual requirements. Output a Brief Analysis as structured JSON with: pieces (array of {type, channel, format, quantity}), priority, and overall creative direction.",
+  },
+  "GD-L:design_system": {
+    artifactSteps: ["brand_dna"],
+    attachmentTypes: ["image"],
+    taskInstruction:
+      "Supervise the Design System creation. Review the Brand DNA for visual direction (colors, typography, imagery). If a previous Design System exists for this client, validate it against the current Brand DNA and flag any needed updates. Approve or request revisions to the Design System Architect's output.",
+  },
+  "GD-001:design_system": {
+    artifactSteps: ["brand_dna"],
+    attachmentTypes: ["image", "json"],
+    taskInstruction:
+      "Create or update the client's Design System from their Brand DNA Document. Generate: color tokens (primary, secondary, accent, neutral — hex + RGB + CMYK), typography scale (font families, sizes, weights, line heights), grid system (columns, gutters, margins for desktop/tablet/mobile), spacing scale (4px base), and base component patterns (buttons, cards, headers). If client uploaded logos or photos, incorporate them as reference assets. Output as structured markdown + JSON tokens.",
+  },
+  "GD-L:moodboard": {
+    artifactSteps: ["brief", "design_system"],
+    attachmentTypes: [],
+    taskInstruction:
+      "Define the visual direction for this project. Create a moodboard brief specifying: color palette application, layout structure, imagery style, composition approach, and copy direction (key messages, tone per piece). The Graphic Composer will use this to generate visual references.",
+  },
+  "GD-002:moodboard": {
+    artifactSteps: ["brief", "design_system"],
+    attachmentTypes: ["image"],
+    taskInstruction:
+      "Generate moodboard images based on the Art Director's visual direction. Create 3-5 reference images showing the visual style, color palette in use, layout concepts, and typography in context. These are NOT final pieces — they are directional references for production.",
+  },
+  "GD-002:production": {
+    artifactSteps: ["brief", "design_system", "moodboard", "production"],
+    attachmentTypes: ["image"],
+    taskInstruction:
+      "Create the master graphic piece(s). Follow the approved moodboard direction and Design System rules exactly. Apply the copy provided by the Copywriter. Produce at maximum resolution in master format. Each piece must respect: grid system, color tokens, typography scale, safe zones, and accessibility contrast requirements from the design constraints.",
+  },
+  "GD-004:production": {
+    artifactSteps: ["brief", "design_system", "moodboard"],
+    attachmentTypes: ["image"],
+    taskInstruction:
+      "Create motion graphics or animated versions of the design pieces. Add: animated text entrances, subtle transitions, looping elements, or kinetic typography. Keep animations short (3-15 seconds). Output as video clips that the Format Adapter will convert to GIF/MP4.",
+  },
+  "GD-005:production": {
+    artifactSteps: ["brief", "design_system"],
+    attachmentTypes: ["json"],
+    taskInstruction:
+      "Create infographic or data visualization pieces. Transform the provided data into clear, visually compelling graphics following the Design System. Use the client's color palette, typography, and visual style. Ensure all data is accurately represented and the visual hierarchy guides the reader through the information logically.",
+  },
+  "CW-001:production": {
+    artifactSteps: ["brand_dna", "brief", "moodboard"],
+    attachmentTypes: [],
+    taskInstruction:
+      "Write advertising copy for the graphic design pieces. For each piece in the brief, produce: headline (max 8 words), subheadline (max 15 words), body copy (if needed, max 30 words), and CTA (max 5 words). Match the Brand DNA verbal identity (tone, vocabulary, do's/don'ts). Copy must be punchy, memorable, and designed for visual impact — this is advertising, not content. Output as JSON: {pieces: [{pieceId, headline, subheadline, bodyCopy, cta}]}.",
+  },
+  "GD-003:adaptation": {
+    artifactSteps: ["brief", "production"],
+    attachmentTypes: ["image"],
+    taskInstruction:
+      "Adapt master pieces to all required channel formats. For each master piece, produce derivatives at the correct aspect ratio, resolution, and color space per channel (see design-constraints.md). Resize, recrop, and reflow text as needed. Ensure no critical content is cut in safe zones. For print pieces, convert RGB to CMYK and set 300 DPI + 3mm bleed.",
+  },
+  "GD-003:delivery": {
+    artifactSteps: ["production", "adaptation"],
+    attachmentTypes: ["image", "video"],
+    taskInstruction:
+      "Package all final files for delivery. Organize by piece, then by format. Generate a Preview Sheet (PDF) showing all pieces in all formats as a visual index. Create the final ZIP package. Upload everything to R2 storage.",
+  },
+  "GD-L:gate": {
+    artifactSteps: ["brief", "design_system", "moodboard", "production", "adaptation"],
+    attachmentTypes: ["image"],
+    taskInstruction:
+      "Evaluate this gate. For G1 (post-moodboard): Does the visual direction align with Brand DNA? Is the Design System correctly applied? Is the copy direction clear? For G2 (post-production): Are pieces visually excellent? Is copy integrated well? Does it respect the Design System? For G3 (post-delivery): Are all formats present and correct? Score 1-10. Issue PASS or FAIL with notes.",
+  },
 };
 
 // ── Agent Output Types ─────────────────────────────────────────
@@ -351,4 +426,18 @@ export const AGENT_OUTPUT_TYPES: Record<
   "ST-003:budget": "text",
   "XA-001:budget": "text",
   "ST-L:briefs": "text",
+
+  // Graphic Design
+  "GD-L:brief": "text",
+  "GD-L:design_system": "text",
+  "GD-001:design_system": "text",
+  "GD-L:moodboard": "text",
+  "GD-002:moodboard": "image",
+  "GD-002:production": "image",
+  "GD-004:production": "video",
+  "GD-005:production": "image",
+  "CW-001:production": "text",
+  "GD-003:adaptation": "image",
+  "GD-003:delivery": "text",
+  "GD-L:gate": "text",
 };

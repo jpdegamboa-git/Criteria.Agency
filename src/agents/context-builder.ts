@@ -59,6 +59,7 @@ const SHARED_DIRECTIVES = [
 // Directives loaded only for specific pipelines
 const PIPELINE_DIRECTIVES: Record<string, string[]> = {
   strategist: ["agents/_shared/harvard-frameworks.md"],
+  "graphic-design": ["agents/_shared/design-constraints.md"],
 };
 
 async function loadDirectives(paths: string[]): Promise<string[]> {
