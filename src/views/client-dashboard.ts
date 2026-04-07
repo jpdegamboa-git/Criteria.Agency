@@ -1,4 +1,5 @@
 import { layout, clientNav } from "./layout.js";
+import { pipelineLabel, statusLabel } from "../shared/terminology.js";
 
 export interface ClientDashboardData {
   projects: Array<{
@@ -11,12 +12,6 @@ export interface ClientDashboardData {
   pendingReviews: number;
   completedProjects: number;
 }
-
-const PIPELINE_LABELS: Record<string, string> = {
-  "video-production": "Produccion de Video",
-  "brand-builder": "Construccion de Marca",
-  "strategist": "Estrategia",
-};
 
 const STATUS_COLORS: Record<string, string> = {
   brief: "bg-blue-500/10 text-blue-400 border-blue-500/30",
@@ -33,7 +28,7 @@ const STATUS_COLORS: Record<string, string> = {
 
 function statusBadge(status: string): string {
   const cls = STATUS_COLORS[status] ?? "bg-criteria-border text-criteria-muted border-criteria-border";
-  return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${cls}">${status}</span>`;
+  return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${cls}">${statusLabel(status)}</span>`;
 }
 
 function formatDate(iso: string): string {
@@ -51,7 +46,7 @@ export function renderClientDashboard(data: ClientDashboardData): string {
           <td class="py-3 px-4">
             <a href="/app/projects/${p.id}" class="text-criteria-light hover:text-criteria-white font-medium">${p.name}</a>
           </td>
-          <td class="py-3 px-4 text-criteria-muted text-sm">${PIPELINE_LABELS[p.pipelineType] ?? p.pipelineType}</td>
+          <td class="py-3 px-4 text-criteria-muted text-sm">${pipelineLabel(p.pipelineType)}</td>
           <td class="py-3 px-4">${statusBadge(p.status)}</td>
           <td class="py-3 px-4 text-criteria-muted text-sm">${new Date(p.updatedAt).toLocaleDateString("es-MX", { day: "numeric", month: "short", year: "numeric" })}</td>
           <td class="py-3 px-4">

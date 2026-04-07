@@ -323,12 +323,12 @@ export function renderPricingPage(): string {
           if (data.url) {
             window.location.href = data.url;
           } else {
-            alert(data.error || "Error al crear la sesion de pago");
+            showToast(data.error || "Error al crear la sesion de pago", "error");
             btn.disabled = false;
             btn.textContent = "Comenzar mi trial gratuito";
           }
         } catch {
-          alert("Error de conexion");
+          showToast("Error de conexion", "error");
           btn.disabled = false;
           btn.textContent = "Comenzar mi trial gratuito";
         }

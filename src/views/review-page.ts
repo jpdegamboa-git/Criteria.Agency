@@ -1,5 +1,6 @@
 import { layout } from "./layout.js";
 import { escapeHtml, escapeJsString, sanitizeUrl } from "../shared/sanitize.js";
+import { gateLabel as gateDisplayLabel } from "../shared/terminology.js";
 
 interface ReviewPageData {
   projectName: string;
@@ -40,16 +41,6 @@ function statusBadge(status: string): string {
   return `<span class="px-3 py-1 rounded-full text-sm font-medium ${colors[status] ?? "bg-gray-600"} text-white">${labels[status] ?? status}</span>`;
 }
 
-function gateLabel(gate: string): string {
-  const labels: Record<string, string> = {
-    g1: "G1 — Concepto",
-    g2: "G2 — Guion",
-    g3: "G3 — Storyboard",
-    g4: "G4 — Primer corte",
-    g5: "G5 — Corte final",
-  };
-  return labels[gate] ?? gate;
-}
 
 function formatDate(date: Date): string {
   return new Date(date).toLocaleDateString("es", {
@@ -80,7 +71,7 @@ export function renderReviewPage(data: ReviewPageData): string {
           .map(
             (g) => `
         <div class="flex items-center justify-between py-2 border-b border-criteria-border">
-          <span class="text-criteria-text">${gateLabel(g.gate)}</span>
+          <span class="text-criteria-text">${gateDisplayLabel(g.gate)}</span>
           <span class="px-2 py-0.5 rounded text-xs font-medium ${g.decision === "pass" ? "bg-green-900 text-green-300" : "bg-red-900 text-red-300"}">
             ${g.decision === "pass" ? "Aprobado" : "Rechazado"} (intento ${g.iteration})
           </span>
@@ -227,12 +218,12 @@ export function renderReviewPage(data: ReviewPageData): string {
               window.location.reload();
             } else {
               const err = await res.json();
-              alert(err.error || "Error al enviar comentario");
+              showToast(err.error || "Error al enviar comentario", "error");
               btn.disabled = false;
               btn.textContent = "Enviar comentario";
             }
           } catch {
-            alert("Error de conexion");
+            showToast("Error de conexion", "error");
             btn.disabled = false;
             btn.textContent = "Enviar comentario";
           }
@@ -243,7 +234,8 @@ export function renderReviewPage(data: ReviewPageData): string {
       const approveBtn = document.getElementById("approveBtn");
       if (approveBtn) {
         approveBtn.addEventListener("click", async () => {
-          if (!confirm("Confirmas que apruebas esta entrega?")) return;
+          const ok = await showConfirm("Confirmas que apruebas esta entrega?");
+          if (!ok) return;
           approveBtn.disabled = true;
           approveBtn.textContent = "Aprobando...";
 
@@ -257,12 +249,12 @@ export function renderReviewPage(data: ReviewPageData): string {
               window.location.reload();
             } else {
               const err = await res.json();
-              alert(err.error || "Error al aprobar");
+              showToast(err.error || "Error al aprobar", "error");
               approveBtn.disabled = false;
               approveBtn.textContent = "Aprobar entrega";
             }
           } catch {
-            alert("Error de conexion");
+            showToast("Error de conexion", "error");
             approveBtn.disabled = false;
             approveBtn.textContent = "Aprobar entrega";
           }
@@ -273,7 +265,8 @@ export function renderReviewPage(data: ReviewPageData): string {
       const revisionBtn = document.getElementById("revisionBtn");
       if (revisionBtn) {
         revisionBtn.addEventListener("click", async () => {
-          if (!confirm("Quieres solicitar cambios en esta entrega?")) return;
+          const ok = await showConfirm("Quieres solicitar cambios en esta entrega?");
+          if (!ok) return;
           revisionBtn.disabled = true;
           revisionBtn.textContent = "Solicitando...";
 
@@ -287,12 +280,12 @@ export function renderReviewPage(data: ReviewPageData): string {
               window.location.reload();
             } else {
               const err = await res.json();
-              alert(err.error || "Error al solicitar revision");
+              showToast(err.error || "Error al solicitar revision", "error");
               revisionBtn.disabled = false;
               revisionBtn.textContent = "Solicitar cambios";
             }
           } catch {
-            alert("Error de conexion");
+            showToast("Error de conexion", "error");
             revisionBtn.disabled = false;
             revisionBtn.textContent = "Solicitar cambios";
           }

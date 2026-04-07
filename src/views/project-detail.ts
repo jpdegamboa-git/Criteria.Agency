@@ -1,39 +1,26 @@
 import { layout, clientNav } from "./layout.js";
-
-const PIPELINE_LABELS: Record<string, string> = {
-  "video-production": "Produccion de Video",
-  "brand-builder": "Construccion de Marca",
-  "strategist": "Estrategia",
-};
+import { pipelineLabel, statusLabel, gateLabel as gateDisplayLabel } from "../shared/terminology.js";
 
 const PIPELINE_STEPS: Record<string, string[]> = {
   "video-production": ["brief", "concept", "script", "visual_look", "storyboard", "video_gen", "edit", "audio", "polish"],
   "brand-builder": ["discovery", "research", "positioning", "identity", "brand_dna"],
-  "strategist": ["diagnostic", "analysis", "strategy", "roadmap", "delivery"],
-};
-
-const STEP_LABELS: Record<string, string> = {
-  brief: "Brief",
-  concept: "Concepto",
-  script: "Guion",
-  visual_look: "Look Visual",
-  storyboard: "Storyboard",
-  video_gen: "Generacion",
-  edit: "Edicion",
-  audio: "Audio",
-  polish: "Pulido",
-  discovery: "Discovery",
-  research: "Investigacion",
-  positioning: "Posicionamiento",
-  identity: "Identidad",
-  brand_dna: "ADN de Marca",
-  diagnostic: "Diagnostico",
-  analysis: "Analisis",
-  strategy: "Estrategia",
-  roadmap: "Roadmap",
-  delivery: "Entrega",
-  completed: "Completado",
-  paused: "Pausado",
+  "strategist": ["diagnostic", "objectives", "audiences", "value_prop", "media_plan", "budget", "briefs"],
+  "graphic-design": ["brief", "design_system", "moodboard", "production", "adaptation", "delivery"],
+  "writers-room": ["wr_brief", "wr_research", "wr_draft", "wr_adaptation", "wr_delivery"],
+  "audio": ["au_brief", "au_sound_design", "au_production", "au_mix_master", "au_delivery"],
+  "web": ["wb_brief", "wb_architecture", "wb_content", "wb_seo", "wb_build", "wb_qa", "wb_delivery"],
+  "marketplace": ["mk_request", "mk_search", "mk_quote", "mk_compare", "mk_contract", "mk_tracking", "mk_delivery"],
+  "print-production": ["pp_brief", "pp_prepress", "pp_vendor_request", "pp_production_tracking", "pp_quality_check", "pp_delivery"],
+  "events": ["ev_brief", "ev_concept", "ev_planning", "ev_vendor_setup", "ev_pre_event", "ev_live_event", "ev_post_event", "ev_delivery"],
+  "ads": ["ad_brief", "ad_strategy", "ad_creative", "ad_targeting", "ad_launch_kit", "ad_delivery"],
+  "community-management": ["cm_brief", "cm_calendar", "cm_content_production", "cm_scheduling", "cm_monitoring", "cm_reporting", "cm_delivery"],
+  "email-marketing": ["em_brief", "em_strategy", "em_production", "em_segmentation", "em_send", "em_analysis", "em_delivery"],
+  "seo-content": ["se_brief", "se_audit", "se_keyword_strategy", "se_content_plan", "se_optimization", "se_reporting", "se_delivery"],
+  "channel-manager": ["ch_request", "ch_analysis", "ch_specs", "ch_delivery"],
+  "sales-crm": ["sl_capture", "sl_enrich", "sl_score", "sl_nurture", "sl_proposal", "sl_negotiate", "sl_close", "sl_attribution", "sl_delivery"],
+  "financial": ["fn_request", "fn_budget", "fn_tracking", "fn_pl", "fn_deliver"],
+  "analytics": ["an_request", "an_collect", "an_analyze", "an_visualize", "an_deliver"],
+  "security": ["sec_audit", "sec_scan", "sec_remediate", "sec_report", "sec_deliver"],
 };
 
 const STATUS_COLORS: Record<string, string> = {
@@ -107,7 +94,7 @@ function renderPipelineTimeline(pipelineType: string, currentStatus: string): st
           </div>
           ${i < steps.length - 1 ? `<div class="flex-1 h-0.5 ${lineClass}"></div>` : ""}
         </div>
-        <span class="mt-2 text-xs ${labelClass} text-center max-w-[70px]">${STEP_LABELS[step] ?? step}</span>
+        <span class="mt-2 text-xs ${labelClass} text-center max-w-[70px]">${statusLabel(step)}</span>
       </div>`;
     })
     .join("");
@@ -127,7 +114,7 @@ export function renderProjectDetail(
   gates: GateReview[],
 ): string {
   const statusCls = STATUS_COLORS[project.status] ?? "bg-criteria-border text-criteria-muted border-criteria-border";
-  const pipelineLabel = PIPELINE_LABELS[project.pipelineType] ?? project.pipelineType;
+  const pLabel = pipelineLabel(project.pipelineType);
   const createdDate = new Date(project.createdAt).toLocaleDateString("es-MX", {
     day: "numeric",
     month: "long",
@@ -146,7 +133,7 @@ export function renderProjectDetail(
         .map(
           (a) => `
         <tr class="border-b border-criteria-border hover:bg-criteria-gray/30">
-          <td class="py-2 px-4 text-criteria-light text-sm">${STEP_LABELS[a.step] ?? a.step}</td>
+          <td class="py-2 px-4 text-criteria-light text-sm">${statusLabel(a.step)}</td>
           <td class="py-2 px-4 text-criteria-muted text-sm">${a.agentId}</td>
           <td class="py-2 px-4 text-criteria-muted text-sm">${a.contentType}</td>
           <td class="py-2 px-4 text-criteria-muted text-sm">${new Date(a.createdAt).toLocaleDateString("es-MX")}</td>
@@ -167,7 +154,7 @@ export function renderProjectDetail(
             : "bg-red-500/10 text-red-400 border-red-500/30";
           return `
           <tr class="border-b border-criteria-border hover:bg-criteria-gray/30">
-            <td class="py-2 px-4 text-criteria-light text-sm">${g.gate}</td>
+            <td class="py-2 px-4 text-criteria-light text-sm">${gateDisplayLabel(g.gate)}</td>
             <td class="py-2 px-4">
               <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${resultCls}">
                 ${isPass ? "Aprobado" : "Rechazado"}
@@ -192,10 +179,10 @@ export function renderProjectDetail(
       <div>
         <div class="flex items-center gap-3 mb-2">
           <h1 class="text-2xl font-bold text-criteria-white">${project.name}</h1>
-          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${statusCls}">${project.status}</span>
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${statusCls}">${statusLabel(project.status)}</span>
         </div>
         <div class="flex items-center gap-4 text-sm text-criteria-muted">
-          <span>${pipelineLabel}</span>
+          <span>${pLabel}</span>
           <span>&bull;</span>
           <span>Creado ${createdDate}</span>
         </div>

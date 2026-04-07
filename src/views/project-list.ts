@@ -1,10 +1,5 @@
 import { layout, clientNav } from "./layout.js";
-
-const PIPELINE_LABELS: Record<string, string> = {
-  "video-production": "Produccion de Video",
-  "brand-builder": "Construccion de Marca",
-  "strategist": "Estrategia",
-};
+import { PIPELINE_LABELS, pipelineLabel, statusLabel } from "../shared/terminology.js";
 
 const STATUS_COLORS: Record<string, string> = {
   brief: "bg-blue-500/10 text-blue-400 border-blue-500/30",
@@ -36,7 +31,7 @@ export function renderProjectList(projects: Project[]): string {
     ? projects
         .map((p) => {
           const statusCls = STATUS_COLORS[p.status] ?? "bg-criteria-border text-criteria-muted border-criteria-border";
-          const pipelineLabel = PIPELINE_LABELS[p.pipelineType] ?? p.pipelineType;
+          const pLabel = pipelineLabel(p.pipelineType);
           const dateStr = new Date(p.updatedAt).toLocaleDateString("es-MX", {
             day: "numeric",
             month: "short",
@@ -47,9 +42,9 @@ export function renderProjectList(projects: Project[]): string {
             class="project-card block bg-criteria-gray border border-criteria-border rounded-xl p-5 hover:border-criteria-accent transition-colors group">
             <div class="flex items-start justify-between mb-3">
               <h3 class="text-criteria-white font-semibold group-hover:text-criteria-accent transition-colors">${p.name}</h3>
-              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${statusCls} ml-3 shrink-0">${p.status}</span>
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${statusCls} ml-3 shrink-0">${statusLabel(p.status)}</span>
             </div>
-            <p class="text-criteria-muted text-sm mb-4">${pipelineLabel}</p>
+            <p class="text-criteria-muted text-sm mb-4">${pLabel}</p>
             <div class="flex items-center justify-between text-xs text-criteria-muted">
               <span>Actualizado: ${dateStr}</span>
               <span class="text-criteria-accent group-hover:underline">Ver proyecto &rarr;</span>

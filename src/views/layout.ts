@@ -99,6 +99,51 @@ export function layout(title: string, body: string, nav?: string): string {
 <body class="bg-criteria-black text-criteria-light min-h-screen">
   ${nav ?? ""}
   ${body}
+  <div id="toast-container" class="fixed top-4 right-4 z-50 flex flex-col gap-2"></div>
+  <script>
+    function showToast(message, type) {
+      type = type || 'info';
+      var colors = {
+        success: 'bg-green-600',
+        error: 'bg-red-600',
+        info: 'bg-criteria-accent',
+        warning: 'bg-yellow-600'
+      };
+      var toast = document.createElement('div');
+      toast.className = (colors[type] || colors.info) + ' text-white px-4 py-3 rounded-lg shadow-lg text-sm max-w-sm transition-opacity duration-300';
+      toast.textContent = message;
+      document.getElementById('toast-container').appendChild(toast);
+      setTimeout(function() { toast.style.opacity = '0'; setTimeout(function() { toast.remove(); }, 300); }, 4000);
+    }
+
+    function showConfirm(message) {
+      return new Promise(function(resolve) {
+        var overlay = document.createElement('div');
+        overlay.className = 'fixed inset-0 bg-black/60 z-50 flex items-center justify-center';
+        var box = document.createElement('div');
+        box.className = 'bg-criteria-dark border border-criteria-border rounded-lg p-6 max-w-md mx-4';
+        var p = document.createElement('p');
+        p.className = 'text-criteria-light mb-6';
+        p.textContent = message;
+        var btns = document.createElement('div');
+        btns.className = 'flex justify-end gap-3';
+        var cancelBtn = document.createElement('button');
+        cancelBtn.className = 'px-4 py-2 text-sm text-criteria-muted hover:text-criteria-light';
+        cancelBtn.textContent = 'Cancelar';
+        var okBtn = document.createElement('button');
+        okBtn.className = 'px-4 py-2 text-sm bg-criteria-accent text-black rounded font-medium';
+        okBtn.textContent = 'Confirmar';
+        btns.appendChild(cancelBtn);
+        btns.appendChild(okBtn);
+        box.appendChild(p);
+        box.appendChild(btns);
+        overlay.appendChild(box);
+        document.body.appendChild(overlay);
+        okBtn.onclick = function() { overlay.remove(); resolve(true); };
+        cancelBtn.onclick = function() { overlay.remove(); resolve(false); };
+      });
+    }
+  </script>
 </body>
 </html>`;
 }

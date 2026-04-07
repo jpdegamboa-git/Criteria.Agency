@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { zodErrorToSpanish } from "../shared/error-messages.js";
 
 // ── Shared ──
 
@@ -275,6 +276,5 @@ export function parseBody<T>(schema: z.ZodType<T>, body: unknown): { success: tr
   if (result.success) {
     return { success: true, data: result.data };
   }
-  const messages = result.error.issues.map(i => `${i.path.join(".")}: ${i.message}`).join("; ");
-  return { success: false, error: messages };
+  return { success: false, error: zodErrorToSpanish(result.error) };
 }
