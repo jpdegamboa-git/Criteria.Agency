@@ -429,6 +429,53 @@ export const AGENT_CONTEXT_MAP: Record<string, AgentContextEntry> = {
   "EV-003:ev_post_event": { artifactSteps: ["ev_live_event"], attachmentTypes: ["text", "image", "video"], taskInstruction: "Follow-up: Email (thank you, survey), CM (recap, gallery), Video (recap 1-3min), WR (blog recap, press release)." },
   "EV-004:ev_post_event": { artifactSteps: ["ev_live_event"], attachmentTypes: ["text", "json"], taskInstruction: "Measure: attendance vs target, leads, social engagement, ROI, NPS. Generate report with insights and recommendations." },
   "EV-L:ev_delivery": { artifactSteps: ["ev_post_event"], attachmentTypes: ["text", "json"], taskInstruction: "Close event: review report, validate follow-up complete, submit vendor reviews, document learnings." },
+
+  // ── Ads Pipeline ──
+  "AD-L:ad_brief": { artifactSteps: [], attachmentTypes: ["json"], taskInstruction: "Interpret pauta brief. Define: objective (awareness/consideration/conversion), total budget, duration, preferred platforms, target audience. Output JSON." },
+  "AD-001:ad_strategy": { artifactSteps: ["ad_brief"], attachmentTypes: ["text", "json"], taskInstruction: "Design media plan: select channels, distribute budget by channel and funnel phase, define timeline, set KPI targets per channel. Use channel-specs.json." },
+  "AD-002:ad_creative": { artifactSteps: ["ad_brief", "ad_strategy"], attachmentTypes: ["text", "json"], taskInstruction: "Coordinate asset production: create sub-projects in Writers Room (copy per platform) and Graphic Design (visuals per format). For video ads, create Video Production sub-project. Do NOT produce copy or visuals directly." },
+  "AD-003:ad_targeting": { artifactSteps: ["ad_brief", "ad_strategy"], attachmentTypes: ["text", "json"], taskInstruction: "Define audiences per platform: demographics, interests, behaviors, custom audiences (lookalikes, retargeting), exclusions. Output as configurable targeting specs." },
+  "AD-004:ad_launch_kit": { artifactSteps: ["ad_brief", "ad_strategy", "ad_creative", "ad_targeting"], attachmentTypes: ["text", "image", "json"], taskInstruction: "Compile launch kit: Campaign → Ad Group/Set → Ad structure, assign creatives, configure bid strategy, placement, schedule, budget. Executable document per platform." },
+  "AD-L:ad_delivery": { artifactSteps: ["ad_launch_kit"], attachmentTypes: ["text", "json"], taskInstruction: "Final review of launch kit. Verify completeness, coherence, budget alignment. Compile deliverable." },
+
+  // ── Community Management Pipeline ──
+  "CM-L:cm_brief": { artifactSteps: [], attachmentTypes: ["json"], taskInstruction: "Interpret social brief. Define: active networks, objectives (engagement/growth/traffic/leads), tone of voice per network, target frequency." },
+  "CM-001:cm_calendar": { artifactSteps: ["cm_brief"], attachmentTypes: ["text", "json"], taskInstruction: "Design monthly editorial calendar: themes per week, frequency per network, content types (educativo 40%, entretenimiento 30%, venta 20%, behind-the-scenes 10%), special dates and holidays." },
+  "CM-002:cm_content_production": { artifactSteps: ["cm_brief", "cm_calendar"], attachmentTypes: ["text", "json"], taskInstruction: "Coordinate production: create sub-projects in Writers Room (captions, format=digital, channel=social) and Graphic Design (visual assets) for each post. For reels/shorts, create Video Production sub-project." },
+  "CM-002:cm_scheduling": { artifactSteps: ["cm_content_production"], attachmentTypes: ["text", "json"], taskInstruction: "Schedule publications: assign optimal date and time per post, verify no conflicts or gaps, check platform-specific timing." },
+  "CM-003:cm_monitoring": { artifactSteps: [], attachmentTypes: ["text"], taskInstruction: "Monitor mentions and comments across all networks. Respond following Brand DNA tone. Detect mild crises (negative comments, complaints). Escalate major crises. Report sentiment." },
+  "CM-004:cm_reporting": { artifactSteps: ["cm_monitoring"], attachmentTypes: ["text", "json"], taskInstruction: "Analyze metrics: engagement rate, reach, impressions, follower growth, best performing content by type/theme/time. Generate report with insights and recommendations." },
+  "CM-L:cm_delivery": { artifactSteps: ["cm_reporting"], attachmentTypes: ["text", "json"], taskInstruction: "Review cycle performance. Adjust strategy for next month based on insights." },
+
+  // ── Email Marketing Pipeline ──
+  "EM-L:em_brief": { artifactSteps: [], attachmentTypes: ["json"], taskInstruction: "Interpret email brief. Define: type (campaign/flow), objective, target audience, expected metrics." },
+  "EM-001:em_strategy": { artifactSteps: ["em_brief"], attachmentTypes: ["text", "json"], taskInstruction: "Design email sequence: number of emails, triggers, timing between emails, exit conditions, A/B testing plan (subject lines, content variants)." },
+  "EM-002:em_production": { artifactSteps: ["em_brief", "em_strategy"], attachmentTypes: ["text", "json"], taskInstruction: "Coordinate production: create sub-projects in Writers Room (subject+body per email, format=digital, channel=email) and Graphic Design (visual template). Compile final emails." },
+  "EM-003:em_segmentation": { artifactSteps: ["em_brief", "em_strategy"], attachmentTypes: ["text", "json"], taskInstruction: "Define audience segments: by funnel stage (lead/MQL/SQL/customer), engagement level (active/warm/cold/churned), demographics, behavior (opened last 30d, clicked, purchased)." },
+  "EM-002:em_send": { artifactSteps: ["em_production", "em_segmentation"], attachmentTypes: ["text"], taskInstruction: "Execute send via Resend API. Configure A/B split if applicable. Schedule timing per strategy." },
+  "EM-004:em_analysis": { artifactSteps: ["em_send"], attachmentTypes: ["text", "json"], taskInstruction: "Analyze post-send metrics: open rate, click rate, conversion rate, unsubscribe rate, bounce rate, A/B test results. Generate optimization recommendations." },
+  "EM-L:em_delivery": { artifactSteps: ["em_analysis"], attachmentTypes: ["text", "json"], taskInstruction: "Review email performance. Optimizations for next send." },
+
+  // ── SEO/Content Pipeline ──
+  "SE-L:se_brief": { artifactSteps: [], attachmentTypes: ["json"], taskInstruction: "Interpret SEO brief: scope (full site or section), objectives (traffic/rankings/leads), competitors to analyze." },
+  "SE-001:se_audit": { artifactSteps: ["se_brief"], attachmentTypes: ["text", "json"], taskInstruction: "Technical SEO audit: crawlability (robots.txt, sitemap), indexation (canonical, noindex), Core Web Vitals, mobile-friendliness, structured data, page speed, broken links, redirect chains. Output issue list with severity and suggested fix." },
+  "SE-002:se_keyword_strategy": { artifactSteps: ["se_brief", "se_audit"], attachmentTypes: ["text", "json"], taskInstruction: "Keyword research: search volume, keyword difficulty, search intent (informational/navigational/commercial/transactional), keyword clusters, content gaps vs competition, long-tail opportunities. Output keyword map with priority." },
+  "SE-003:se_content_plan": { artifactSteps: ["se_brief", "se_keyword_strategy"], attachmentTypes: ["text", "json"], taskInstruction: "Map keywords to pages (existing or new), define pillar-cluster structure, production calendar, prioritize by impact potential (volume x ranking probability)." },
+  "SE-004:se_optimization": { artifactSteps: ["se_content_plan"], attachmentTypes: ["text"], taskInstruction: "Optimize existing content: meta tags, headings, internal links, content freshness. Create briefs for Writers Room (WR-004) for new SEO content." },
+  "SE-004:se_reporting": { artifactSteps: ["se_optimization"], attachmentTypes: ["text", "json"], taskInstruction: "Monitor rankings, organic traffic, backlink profile. Detect ranking drops, recommend content refresh for declining pages." },
+  "SE-L:se_delivery": { artifactSteps: ["se_reporting"], attachmentTypes: ["text", "json"], taskInstruction: "Review SEO performance. Adjust strategy for next cycle." },
+
+  // ── Channel Manager Pipeline ──
+  "CH-L:ch_request": { artifactSteps: [], attachmentTypes: ["json"], taskInstruction: "Interpret channel request: which channel(s), objective, estimated budget, query type (specs/recommendation/procurement)." },
+  "CH-001:ch_analysis": { artifactSteps: ["ch_request"], attachmentTypes: ["text", "json"], taskInstruction: "Analyze digital channel(s): available formats, estimated costs (CPM/CPC/CPV), audience, best practices, limitations. Use channel-specs.json." },
+  "CH-002:ch_analysis": { artifactSteps: ["ch_request"], attachmentTypes: ["text", "json"], taskInstruction: "Analyze traditional channel(s): formats, estimated costs, reach, frequency, advantages/limitations. If procurement needed, create Marketplace request." },
+  "CH-003:ch_specs": { artifactSteps: ["ch_request", "ch_analysis"], attachmentTypes: ["json"], taskInstruction: "Generate detailed technical specs: dimensions, resolution, file format, max weight, duration, safe zones, color space. Output structured JSON." },
+  "CH-L:ch_delivery": { artifactSteps: ["ch_specs"], attachmentTypes: ["text", "json"], taskInstruction: "Compile final recommendation with specs. Deliver to invoking motor." },
+
+  // ── Opportunity Agent (loop) ──
+  "OP-001:op_scan": { artifactSteps: [], attachmentTypes: ["text", "json"], taskInstruction: "Collect recent outputs from 4 Listeners (LI-001 Brand, LI-002 Culture, LI-003 Industry, LI-004 Competitive). Cross signals looking for patterns: trending topic matching audience, competitor gap, brand mention to amplify, industry signal for thought leadership." },
+  "OP-L:op_evaluate": { artifactSteps: ["op_scan"], attachmentTypes: ["text", "json"], taskInstruction: "Evaluate each signal: relevance to brand (1-10), time window, potential impact, resource needed. Filter: only signals scoring >= minRelevanceScore become opportunities." },
+  "OP-002:op_alert": { artifactSteps: ["op_evaluate"], attachmentTypes: ["text", "json"], taskInstruction: "For each approved opportunity: generate activation brief with suggested motor (CM for social, Ads for campaigns, WR for content, SEO for thought leadership), urgency level, and draft brief." },
 };
 
 // ── Agent Output Types ─────────────────────────────────────────
@@ -514,4 +561,16 @@ export const AGENT_OUTPUT_TYPES: Record<
   "PP-L:pp_brief": "text", "PP-001:pp_prepress": "text", "PP-002:pp_vendor_request": "text", "PP-003:pp_quality_check": "text", "PP-L:pp_delivery": "text",
   // Events
   "EV-L:ev_brief": "text", "EV-L:ev_concept": "text", "EV-001:ev_planning": "text", "EV-002:ev_vendor_setup": "text", "EV-003:ev_pre_event": "text", "EV-005:ev_pre_event": "text", "EV-003:ev_live_event": "text", "EV-005:ev_live_event": "text", "EV-003:ev_post_event": "text", "EV-004:ev_post_event": "text", "EV-L:ev_delivery": "text",
+  // Ads
+  "AD-L:ad_brief": "text", "AD-001:ad_strategy": "text", "AD-002:ad_creative": "text", "AD-003:ad_targeting": "text", "AD-004:ad_launch_kit": "text", "AD-L:ad_delivery": "text",
+  // Community Management
+  "CM-L:cm_brief": "text", "CM-001:cm_calendar": "text", "CM-002:cm_content_production": "text", "CM-002:cm_scheduling": "text", "CM-003:cm_monitoring": "text", "CM-004:cm_reporting": "text", "CM-L:cm_delivery": "text",
+  // Email Marketing
+  "EM-L:em_brief": "text", "EM-001:em_strategy": "text", "EM-002:em_production": "text", "EM-003:em_segmentation": "text", "EM-002:em_send": "text", "EM-004:em_analysis": "text", "EM-L:em_delivery": "text",
+  // SEO/Content
+  "SE-L:se_brief": "text", "SE-001:se_audit": "text", "SE-002:se_keyword_strategy": "text", "SE-003:se_content_plan": "text", "SE-004:se_optimization": "text", "SE-004:se_reporting": "text", "SE-L:se_delivery": "text",
+  // Channel Manager
+  "CH-L:ch_request": "text", "CH-001:ch_analysis": "text", "CH-002:ch_analysis": "text", "CH-003:ch_specs": "text", "CH-L:ch_delivery": "text",
+  // Opportunity Agent
+  "OP-001:op_scan": "text", "OP-L:op_evaluate": "text", "OP-002:op_alert": "text",
 };
