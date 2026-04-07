@@ -4,6 +4,7 @@ import {
   varchar,
   text,
   integer,
+  boolean,
   timestamp,
   jsonb,
   pgEnum,
@@ -333,6 +334,7 @@ export const transactions = pgTable("transactions", {
   clientId: uuid("client_id").references(() => clients.id),
   entityId: uuid("entity_id"),
   notes: text("notes"),
+  parentTransactionId: uuid("parent_transaction_id"),
   metadata: jsonb("metadata").default({}),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
@@ -340,6 +342,7 @@ export const transactions = pgTable("transactions", {
   index("transactions_date_idx").on(table.date),
   index("transactions_client_id_idx").on(table.clientId),
   index("transactions_category_idx").on(table.category),
+  index("transactions_parent_id_idx").on(table.parentTransactionId),
 ]);
 
 export const expectedPayments = pgTable("expected_payments", {
@@ -466,6 +469,86 @@ export const transactionInvoices = pgTable("transaction_invoices", {
   transactionId: uuid("transaction_id").references(() => transactions.id).notNull(),
   invoiceId: uuid("invoice_id").references(() => invoices.id).notNull(),
   amount: numeric("amount", { precision: 12, scale: 2 }).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// ── Agent Canvas ──
+
+export const connectionTypeEnum = pgEnum("connection_type", [
+  "pipeline",
+  "manual",
+]);
+
+export const agentConnections = pgTable("agent_connections", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  sourceAgentId: varchar("source_agent_id", { length: 20 }).notNull(),
+  targetAgentId: varchar("target_agent_id", { length: 20 }).notNull(),
+  type: connectionTypeEnum("type").default("pipeline").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+}, (table) => [
+  index("agent_connections_source_idx").on(table.sourceAgentId),
+  index("agent_connections_target_idx").on(table.targetAgentId),
+]);
+
+export const agentNodePositions = pgTable("agent_node_positions", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  agentId: varchar("agent_id", { length: 20 }).notNull().unique(),
+  x: numeric("x", { precision: 10, scale: 2 }).default("0").notNull(),
+  y: numeric("y", { precision: 10, scale: 2 }).default("0").notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// ── Auth (Better Auth) ──
+
+export const user = pgTable("user", {
+  id: text("id").primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  email: varchar("email", { length: 255 }).notNull().unique(),
+  emailVerified: boolean("email_verified").default(false).notNull(),
+  image: text("image"),
+  role: varchar("role", { length: 20 }).default("client").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const session = pgTable("session", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .references(() => user.id)
+    .notNull(),
+  token: text("token").notNull().unique(),
+  expiresAt: timestamp("expires_at").notNull(),
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const account = pgTable("account", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .references(() => user.id)
+    .notNull(),
+  accountId: text("account_id").notNull(),
+  providerId: text("provider_id").notNull(),
+  accessToken: text("access_token"),
+  refreshToken: text("refresh_token"),
+  accessTokenExpiresAt: timestamp("access_token_expires_at"),
+  refreshTokenExpiresAt: timestamp("refresh_token_expires_at"),
+  scope: text("scope"),
+  idToken: text("id_token"),
+  password: text("password"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const verification = pgTable("verification", {
+  id: text("id").primaryKey(),
+  identifier: text("identifier").notNull(),
+  value: text("value").notNull(),
+  expiresAt: timestamp("expires_at").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
