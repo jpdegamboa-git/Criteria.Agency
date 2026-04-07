@@ -7,6 +7,14 @@
       "runtimeArgs": ["node_modules/.bin/tsx", "src/api/server.ts"],
       "env": { "PATH": "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin" },
       "port": 3000
+    },
+    {
+      "name": "web",
+      "runtimeExecutable": "/opt/homebrew/bin/npm",
+      "runtimeArgs": ["run", "dev", "--", "--port", "3001"],
+      "env": { "PATH": "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin" },
+      "port": 3001,
+      "cwd": "web"
     }
   ]
 }
