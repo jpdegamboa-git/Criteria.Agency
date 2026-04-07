@@ -103,6 +103,12 @@ export const ARTIFACT_STEPS = [
   "sec_audit", "sec_scan", "sec_remediate", "sec_report", "sec_deliver",
   // Shared
   "model_config", "gate_review",
+  // Intelligence Engine steps
+  "brand_collect", "brand_analyze", "brand_report", "brand_alert_eval",
+  "culture_collect", "culture_analyze", "culture_report", "culture_alert_eval",
+  "industry_collect", "industry_analyze", "industry_report", "industry_alert_eval",
+  "competitive_collect", "competitive_analyze", "competitive_report", "competitive_alert_eval",
+  "opportunity_aggregate", "opportunity_evaluate", "opportunity_generate", "opportunity_prioritize",
 ] as const;
 export type ArtifactStep = (typeof ARTIFACT_STEPS)[number];
 
