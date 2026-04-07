@@ -1,5 +1,8 @@
 import Nav from "@/components/nav";
 import Hero from "@/components/hero";
+import TrustBar from "@/components/trust-bar";
+import HowItWorks from "@/components/how-it-works";
+import QualityGates from "@/components/quality-gates";
 import Footer from "@/components/footer";
 
 export default function Home() {
@@ -7,6 +10,9 @@ export default function Home() {
     <>
       <Nav />
       <Hero />
+      <TrustBar />
+      <HowItWorks />
+      <QualityGates />
       <Footer />
     </>
   );
