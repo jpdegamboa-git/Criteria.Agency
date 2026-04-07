@@ -1,30 +1,16 @@
 import { Hono } from "hono";
 import { db, schema } from "../db/index.js";
 import { eq, sql } from "drizzle-orm";
+import { parseBody, createInvoiceSchema, updateInvoiceSchema, linkTransactionInvoiceSchema } from "./validators.js";
 
 export const invoiceRoutes = new Hono();
 
 // POST /api/invoices — create invoice
 invoiceRoutes.post("/api/invoices", async (c) => {
   const body = await c.req.json();
-  const {
-    direction,
-    entityId,
-    invoiceNumber,
-    amount,
-    currency,
-    issueDate,
-    dueDate,
-    notes,
-    metadata,
-  } = body;
-
-  if (!direction || !entityId || !amount || !issueDate) {
-    return c.json(
-      { error: "direction, entityId, amount, and issueDate are required" },
-      400,
-    );
-  }
+  const parsed = parseBody(createInvoiceSchema, body);
+  if (!parsed.success) return c.json({ error: parsed.error }, 400);
+  const { direction, entityId, invoiceNumber, amount, currency, issueDate, dueDate, notes, metadata } = parsed.data;
 
   const [created] = await db
     .insert(schema.invoices)
@@ -33,11 +19,11 @@ invoiceRoutes.post("/api/invoices", async (c) => {
       entityId,
       invoiceNumber: invoiceNumber ?? null,
       amount: String(amount),
-      currency: currency ?? "USD",
+      currency,
       issueDate: new Date(issueDate),
       dueDate: dueDate ? new Date(dueDate) : null,
       notes: notes ?? null,
-      metadata: metadata ?? {},
+      metadata,
     })
     .returning();
 
@@ -49,14 +35,14 @@ invoiceRoutes.get("/api/invoices", async (c) => {
   const direction = c.req.query("direction");
   const status = c.req.query("status");
 
-  let data = await db.select().from(schema.invoices);
+  const conditions = [];
+  if (direction) conditions.push(eq(schema.invoices.direction, direction as "issued" | "received"));
+  if (status) conditions.push(eq(schema.invoices.status, status as "pending" | "partial" | "paid" | "overdue" | "canceled"));
 
-  if (direction) {
-    data = data.filter((inv) => inv.direction === direction);
-  }
-  if (status) {
-    data = data.filter((inv) => inv.status === status);
-  }
+  const query = db.select().from(schema.invoices);
+  const data = conditions.length > 0
+    ? await query.where(sql`${sql.join(conditions, sql` AND `)}`)
+    : await query;
 
   return c.json(data);
 });
@@ -76,7 +62,9 @@ invoiceRoutes.get("/api/invoices/:id", async (c) => {
 invoiceRoutes.patch("/api/invoices/:id", async (c) => {
   const id = c.req.param("id");
   const body = await c.req.json();
-  const { status, notes, invoiceNumber } = body;
+  const parsed = parseBody(updateInvoiceSchema, body);
+  if (!parsed.success) return c.json({ error: parsed.error }, 400);
+  const { status, notes, invoiceNumber } = parsed.data;
 
   const [existing] = await db
     .select()
@@ -89,10 +77,6 @@ invoiceRoutes.patch("/api/invoices/:id", async (c) => {
   if (status !== undefined) updates.status = status;
   if (notes !== undefined) updates.notes = notes;
   if (invoiceNumber !== undefined) updates.invoiceNumber = invoiceNumber;
-
-  if (Object.keys(updates).length === 0) {
-    return c.json({ error: "No fields to update" }, 400);
-  }
 
   const [updated] = await db
     .update(schema.invoices)
@@ -107,11 +91,9 @@ invoiceRoutes.patch("/api/invoices/:id", async (c) => {
 invoiceRoutes.post("/api/transactions/:id/invoices", async (c) => {
   const transactionId = c.req.param("id");
   const body = await c.req.json();
-  const { invoiceId, amount } = body;
-
-  if (!invoiceId || amount === undefined) {
-    return c.json({ error: "invoiceId and amount are required" }, 400);
-  }
+  const parsed = parseBody(linkTransactionInvoiceSchema, body);
+  if (!parsed.success) return c.json({ error: parsed.error }, 400);
+  const { invoiceId, amount } = parsed.data;
 
   // Verify transaction exists
   const [txn] = await db

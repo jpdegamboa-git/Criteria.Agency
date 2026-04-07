@@ -44,6 +44,9 @@ export const config = {
 
   // PiAPI (Kling, Seedance)
   piapiApiKey: process.env.PIAPI_API_KEY ?? "",
+
+  // Admin API key for internal routes
+  adminApiKey: process.env.ADMIN_API_KEY ?? "",
 };
 
 // ── Startup security audit ──
@@ -69,6 +72,9 @@ export function auditConfig(): void {
 
   if (config.resendApiKey) configured.push("Resend (email)");
   else warnings.push("RESEND_API_KEY empty — emails will log to console");
+
+  if (config.adminApiKey) configured.push("Admin auth");
+  else warnings.push("ADMIN_API_KEY empty — API routes are UNPROTECTED (dev mode)");
 
   // Report
   if (configured.length > 0) {

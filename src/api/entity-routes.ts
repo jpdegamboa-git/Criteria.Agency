@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { db, schema } from "../db/index.js";
 import { eq } from "drizzle-orm";
 import { addEntityPattern } from "../services/entity-matcher.js";
+import { parseBody, createEntitySchema, updateEntitySchema, addPatternSchema } from "./validators.js";
 
 export const entityRoutes = new Hono();
 
@@ -14,19 +15,17 @@ entityRoutes.get("/api/entities", async (c) => {
 // POST /api/entities — create entity
 entityRoutes.post("/api/entities", async (c) => {
   const body = await c.req.json();
-  const { name, type, clientId, patterns, defaultCategory, notes } = body;
-
-  if (!name) {
-    return c.json({ error: "name is required" }, 400);
-  }
+  const parsed = parseBody(createEntitySchema, body);
+  if (!parsed.success) return c.json({ error: parsed.error }, 400);
+  const { name, type, clientId, patterns, defaultCategory, notes } = parsed.data;
 
   const [created] = await db
     .insert(schema.businessEntities)
     .values({
       name,
-      type: type ?? "unknown",
+      type,
       clientId: clientId ?? null,
-      patterns: patterns ?? [],
+      patterns,
       defaultCategory: defaultCategory ?? null,
       notes: notes ?? null,
     })
@@ -39,7 +38,9 @@ entityRoutes.post("/api/entities", async (c) => {
 entityRoutes.patch("/api/entities/:id", async (c) => {
   const id = c.req.param("id");
   const body = await c.req.json();
-  const { name, type, defaultCategory, patterns, notes } = body;
+  const parsed = parseBody(updateEntitySchema, body);
+  if (!parsed.success) return c.json({ error: parsed.error }, 400);
+  const { name, type, defaultCategory, patterns, notes } = parsed.data;
 
   const [existing] = await db
     .select()
@@ -55,10 +56,6 @@ entityRoutes.patch("/api/entities/:id", async (c) => {
   if (patterns !== undefined) updates.patterns = patterns;
   if (notes !== undefined) updates.notes = notes;
 
-  if (Object.keys(updates).length === 0) {
-    return c.json({ error: "No fields to update" }, 400);
-  }
-
   const [updated] = await db
     .update(schema.businessEntities)
     .set(updates)
@@ -72,11 +69,9 @@ entityRoutes.patch("/api/entities/:id", async (c) => {
 entityRoutes.post("/api/entities/:id/patterns", async (c) => {
   const id = c.req.param("id");
   const body = await c.req.json();
-  const { pattern } = body;
-
-  if (!pattern) {
-    return c.json({ error: "pattern is required" }, 400);
-  }
+  const parsed = parseBody(addPatternSchema, body);
+  if (!parsed.success) return c.json({ error: parsed.error }, 400);
+  const { pattern } = parsed.data;
 
   try {
     await addEntityPattern(id, pattern);

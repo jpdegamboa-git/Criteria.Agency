@@ -1,5 +1,6 @@
 import { Resend } from "resend";
 import { config } from "../shared/config.js";
+import { escapeHtml, sanitizeUrl } from "../shared/sanitize.js";
 
 const resend = config.resendApiKey
   ? new Resend(config.resendApiKey)
@@ -39,9 +40,9 @@ export async function sendReviewNotification(
     `Nuevo comentario en "${projectName}"`,
     `
     <h2>Nuevo comentario del cliente</h2>
-    <p><strong>Proyecto:</strong> ${projectName}</p>
-    <p><strong>Comentario:</strong> ${commentText}</p>
-    <p><a href="${reviewUrl}">Ver proyecto</a></p>
+    <p><strong>Proyecto:</strong> ${escapeHtml(projectName)}</p>
+    <p><strong>Comentario:</strong> ${escapeHtml(commentText)}</p>
+    <p><a href="${sanitizeUrl(reviewUrl)}">Ver proyecto</a></p>
     `,
   );
 }
@@ -55,7 +56,7 @@ export async function sendApprovalNotification(
     `Proyecto aprobado: "${projectName}"`,
     `
     <h2>El cliente aprobo el proyecto</h2>
-    <p><strong>Proyecto:</strong> ${projectName}</p>
+    <p><strong>Proyecto:</strong> ${escapeHtml(projectName)}</p>
     <p>El cliente ha aprobado la entrega. Puedes proceder con la entrega final.</p>
     `,
   );
@@ -71,9 +72,9 @@ export async function sendRevisionNotification(
     `Revision solicitada: "${projectName}"`,
     `
     <h2>El cliente solicita cambios</h2>
-    <p><strong>Proyecto:</strong> ${projectName}</p>
+    <p><strong>Proyecto:</strong> ${escapeHtml(projectName)}</p>
     <p>Revisa los comentarios del cliente y sube una nueva version.</p>
-    <p><a href="${reviewUrl}">Ver proyecto</a></p>
+    <p><a href="${sanitizeUrl(reviewUrl)}">Ver proyecto</a></p>
     `,
   );
 }
@@ -88,9 +89,9 @@ export async function sendNewVersionNotification(
     `Nueva version lista: "${projectName}"`,
     `
     <h2>Tu proyecto tiene una nueva version</h2>
-    <p><strong>Proyecto:</strong> ${projectName}</p>
+    <p><strong>Proyecto:</strong> ${escapeHtml(projectName)}</p>
     <p>Hemos subido una nueva version de tu entrega. Revisala y dejanos tus comentarios.</p>
-    <p><a href="${reviewUrl}" style="display:inline-block;padding:12px 24px;background:#000;color:#fff;text-decoration:none;border-radius:6px;">Ver mi proyecto</a></p>
+    <p><a href="${sanitizeUrl(reviewUrl)}" style="display:inline-block;padding:12px 24px;background:#000;color:#fff;text-decoration:none;border-radius:6px;">Ver mi proyecto</a></p>
     `,
   );
 }
@@ -105,9 +106,9 @@ export async function sendDeliveryNotification(
     `Tu proyecto esta listo: "${projectName}"`,
     `
     <h2>Tu video esta listo para revision</h2>
-    <p><strong>Proyecto:</strong> ${projectName}</p>
+    <p><strong>Proyecto:</strong> ${escapeHtml(projectName)}</p>
     <p>Nuestro equipo ha completado tu proyecto. Revisalo, dejanos comentarios, y apruebalo cuando estes satisfecho.</p>
-    <p><a href="${reviewUrl}" style="display:inline-block;padding:12px 24px;background:#000;color:#fff;text-decoration:none;border-radius:6px;">Revisar mi video</a></p>
+    <p><a href="${sanitizeUrl(reviewUrl)}" style="display:inline-block;padding:12px 24px;background:#000;color:#fff;text-decoration:none;border-radius:6px;">Revisar mi video</a></p>
     <p style="color:#666;font-size:13px;margin-top:24px;">La IA genera. El criterio decide.</p>
     `,
   );

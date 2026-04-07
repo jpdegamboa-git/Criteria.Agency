@@ -40,13 +40,15 @@ export function layout(title: string, body: string): string {
 }
 
 export function errorPage(title: string, message: string): string {
+  const safeTitle = title.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const safeMessage = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   return layout(
     title,
     `
     <div class="min-h-screen flex items-center justify-center">
       <div class="text-center max-w-md px-6">
-        <h1 class="text-2xl font-bold text-criteria-white mb-4">${title}</h1>
-        <p class="text-criteria-muted mb-8">${message}</p>
+        <h1 class="text-2xl font-bold text-criteria-white mb-4">${safeTitle}</h1>
+        <p class="text-criteria-muted mb-8">${safeMessage}</p>
         <a href="/" class="text-criteria-accent hover:underline">Volver al inicio</a>
       </div>
     </div>

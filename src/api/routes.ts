@@ -10,6 +10,8 @@ import {
 } from "../orchestrator/state-machine.js";
 import { getArtifacts, readArtifact } from "../storage/artifacts.js";
 import type { ProjectType } from "../shared/types.js";
+import { requireAuth } from "./auth.js";
+import { parseBody, createProjectSchema, resumeProjectSchema } from "./validators.js";
 import { reviewRoutes } from "./review-routes.js";
 import { checkoutRoutes } from "./checkout-routes.js";
 import { financeRoutes } from "./finance-routes.js";
@@ -21,9 +23,24 @@ import { dashboardRoutes } from "./dashboard-routes.js";
 
 export const app = new Hono();
 
-// Mount feature routes
-app.route("/", reviewRoutes);
-app.route("/", checkoutRoutes);
+// ── Public routes (no auth required) ──
+app.route("/", reviewRoutes);     // Token-based auth (client portal)
+app.route("/", checkoutRoutes);   // Public pricing + Stripe webhook
+
+// ── Protected routes (require ADMIN_API_KEY) ──
+app.use("/projects/*", requireAuth);
+app.use("/agents", requireAuth);
+app.use("/artifacts/*", requireAuth);
+app.use("/api/transactions/*", requireAuth);
+app.use("/api/expected-payments/*", requireAuth);
+app.use("/api/categorization-rules/*", requireAuth);
+app.use("/api/subscriptions/*", requireAuth);
+app.use("/api/content/*", requireAuth);
+app.use("/api/copilot/*", requireAuth);
+app.use("/api/entities/*", requireAuth);
+app.use("/api/invoices/*", requireAuth);
+app.use("/admin/*", requireAuth);
+
 app.route("/", financeRoutes);
 app.route("/", copilotRoutes);
 app.route("/", contentRoutes);
@@ -40,7 +57,9 @@ app.get("/agents", (c) => c.json(Object.values(AGENT_REGISTRY)));
 // Projects - Create
 app.post("/projects", async (c) => {
   const body = await c.req.json();
-  const { name, type, clientName, clientEmail } = body;
+  const parsed = parseBody(createProjectSchema, body);
+  if (!parsed.success) return c.json({ error: parsed.error }, 400);
+  const { name, type, clientName, clientEmail } = parsed.data;
 
   // Create or find client
   let [client] = await db
@@ -122,7 +141,9 @@ app.post("/projects/:id/pause", async (c) => {
 // Projects - Resume
 app.post("/projects/:id/resume", async (c) => {
   const body = await c.req.json();
-  await resumeProject(c.req.param("id"), body.resumeTo ?? "brief");
+  const parsed = parseBody(resumeProjectSchema, body);
+  if (!parsed.success) return c.json({ error: parsed.error }, 400);
+  await resumeProject(c.req.param("id"), parsed.data.resumeTo ?? "brief");
   return c.json({ status: "resumed" });
 });
 

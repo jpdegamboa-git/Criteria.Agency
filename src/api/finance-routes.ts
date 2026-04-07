@@ -11,6 +11,14 @@ import {
   detectChurnRisk,
   getSubscriptionSummary,
 } from "../services/subscription-manager.js";
+import {
+  parseBody,
+  updateTransactionSchema,
+  reconcileTransactionSchema,
+  createExpectedPaymentSchema,
+  updateExpectedPaymentSchema,
+  createRuleSchema,
+} from "./validators.js";
 
 export const financeRoutes = new Hono();
 
@@ -50,7 +58,9 @@ financeRoutes.get("/api/transactions/:id", async (c) => {
 financeRoutes.patch("/api/transactions/:id", async (c) => {
   const id = c.req.param("id");
   const body = await c.req.json();
-  const { category, subcategory, type, notes, entityId } = body;
+  const parsed = parseBody(updateTransactionSchema, body);
+  if (!parsed.success) return c.json({ error: parsed.error }, 400);
+  const { category, subcategory, type, notes, entityId } = parsed.data;
 
   const [existing] = await db
     .select()
@@ -65,10 +75,6 @@ financeRoutes.patch("/api/transactions/:id", async (c) => {
   if (type !== undefined) updates.type = type;
   if (notes !== undefined) updates.notes = notes;
   if (entityId !== undefined) updates.entityId = entityId;
-
-  if (Object.keys(updates).length === 0) {
-    return c.json({ error: "No fields to update" }, 400);
-  }
 
   const [updated] = await db
     .update(schema.transactions)
@@ -99,11 +105,9 @@ financeRoutes.patch("/api/transactions/:id", async (c) => {
 financeRoutes.post("/api/transactions/:id/reconcile", async (c) => {
   const id = c.req.param("id");
   const body = await c.req.json();
-  const { expectedPaymentId } = body;
-
-  if (!expectedPaymentId) {
-    return c.json({ error: "expectedPaymentId is required" }, 400);
-  }
+  const parsed = parseBody(reconcileTransactionSchema, body);
+  if (!parsed.success) return c.json({ error: parsed.error }, 400);
+  const { expectedPaymentId } = parsed.data;
 
   const [txn] = await db
     .select()
@@ -129,18 +133,16 @@ financeRoutes.post("/api/transactions/:id/reconcile", async (c) => {
 // POST /api/expected-payments — create
 financeRoutes.post("/api/expected-payments", async (c) => {
   const body = await c.req.json();
-  const { clientId, amount, currency, description, dueDate } = body;
-
-  if (!clientId || !amount || !description || !dueDate) {
-    return c.json({ error: "clientId, amount, description, and dueDate are required" }, 400);
-  }
+  const parsed = parseBody(createExpectedPaymentSchema, body);
+  if (!parsed.success) return c.json({ error: parsed.error }, 400);
+  const { clientId, amount, currency, description, dueDate } = parsed.data;
 
   const [created] = await db
     .insert(schema.expectedPayments)
     .values({
       clientId,
       amount: String(amount),
-      currency: currency ?? "USD",
+      currency,
       description,
       dueDate: new Date(dueDate),
       status: "pending",
@@ -169,7 +171,9 @@ financeRoutes.get("/api/expected-payments", async (c) => {
 financeRoutes.patch("/api/expected-payments/:id", async (c) => {
   const id = c.req.param("id");
   const body = await c.req.json();
-  const { amount, dueDate, status } = body;
+  const parsed = parseBody(updateExpectedPaymentSchema, body);
+  if (!parsed.success) return c.json({ error: parsed.error }, 400);
+  const { amount, dueDate, status } = parsed.data;
 
   const [existing] = await db
     .select()
@@ -182,10 +186,6 @@ financeRoutes.patch("/api/expected-payments/:id", async (c) => {
   if (amount !== undefined) updates.amount = String(amount);
   if (dueDate !== undefined) updates.dueDate = new Date(dueDate);
   if (status !== undefined) updates.status = status;
-
-  if (Object.keys(updates).length === 0) {
-    return c.json({ error: "No fields to update" }, 400);
-  }
 
   const [updated] = await db
     .update(schema.expectedPayments)
@@ -231,22 +231,20 @@ financeRoutes.get("/api/categorization-rules", async (c) => {
 // POST /api/categorization-rules — create
 financeRoutes.post("/api/categorization-rules", async (c) => {
   const body = await c.req.json();
-  const { pattern, matchType, category, subcategory, transactionType, priority } = body;
-
-  if (!pattern || !category || !transactionType) {
-    return c.json({ error: "pattern, category, and transactionType are required" }, 400);
-  }
+  const parsed = parseBody(createRuleSchema, body);
+  if (!parsed.success) return c.json({ error: parsed.error }, 400);
+  const { pattern, matchType, category, subcategory, transactionType, priority } = parsed.data;
 
   const [created] = await db
     .insert(schema.categorizationRules)
     .values({
       pattern,
-      matchType: matchType ?? "contains",
+      matchType,
       category,
       subcategory: subcategory ?? null,
       transactionType,
       source: "manual",
-      priority: priority ?? 10,
+      priority,
     })
     .returning();
 

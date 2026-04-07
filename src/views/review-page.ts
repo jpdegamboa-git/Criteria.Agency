@@ -1,4 +1,5 @@
 import { layout } from "./layout.js";
+import { escapeHtml, escapeJsString, sanitizeUrl } from "../shared/sanitize.js";
 
 interface ReviewPageData {
   projectName: string;
@@ -66,7 +67,7 @@ export function renderReviewPage(data: ReviewPageData): string {
 
   const videoSection = data.videoUrl
     ? `<video controls class="w-full rounded-lg bg-black" preload="metadata">
-         <source src="${data.videoUrl}" type="video/mp4">
+         <source src="${sanitizeUrl(data.videoUrl)}" type="video/mp4">
          Tu navegador no soporta video HTML5.
        </video>`
     : `<div class="w-full aspect-video bg-criteria-gray rounded-lg flex items-center justify-center">
@@ -96,11 +97,11 @@ export function renderReviewPage(data: ReviewPageData): string {
         <div class="py-3 border-b border-criteria-border">
           <div class="flex items-center gap-2 mb-1">
             <span class="font-medium ${c.author === "client" ? "text-blue-400" : "text-criteria-accent"}">
-              ${c.author === "client" ? (c.authorName ?? "Cliente") : "criteria.agency"}
+              ${c.author === "client" ? escapeHtml(c.authorName ?? "Cliente") : "criteria.agency"}
             </span>
             <span class="text-criteria-muted text-xs">${formatDate(c.createdAt)}</span>
           </div>
-          <p class="text-criteria-text">${c.text}</p>
+          <p class="text-criteria-text">${escapeHtml(c.text)}</p>
         </div>`,
           )
           .join("")
@@ -164,7 +165,7 @@ export function renderReviewPage(data: ReviewPageData): string {
       <!-- Project info -->
       <div class="flex items-center justify-between mb-6">
         <div>
-          <h1 class="text-2xl font-bold text-criteria-white">${data.projectName}</h1>
+          <h1 class="text-2xl font-bold text-criteria-white">${escapeHtml(data.projectName)}</h1>
           <p class="text-criteria-muted mt-1">Version ${data.currentVersion}</p>
         </div>
         ${statusBadge(data.deliveryStatus)}
@@ -202,7 +203,7 @@ export function renderReviewPage(data: ReviewPageData): string {
     </footer>
 
     <script>
-      const token = "${data.token}";
+      const token = "${escapeJsString(data.token)}";
 
       // Comment form
       const commentForm = document.getElementById("commentForm");

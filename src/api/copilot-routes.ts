@@ -1,12 +1,15 @@
 import { Hono } from "hono";
 import { startSession, processMessage } from "../services/brief-copilot.js";
+import { parseBody, copilotMessageSchema } from "./validators.js";
 
 export const copilotRoutes = new Hono();
 
 // POST /api/copilot/message
 copilotRoutes.post("/api/copilot/message", async (c) => {
   const body = await c.req.json();
-  const { sessionId, message, clientId } = body;
+  const parsed = parseBody(copilotMessageSchema, body);
+  if (!parsed.success) return c.json({ error: parsed.error }, 400);
+  const { sessionId, message, clientId } = parsed.data;
 
   // No sessionId → start a new session
   if (!sessionId) {
@@ -15,7 +18,7 @@ copilotRoutes.post("/api/copilot/message", async (c) => {
   }
 
   // Existing session → process client message
-  if (!message || typeof message !== "string") {
+  if (!message) {
     return c.json({ error: "message is required for existing sessions" }, 400);
   }
 

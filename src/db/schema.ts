@@ -8,6 +8,7 @@ import {
   jsonb,
   pgEnum,
   numeric,
+  index,
 } from "drizzle-orm/pg-core";
 
 // ── Enums ──
@@ -188,7 +189,7 @@ export const invoiceStatusEnum = pgEnum("invoice_status", [
 export const clients = pgTable("clients", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: varchar("name", { length: 255 }).notNull(),
-  email: varchar("email", { length: 255 }).notNull(),
+  email: varchar("email", { length: 255 }).notNull().unique(),
   company: varchar("company", { length: 255 }),
   brandAssets: jsonb("brand_assets").default({}),
   stripeCustomerId: varchar("stripe_customer_id", { length: 255 }),
@@ -213,7 +214,9 @@ export const projects = pgTable("projects", {
   videoUrl: text("video_url"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
-});
+}, (table) => [
+  index("projects_client_id_idx").on(table.clientId),
+]);
 
 export const artifacts = pgTable("artifacts", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -228,7 +231,9 @@ export const artifacts = pgTable("artifacts", {
   createdByAgent: varchar("created_by_agent", { length: 20 }).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   metadata: jsonb("metadata").default({}),
-});
+}, (table) => [
+  index("artifacts_project_id_idx").on(table.projectId),
+]);
 
 export const gateReviews = pgTable("gate_reviews", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -297,7 +302,9 @@ export const comments = pgTable("comments", {
   authorName: varchar("author_name", { length: 255 }),
   text: text("text").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
-});
+}, (table) => [
+  index("comments_project_id_idx").on(table.projectId),
+]);
 
 // ── Financial Module ──
 
@@ -322,7 +329,11 @@ export const transactions = pgTable("transactions", {
   notes: text("notes"),
   metadata: jsonb("metadata").default({}),
   createdAt: timestamp("created_at").defaultNow().notNull(),
-});
+}, (table) => [
+  index("transactions_date_idx").on(table.date),
+  index("transactions_client_id_idx").on(table.clientId),
+  index("transactions_category_idx").on(table.category),
+]);
 
 export const expectedPayments = pgTable("expected_payments", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -336,7 +347,10 @@ export const expectedPayments = pgTable("expected_payments", {
   status: expectedPaymentStatusEnum("status").default("pending").notNull(),
   reconciledTransactionId: uuid("reconciled_transaction_id"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
-});
+}, (table) => [
+  index("expected_payments_client_id_idx").on(table.clientId),
+  index("expected_payments_status_idx").on(table.status),
+]);
 
 export const clientAliases = pgTable("client_aliases", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -429,7 +443,10 @@ export const invoices = pgTable("invoices", {
   notes: text("notes"),
   metadata: jsonb("metadata").default({}),
   createdAt: timestamp("created_at").defaultNow().notNull(),
-});
+}, (table) => [
+  index("invoices_entity_id_idx").on(table.entityId),
+  index("invoices_status_idx").on(table.status),
+]);
 
 export const transactionInvoices = pgTable("transaction_invoices", {
   id: uuid("id").primaryKey().defaultRandom(),

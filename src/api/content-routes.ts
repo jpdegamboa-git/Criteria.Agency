@@ -2,33 +2,16 @@ import { Hono } from "hono";
 import { db, schema } from "../db/index.js";
 import { eq, desc } from "drizzle-orm";
 import { generateContent, reviseContent } from "../services/content-writer.js";
+import { parseBody, generateContentSchema, updateContentSchema, reviseContentSchema } from "./validators.js";
 
 export const contentRoutes = new Hono();
-
-const VALID_TYPES = ["linkedin_post", "email_nurture", "blog_article", "social_caption", "landing_copy"] as const;
-const VALID_STATUSES = ["draft", "review", "approved", "published"] as const;
 
 // POST /api/content/generate — Generate new content
 contentRoutes.post("/api/content/generate", async (c) => {
   const body = await c.req.json();
-  const { type, topic, audience, tone, keyMessage, cta, additionalContext } = body;
-
-  // Validate required fields
-  const missing: string[] = [];
-  if (!type) missing.push("type");
-  if (!topic) missing.push("topic");
-  if (!audience) missing.push("audience");
-  if (!tone) missing.push("tone");
-  if (!keyMessage) missing.push("keyMessage");
-  if (!cta) missing.push("cta");
-
-  if (missing.length > 0) {
-    return c.json({ error: `Missing required fields: ${missing.join(", ")}` }, 400);
-  }
-
-  if (!VALID_TYPES.includes(type)) {
-    return c.json({ error: `Invalid type. Must be one of: ${VALID_TYPES.join(", ")}` }, 400);
-  }
+  const parsed = parseBody(generateContentSchema, body);
+  if (!parsed.success) return c.json({ error: parsed.error }, 400);
+  const { type, topic, audience, tone, keyMessage, cta, additionalContext } = parsed.data;
 
   const brief = { type, topic, audience, tone, keyMessage, cta, additionalContext };
   const output = await generateContent(brief);
@@ -81,16 +64,13 @@ contentRoutes.patch("/api/content/:id", async (c) => {
 
   if (!existing) return c.json({ error: "Not found" }, 404);
 
-  const updates: Record<string, unknown> = { updatedAt: new Date() };
+  const parsed = parseBody(updateContentSchema, body);
+  if (!parsed.success) return c.json({ error: parsed.error }, 400);
 
-  if (body.status !== undefined) {
-    if (!VALID_STATUSES.includes(body.status)) {
-      return c.json({ error: `Invalid status. Must be one of: ${VALID_STATUSES.join(", ")}` }, 400);
-    }
-    updates.status = body.status;
-  }
-  if (body.content !== undefined) updates.content = body.content;
-  if (body.title !== undefined) updates.title = body.title;
+  const updates: Record<string, unknown> = { updatedAt: new Date() };
+  if (parsed.data.status !== undefined) updates.status = parsed.data.status;
+  if (parsed.data.content !== undefined) updates.content = parsed.data.content;
+  if (parsed.data.title !== undefined) updates.title = parsed.data.title;
 
   const [updated] = await db
     .update(schema.contentPieces)
@@ -106,9 +86,8 @@ contentRoutes.post("/api/content/:id/revise", async (c) => {
   const id = c.req.param("id");
   const body = await c.req.json();
 
-  if (!body.feedback) {
-    return c.json({ error: "Missing required field: feedback" }, 400);
-  }
+  const parsed = parseBody(reviseContentSchema, body);
+  if (!parsed.success) return c.json({ error: parsed.error }, 400);
 
   const [existing] = await db
     .select()
@@ -121,7 +100,7 @@ contentRoutes.post("/api/content/:id/revise", async (c) => {
     return c.json({ error: "Maximum revisions reached (3). Create a new content piece instead." }, 400);
   }
 
-  const output = await reviseContent(id, body.feedback);
+  const output = await reviseContent(id, parsed.data.feedback);
   const newVersion = existing.version + 1;
 
   const [updated] = await db
@@ -131,7 +110,7 @@ contentRoutes.post("/api/content/:id/revise", async (c) => {
       title: output.title,
       meta: output.meta,
       version: newVersion,
-      revisionNotes: body.feedback,
+      revisionNotes: parsed.data.feedback,
       status: "review",
       updatedAt: new Date(),
     })
