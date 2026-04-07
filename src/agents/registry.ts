@@ -219,9 +219,9 @@ export const AGENT_REGISTRY: Record<string, AgentRegistryEntry> = {
   "LI-003": { id: "LI-003", name: "Industry Listener", skillFile: "agents/LI-003_industry_listener.md", team: 12, level: "sub", steps: ["diagnostic"] as any, gates: [], autonomy: 90 },
   "LI-004": { id: "LI-004", name: "Competitive Listener", skillFile: "agents/LI-004_competitive_listener.md", team: 12, level: "sub", steps: ["research", "diagnostic", "value_prop"] as any, gates: [], autonomy: 90 },
   // ── Transversal Stubs ──
-  "XA-001": { id: "XA-001", name: "Financial Agent", skillFile: "agents/XA-001_financial_agent.md", team: 13, level: "cross_functional", steps: ["budget"] as any, gates: ["st-g1"] as any, autonomy: 85 },
+  "XA-001": { id: "XA-001", name: "Financial Agent", skillFile: "agents/XA-001_financial_agent.md", team: 13, level: "cross_functional", steps: ["budget"] as any, gates: ["st-g1", "ad-g1"] as any, autonomy: 85 },
   "XA-002": { id: "XA-002", name: "Channel Manager", skillFile: "agents/XA-002_channel_manager.md", team: 13, level: "cross_functional", steps: ["media_plan"] as any, gates: [], autonomy: 85 },
-  "XA-003": { id: "XA-003", name: "Brand Guardian", skillFile: "agents/XA-003_brand_guardian.md", team: 13, level: "cross_functional", steps: [], gates: ["bb-g2", "st-g2", "gd-g1", "gd-g2", "wr-g2", "au-g2", "wb-g2", "pp-g1"] as any, autonomy: 80 },
+  "XA-003": { id: "XA-003", name: "Brand Guardian", skillFile: "agents/XA-003_brand_guardian.md", team: 13, level: "cross_functional", steps: [], gates: ["bb-g2", "st-g2", "gd-g1", "gd-g2", "wr-g2", "au-g2", "wb-g2", "pp-g1", "ad-g2", "cm-g2", "em-g2"] as any, autonomy: 80 },
   "XA-004": { id: "XA-004", name: "Media Scout", skillFile: "agents/XA-004_media_scout.md", team: 13, level: "cross_functional", steps: ["media_plan"] as any, gates: [], autonomy: 85 },
   // ── Graphic Design Motor ──
   "GD-L": { id: "GD-L", name: "Art Director", skillFile: "agents/GD-L_art_director.md", team: 14, level: "leader", steps: ["brief", "design_system", "moodboard", "production"] as any, gates: ["gd-g1", "gd-g2", "gd-g3"] as any, autonomy: 75 },
@@ -269,4 +269,37 @@ export const AGENT_REGISTRY: Record<string, AgentRegistryEntry> = {
   "EV-003": { id: "EV-003", name: "Content Activator", skillFile: "agents/EV-003_content_activator.md", team: 21, level: "sub", steps: ["ev_pre_event", "ev_live_event", "ev_post_event"] as any, gates: [], autonomy: 65 },
   "EV-004": { id: "EV-004", name: "Event Analyst", skillFile: "agents/EV-004_event_analyst.md", team: 21, level: "sub", steps: ["ev_post_event"] as any, gates: [], autonomy: 80 },
   "EV-005": { id: "EV-005", name: "Guest Manager", skillFile: "agents/EV-005_guest_manager.md", team: 21, level: "sub", steps: ["ev_pre_event", "ev_live_event"] as any, gates: [], autonomy: 75 },
+  // ── Ads Motor ──
+  "AD-L": { id: "AD-L", name: "Ads Director", skillFile: "agents/AD-L_ads_director.md", team: 22, level: "leader", steps: ["ad_brief", "ad_delivery"] as any, gates: ["ad-g1", "ad-g2"] as any, autonomy: 75 },
+  "AD-001": { id: "AD-001", name: "Media Strategist", skillFile: "agents/AD-001_media_strategist.md", team: 22, level: "sub", steps: ["ad_strategy"] as any, gates: [], autonomy: 75 },
+  "AD-002": { id: "AD-002", name: "Ad Production Coordinator", skillFile: "agents/AD-002_ad_production_coordinator.md", team: 22, level: "sub", steps: ["ad_creative"] as any, gates: [], autonomy: 70 },
+  "AD-003": { id: "AD-003", name: "Targeting Specialist", skillFile: "agents/AD-003_targeting_specialist.md", team: 22, level: "sub", steps: ["ad_targeting"] as any, gates: [], autonomy: 75 },
+  "AD-004": { id: "AD-004", name: "Campaign Assembler", skillFile: "agents/AD-004_campaign_assembler.md", team: 22, level: "sub", steps: ["ad_launch_kit"] as any, gates: [], autonomy: 80 },
+  // ── Community Management Motor ──
+  "CM-L": { id: "CM-L", name: "Community Director", skillFile: "agents/CM-L_community_director.md", team: 23, level: "leader", steps: ["cm_brief", "cm_delivery"] as any, gates: ["cm-g1", "cm-g2"] as any, autonomy: 75 },
+  "CM-001": { id: "CM-001", name: "Calendar Planner", skillFile: "agents/CM-001_calendar_planner.md", team: 23, level: "sub", steps: ["cm_calendar"] as any, gates: [], autonomy: 75 },
+  "CM-002": { id: "CM-002", name: "Social Coordinator", skillFile: "agents/CM-002_social_coordinator.md", team: 23, level: "sub", steps: ["cm_content_production", "cm_scheduling"] as any, gates: [], autonomy: 70 },
+  "CM-003": { id: "CM-003", name: "Engagement Manager", skillFile: "agents/CM-003_engagement_manager.md", team: 23, level: "sub", steps: ["cm_monitoring"] as any, gates: [], autonomy: 65 },
+  "CM-004": { id: "CM-004", name: "Social Analyst", skillFile: "agents/CM-004_social_analyst.md", team: 23, level: "sub", steps: ["cm_reporting"] as any, gates: [], autonomy: 80 },
+  // ── Email Marketing Motor ──
+  "EM-L": { id: "EM-L", name: "Email Director", skillFile: "agents/EM-L_email_director.md", team: 24, level: "leader", steps: ["em_brief", "em_delivery"] as any, gates: ["em-g1", "em-g2"] as any, autonomy: 75 },
+  "EM-001": { id: "EM-001", name: "Sequence Designer", skillFile: "agents/EM-001_sequence_designer.md", team: 24, level: "sub", steps: ["em_strategy"] as any, gates: [], autonomy: 75 },
+  "EM-002": { id: "EM-002", name: "Email Production Coordinator", skillFile: "agents/EM-002_email_production_coordinator.md", team: 24, level: "sub", steps: ["em_production", "em_send"] as any, gates: [], autonomy: 70 },
+  "EM-003": { id: "EM-003", name: "Audience Segmenter", skillFile: "agents/EM-003_audience_segmenter.md", team: 24, level: "sub", steps: ["em_segmentation"] as any, gates: [], autonomy: 75 },
+  "EM-004": { id: "EM-004", name: "Email Analyst", skillFile: "agents/EM-004_email_analyst.md", team: 24, level: "sub", steps: ["em_analysis"] as any, gates: [], autonomy: 80 },
+  // ── SEO/Content Motor ──
+  "SE-L": { id: "SE-L", name: "SEO Director", skillFile: "agents/SE-L_seo_director.md", team: 25, level: "leader", steps: ["se_brief", "se_delivery"] as any, gates: ["se-g1", "se-g2"] as any, autonomy: 75 },
+  "SE-001": { id: "SE-001", name: "Technical Auditor", skillFile: "agents/SE-001_technical_auditor.md", team: 25, level: "sub", steps: ["se_audit"] as any, gates: [], autonomy: 80 },
+  "SE-002": { id: "SE-002", name: "Keyword Strategist", skillFile: "agents/SE-002_keyword_strategist.md", team: 25, level: "sub", steps: ["se_keyword_strategy"] as any, gates: [], autonomy: 75 },
+  "SE-003": { id: "SE-003", name: "Content Planner", skillFile: "agents/SE-003_content_planner.md", team: 25, level: "sub", steps: ["se_content_plan"] as any, gates: [], autonomy: 75 },
+  "SE-004": { id: "SE-004", name: "Rankings Monitor", skillFile: "agents/SE-004_rankings_monitor.md", team: 25, level: "sub", steps: ["se_optimization", "se_reporting"] as any, gates: [], autonomy: 80 },
+  // ── Channel Manager Motor ──
+  "CH-L": { id: "CH-L", name: "Channel Director", skillFile: "agents/CH-L_channel_director.md", team: 26, level: "leader", steps: ["ch_request", "ch_delivery"] as any, gates: ["ch-g1"] as any, autonomy: 75 },
+  "CH-001": { id: "CH-001", name: "Digital Channel Specialist", skillFile: "agents/CH-001_digital_channel_specialist.md", team: 26, level: "sub", steps: ["ch_analysis"] as any, gates: [], autonomy: 80 },
+  "CH-002": { id: "CH-002", name: "Traditional Channel Specialist", skillFile: "agents/CH-002_traditional_channel_specialist.md", team: 26, level: "sub", steps: ["ch_analysis"] as any, gates: [], autonomy: 75 },
+  "CH-003": { id: "CH-003", name: "Specs Engineer", skillFile: "agents/CH-003_specs_engineer.md", team: 26, level: "sub", steps: ["ch_specs"] as any, gates: [], autonomy: 85 },
+  // ── Opportunity Agent (loop, not pipeline) ──
+  "OP-L": { id: "OP-L", name: "Opportunity Director", skillFile: "agents/OP-L_opportunity_director.md", team: 27, level: "leader", steps: [], gates: [], autonomy: 70 },
+  "OP-001": { id: "OP-001", name: "Signal Scanner", skillFile: "agents/OP-001_signal_scanner.md", team: 27, level: "sub", steps: [], gates: [], autonomy: 80 },
+  "OP-002": { id: "OP-002", name: "Activation Planner", skillFile: "agents/OP-002_activation_planner.md", team: 27, level: "sub", steps: [], gates: [], autonomy: 75 },
 };
