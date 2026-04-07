@@ -10,6 +10,7 @@ import {
   detectChurnRisk,
   createRecurringPayments,
   sendEarlyAdopterTransitionNotice,
+  sendWaitlistNurture,
 } from "../services/subscription-manager.js";
 
 // Security audit on startup
@@ -34,5 +35,6 @@ cronJob("0 11 * * *", "checkOverduePayments", checkOverduePayments);
 cronJob("0 9 * * 1", "detectChurnRisk", detectChurnRisk);
 cronJob("0 8 1 * *", "createRecurringPayments", createRecurringPayments);
 cronJob("0 12 * * *", "sendEarlyAdopterTransitionNotice", sendEarlyAdopterTransitionNotice);
+cronJob("0 13 * * *", "sendWaitlistNurture", sendWaitlistNurture);
 
-logger.info("cron.scheduled", { jobs: 6 });
+logger.info("cron.scheduled", { jobs: 7 });

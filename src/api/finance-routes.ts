@@ -19,6 +19,7 @@ import {
   updateExpectedPaymentSchema,
   createRuleSchema,
 } from "./validators.js";
+import { linkFee, unlinkFee, linkAllOrphanedFees } from "../services/fee-linker.js";
 
 export const financeRoutes = new Hono();
 
@@ -126,6 +127,39 @@ financeRoutes.post("/api/transactions/:id/reconcile", async (c) => {
   await applyReconciliation(id, expectedPaymentId, ep.clientId, txn.counterpartyName ?? null);
 
   return c.json({ ok: true });
+});
+
+// ── Fee Linking ──
+
+// POST /api/transactions/:id/link-fee — manually link a fee to an income transaction
+financeRoutes.post("/api/transactions/:id/link-fee", async (c) => {
+  const parentId = c.req.param("id");
+  const body = await c.req.json();
+  const feeTransactionId = body?.feeTransactionId;
+
+  if (!feeTransactionId) {
+    return c.json({ error: "feeTransactionId is required" }, 400);
+  }
+
+  try {
+    await linkFee(feeTransactionId, parentId);
+    return c.json({ ok: true });
+  } catch (err) {
+    return c.json({ error: err instanceof Error ? err.message : "Link failed" }, 400);
+  }
+});
+
+// DELETE /api/transactions/:feeId/link-fee — unlink a fee from its parent
+financeRoutes.delete("/api/transactions/:feeId/link-fee", async (c) => {
+  const feeId = c.req.param("feeId");
+  await unlinkFee(feeId);
+  return c.json({ ok: true });
+});
+
+// POST /api/transactions/auto-link-fees — retroactive linking of all orphaned fees
+financeRoutes.post("/api/transactions/auto-link-fees", async (c) => {
+  const linked = await linkAllOrphanedFees();
+  return c.json({ linked });
 });
 
 // ── Expected Payments ──

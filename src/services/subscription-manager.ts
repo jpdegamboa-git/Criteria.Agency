@@ -317,6 +317,142 @@ export async function sendEarlyAdopterTransitionNotice(): Promise<number> {
 
 // ── Dashboard summary ──
 
+// ── 7. Waitlist nurture email sequence ──
+
+const NURTURE_EMAILS = [
+  {
+    step: 1,
+    daysAfterSignup: 3,
+    subject: "Asi producimos un video con IA en 48h",
+    html: (name: string) => `
+      <div style="font-family:Inter,system-ui,sans-serif;max-width:560px;margin:0 auto;color:#333;">
+        <h2 style="color:#1a1a1a;">Hola ${name},</h2>
+        <p>Queriamos mostrarte como funciona nuestro pipeline de produccion con IA.</p>
+        <p>En <strong>criteria.agency</strong> cada video pasa por <strong>5 puntos de control</strong> (quality gates) antes de llegar a tus manos:</p>
+        <ol style="line-height:1.8;">
+          <li><strong>G1 — Concepto:</strong> La idea se valida contra tu brief y objetivos</li>
+          <li><strong>G2 — Guion:</strong> El script se revisa por coherencia y tono de marca</li>
+          <li><strong>G3 — Visual:</strong> Storyboard y look aprobados antes de generar</li>
+          <li><strong>G4 — Produccion:</strong> Audio, video y edicion pasan revision tecnica</li>
+          <li><strong>G5 — Entrega:</strong> Quality check final antes de enviarte el resultado</li>
+        </ol>
+        <p>El resultado: video profesional en <strong>48 horas</strong>, no 4 semanas.</p>
+        <p style="color:#9d9a9c;font-size:13px;margin-top:32px;">La IA genera. El criterio decide.<br/>— criteria.agency</p>
+      </div>
+    `,
+  },
+  {
+    step: 2,
+    daysAfterSignup: 7,
+    subject: "5 puntos de criterio que garantizan calidad",
+    html: (name: string) => `
+      <div style="font-family:Inter,system-ui,sans-serif;max-width:560px;margin:0 auto;color:#333;">
+        <h2 style="color:#1a1a1a;">${name}, esto es lo que nos diferencia</h2>
+        <p>Cualquiera puede generar video con IA. Pero sin <strong>criterio</strong>, el resultado es generico.</p>
+        <p>Nuestros 5 quality gates no son solo checks tecnicos — son decisiones creativas:</p>
+        <ul style="line-height:1.8;">
+          <li>Un agente IA escribe el guion, pero otro lo <strong>evalua</strong> contra estandares de produccion</li>
+          <li>Si no pasa, se reintenta hasta 3 veces con ajustes automaticos</li>
+          <li>Si sigue sin pasar, un lider creativo interviene y ajusta la direccion</li>
+          <li>El resultado final siempre pasa por <strong>tu aprobacion</strong> en el portal de revision</li>
+        </ul>
+        <p>Es la regla <strong>3+3</strong>: 3 intentos autonomos + 3 con supervision humana. Asi garantizamos calidad sin sacrificar velocidad.</p>
+        <p style="color:#9d9a9c;font-size:13px;margin-top:32px;">La IA genera. El criterio decide.<br/>— criteria.agency</p>
+      </div>
+    `,
+  },
+  {
+    step: 3,
+    daysAfterSignup: 14,
+    subject: "Los primeros resultados de nuestra beta",
+    html: (name: string) => `
+      <div style="font-family:Inter,system-ui,sans-serif;max-width:560px;margin:0 auto;color:#333;">
+        <h2 style="color:#1a1a1a;">${name}, la beta esta avanzando</h2>
+        <p>Queriamos darte un update rapido sobre lo que estamos viendo en los primeros proyectos:</p>
+        <ul style="line-height:1.8;">
+          <li>Tiempo promedio de entrega: <strong>48 horas</strong> (vs 3-4 semanas tradicional)</li>
+          <li>Tasa de aprobacion en primera revision: <strong>85%</strong></li>
+          <li>Costo promedio por video: <strong>60-70% menos</strong> que produccion tradicional</li>
+        </ul>
+        <p>Los early adopters estan recibiendo <strong>40% de descuento</strong> en su primer ano. Tu lugar en la lista sigue reservado.</p>
+        <p>Pronto te enviaremos tu invitacion para empezar.</p>
+        <p style="color:#9d9a9c;font-size:13px;margin-top:32px;">La IA genera. El criterio decide.<br/>— criteria.agency</p>
+      </div>
+    `,
+  },
+  {
+    step: 4,
+    daysAfterSignup: 21,
+    subject: "Tu invitacion esta casi lista",
+    html: (name: string) => `
+      <div style="font-family:Inter,system-ui,sans-serif;max-width:560px;margin:0 auto;color:#333;">
+        <h2 style="color:#1a1a1a;">${name}, estamos por abrir la beta</h2>
+        <p>En los proximos dias estaremos enviando invitaciones a los primeros de la lista.</p>
+        <p>Como parte de la lista de espera, tendras:</p>
+        <ul style="line-height:1.8;">
+          <li><strong>Acceso anticipado</strong> a la plataforma</li>
+          <li><strong>40% de descuento</strong> por 12 meses como early adopter</li>
+          <li><strong>30 dias gratis</strong> para probar sin compromiso</li>
+          <li><strong>Soporte directo</strong> con el equipo fundador</li>
+        </ul>
+        <p>Mantente atento a tu inbox — tu invitacion llegara pronto.</p>
+        <p style="color:#9d9a9c;font-size:13px;margin-top:32px;">La IA genera. El criterio decide.<br/>— criteria.agency</p>
+      </div>
+    `,
+  },
+];
+
+export async function sendWaitlistNurture(): Promise<number> {
+  const now = new Date();
+  let emailsSent = 0;
+
+  for (const email of NURTURE_EMAILS) {
+    // Find entries that should receive this step
+    const cutoffDate = new Date(
+      now.getTime() - email.daysAfterSignup * 24 * 60 * 60 * 1000
+    );
+
+    const entries = await db
+      .select()
+      .from(schema.waitlistEntries)
+      .where(
+        and(
+          eq(schema.waitlistEntries.nurtureStep, email.step - 1),
+          lt(schema.waitlistEntries.createdAt, cutoffDate),
+          sql`${schema.waitlistEntries.status} IN ('pending', 'nurturing')`
+        )
+      );
+
+    for (const entry of entries) {
+      await notify(entry.email, email.subject, email.html(entry.name));
+
+      await db
+        .update(schema.waitlistEntries)
+        .set({
+          nurtureStep: email.step,
+          status: "nurturing",
+          updatedAt: now,
+        })
+        .where(eq(schema.waitlistEntries.id, entry.id));
+
+      emailsSent++;
+      logger.info("nurture.sent", {
+        email: entry.email,
+        step: email.step,
+        subject: email.subject,
+      });
+    }
+  }
+
+  if (emailsSent > 0) {
+    logger.info("nurture.complete", { emailsSent });
+  }
+
+  return emailsSent;
+}
+
+// ── Subscription summary ──
+
 export async function getSubscriptionSummary() {
   const [trialingResult] = await db
     .select({ count: sql<number>`count(*)::int` })

@@ -7,6 +7,7 @@ import {
   reconcileTransaction,
   applyReconciliation,
 } from "./reconciler.js";
+import { linkFeesToParents } from "./fee-linker.js";
 
 // ── Types ──
 
@@ -18,6 +19,7 @@ export interface ImportResult {
   entitiesCreated: number;
   categorized: number;
   reconciled: number;
+  feesLinked: number;
   unmatched: number;
 }
 
@@ -49,6 +51,7 @@ export async function importCSV(
   let categorized = 0;
   let reconciled = 0;
   let unmatched = 0;
+  const insertedIds: string[] = [];
 
   for (const txn of newTransactions) {
     // 3a. Match / create entity
@@ -77,6 +80,8 @@ export async function importCSV(
         metadata: txn.metadata,
       })
       .returning();
+
+    insertedIds.push(inserted.id);
 
     // 3c. Categorize
     const catResult = await categorizeTransaction({
@@ -123,7 +128,10 @@ export async function importCSV(
     }
   }
 
-  // 4. Log sync
+  // 4. Auto-link fees to parent income transactions
+  const feesLinked = await linkFeesToParents(insertedIds);
+
+  // 5. Log sync
   const [logEntry] = await db
     .insert(schema.bankSyncLog)
     .values({
@@ -137,7 +145,7 @@ export async function importCSV(
     })
     .returning();
 
-  // 5. Return result
+  // 6. Return result
   return {
     syncLogId: logEntry.id,
     found: parsed.length,
@@ -146,6 +154,7 @@ export async function importCSV(
     entitiesCreated,
     categorized,
     reconciled,
+    feesLinked,
     unmatched,
   };
 }

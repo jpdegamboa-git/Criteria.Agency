@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { db, schema } from "../db/index.js";
-import { sql, and, gte, lt, eq, desc } from "drizzle-orm";
+import { sql, and, gte, lt, eq, desc, isNotNull } from "drizzle-orm";
 import { layout } from "../views/layout.js";
 import { renderFinanceImport } from "../views/finance-import.js";
 import { renderFinanceDashboard } from "../views/finance-dashboard.js";
@@ -132,8 +132,24 @@ dashboardRoutes.get("/api/finances/summary", async (c) => {
       ),
     );
 
+  // Linked fees (fees that have a parent income transaction)
+  const [feesResult] = await db
+    .select({
+      linkedFees: sql<string>`coalesce(sum(abs(amount::numeric)), 0)`,
+    })
+    .from(schema.transactions)
+    .where(
+      and(
+        isNotNull(schema.transactions.parentTransactionId),
+        gte(schema.transactions.date, start),
+        lt(schema.transactions.date, end),
+      ),
+    );
+
   const income = parseFloat(current.income);
   const expenses = parseFloat(current.expenses);
+  const linkedFees = parseFloat(feesResult.linkedFees);
+  const netIncome = income - linkedFees;
   const balance = income - expenses;
 
   const prevIncome = parseFloat(previous.income);
@@ -147,6 +163,8 @@ dashboardRoutes.get("/api/finances/summary", async (c) => {
     period,
     income,
     expenses,
+    linkedFees,
+    netIncome,
     balance,
     changes: {
       income: pctChange(income, prevIncome),

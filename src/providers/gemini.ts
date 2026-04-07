@@ -10,6 +10,7 @@ import type {
 } from "./types.js";
 import { MODEL_CATALOG } from "./catalog.js";
 import { config } from "../shared/config.js";
+import { geminiRateLimiter } from "./rate-limiter.js";
 
 // ── Model-ID Mapping (catalog → Google API) ───────────────────
 const MODEL_ID_MAP: Record<string, string> = {
@@ -49,6 +50,9 @@ export class GeminiProvider implements ModelProvider {
         error: "Google AI API key not configured",
       };
     }
+
+    // Rate limit: wait if necessary before calling API
+    await geminiRateLimiter.acquire(params.model);
 
     const catalogEntry = this.models.find((m) => m.id === params.model);
     const entryType = catalogEntry?.type ?? this.type;
@@ -158,6 +162,9 @@ export class GeminiProvider implements ModelProvider {
     if (!this.client) {
       return { status: "failed", error: "Google AI API key not configured" };
     }
+
+    // Rate limit poll requests too (they count against quota)
+    await geminiRateLimiter.acquire("veo-3");
 
     const op = await this.client.operations.getVideosOperation({
       operation: { name: jobId } as Parameters<

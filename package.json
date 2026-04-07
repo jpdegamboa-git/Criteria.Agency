@@ -8,6 +8,7 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "tsx src/db/migrate.ts",
     "db:seed": "tsx src/db/seed.ts",
+    "db:seed-admin": "tsx src/scripts/seed-admin.ts",
     "stripe:setup": "tsx src/scripts/setup-stripe.ts",
     "test": "vitest run"
   },
@@ -18,6 +19,8 @@
     "@anthropic-ai/sdk": "^0.82.0",
     "@google/genai": "^1.48.0",
     "@hono/node-server": "^1.13.0",
+    "@opentelemetry/api": "^1.9.1",
+    "better-auth": "^1.6.0",
     "commander": "^13.1.0",
     "dotenv": "^16.4.0",
     "drizzle-orm": "^0.45.2",
