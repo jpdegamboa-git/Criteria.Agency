@@ -57,6 +57,8 @@ export const projectStatusEnum = pgEnum("project_status", [
   "ch_request", "ch_analysis", "ch_specs", "ch_delivery",
   // Sales/CRM
   "sl_capture", "sl_enrich", "sl_score", "sl_nurture", "sl_proposal", "sl_negotiate", "sl_close", "sl_attribution", "sl_delivery",
+  // Analytics
+  "an_request", "an_collect", "an_analyze", "an_visualize", "an_deliver",
   // Shared
   "delivered", "paused",
 ]);
@@ -82,6 +84,7 @@ export const gateTypeEnum = pgEnum("gate_type", [
   "se-g1", "se-g2",
   "ch-g1",
   "sl-g1", "sl-g2",
+  "an-g1",
 ]);
 
 export const gateDecisionEnum = pgEnum("gate_decision", ["pass", "fail"]);
@@ -120,6 +123,8 @@ export const artifactStepEnum = pgEnum("artifact_step", [
   "ch_request", "ch_analysis", "ch_specs", "ch_delivery",
   // Sales/CRM
   "sl_capture", "sl_enrich", "sl_score", "sl_nurture", "sl_proposal", "sl_negotiate", "sl_close", "sl_attribution", "sl_delivery",
+  // Analytics
+  "an_request", "an_collect", "an_analyze", "an_visualize", "an_deliver",
   // Opportunity Agent (loop, not pipeline)
   "op_scan", "op_evaluate", "op_alert",
   // Brand Listener

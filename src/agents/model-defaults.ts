@@ -161,6 +161,13 @@ export const MODEL_DEFAULTS: Record<string, string> = {
   "SL-004": "gemini-2.5-flash",
   "SL-005": "gemini-2.5-flash",
   "SL-006": "gemini-2.5-flash",
+  // Analytics
+  "AN-L": "claude-sonnet-4",
+  "AN-001": "gemini-2.5-flash",
+  "AN-002": "gemini-2.5-flash",
+  "AN-003": "gemini-2.5-flash",
+  "AN-004": "gemini-2.5-flash",
+  "AN-005": "claude-sonnet-4",
 };
 
 const DEFAULT_FALLBACK = "gemini-2.5-flash";

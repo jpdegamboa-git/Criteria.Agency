@@ -326,4 +326,11 @@ export const AGENT_REGISTRY: Record<string, AgentRegistryEntry> = {
   "SL-004": { id: "SL-004", name: "Nurture Coordinator", skillFile: "agents/SL-004_nurture_coordinator.md", team: 32, level: "sub", steps: ["sl_nurture"] as any, gates: [], autonomy: 75 },
   "SL-005": { id: "SL-005", name: "Proposal Generator", skillFile: "agents/SL-005_proposal_generator.md", team: 32, level: "sub", steps: ["sl_proposal"] as any, gates: [], autonomy: 65 },
   "SL-006": { id: "SL-006", name: "Attribution Analyst", skillFile: "agents/SL-006_attribution_analyst.md", team: 32, level: "sub", steps: ["sl_attribution"] as any, gates: [], autonomy: 80 },
+  // ── Analytics Motor ──
+  "AN-L": { id: "AN-L", name: "Analytics Director", skillFile: "agents/AN-L_analytics_director.md", team: 33, level: "leader", steps: ["an_request", "an_deliver"] as any, gates: ["an-g1"] as any, autonomy: 75 },
+  "AN-001": { id: "AN-001", name: "Data Collector", skillFile: "agents/AN-001_data_collector.md", team: 33, level: "sub", steps: ["an_collect"] as any, gates: [], autonomy: 85 },
+  "AN-002": { id: "AN-002", name: "Metrics Analyst", skillFile: "agents/AN-002_metrics_analyst.md", team: 33, level: "sub", steps: ["an_analyze"] as any, gates: [], autonomy: 80 },
+  "AN-003": { id: "AN-003", name: "Dashboard Builder", skillFile: "agents/AN-003_dashboard_builder.md", team: 33, level: "sub", steps: ["an_visualize"] as any, gates: [], autonomy: 80 },
+  "AN-004": { id: "AN-004", name: "Report Generator", skillFile: "agents/AN-004_report_generator.md", team: 33, level: "sub", steps: ["an_visualize"] as any, gates: [], autonomy: 80 },
+  "AN-005": { id: "AN-005", name: "NL Query Agent", skillFile: "agents/AN-005_nl_query_agent.md", team: 33, level: "sub", steps: ["an_analyze"] as any, gates: [], autonomy: 75 },
 };
