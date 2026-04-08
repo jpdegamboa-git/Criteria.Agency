@@ -29,6 +29,7 @@ import { brandRoutes } from "./brand-routes.js";
 import { securityRoutes } from "./security-routes.js";
 import { salesRoutes } from "./sales-routes.js";
 import { positioningRoutes } from "./positioning-routes.js";
+import { analyticsRoutes } from "./analytics-routes.js";
 import { auth } from "../auth.js";
 import { config } from "../shared/config.js";
 
@@ -113,6 +114,7 @@ app.use("/api/security/run-audit", requireSession, requireAdmin);
 app.use("/api/security/:clientId/*", requireSession, requireTenantMatch);
 app.use("/api/sales/:clientId/*", requireSession, requireTenantMatch);
 app.use("/api/positioning/:clientId/*", requireSession, requireTenantMatch);
+app.use("/api/analytics/:clientId/*", requireSession, requireTenantMatch);
 app.use("/api/content/*", requireSession);
 app.use("/api/copilot/*", requireSession);
 app.use("/api/entities/*", requireSession);
@@ -137,6 +139,7 @@ app.route("/", brandRoutes);
 app.route("/", securityRoutes);
 app.route("/", salesRoutes);
 app.route("/", positioningRoutes);
+app.route("/", analyticsRoutes);
 
 // Health
 app.get("/health", (c) => c.json({ status: "ok", version: "0.1.0" }));

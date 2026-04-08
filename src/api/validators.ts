@@ -467,6 +467,71 @@ export const recordPerceptionSchema = z.object({
   notes: z.string().max(2000).optional(),
 });
 
+// ── Analytics Validators ──
+
+export const dashboardQuerySchema = z.object({
+  dateRange: z.object({
+    start: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    end: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  }).optional(),
+});
+
+export const dashboardConfigUpdateSchema = z.object({
+  widgets: z.array(z.object({
+    id: z.string().min(1).max(100),
+    type: z.enum(["kpi_card", "time_series", "bar_chart", "funnel", "table", "pie", "heatmap"]),
+    metric: z.string().min(1).max(100),
+    position: z.object({
+      x: z.number().int().min(0),
+      y: z.number().int().min(0),
+      w: z.number().int().min(1),
+      h: z.number().int().min(1),
+    }),
+    config: z.record(z.unknown()).optional(),
+  })),
+  refreshInterval: z.number().int().min(30).max(3600).optional(),
+});
+
+export const metricsQuerySchema = z.object({
+  metrics: z.array(z.string().min(1).max(100)).min(1),
+  dateRange: z.object({
+    start: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    end: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  }),
+  dimensions: z.array(z.string()).optional(),
+});
+
+export const attributionQuerySchema = z.object({
+  model: z.enum(["first_touch", "last_touch", "linear", "time_decay", "position_based"]),
+  dateRange: z.object({
+    start: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    end: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  }),
+});
+
+export const generateReportSchema = z.object({
+  type: z.enum(["daily", "weekly", "monthly", "on_demand"]),
+  dateRange: z.object({
+    start: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    end: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  }),
+});
+
+export const nlQuerySchema = z.object({
+  question: z.string().min(3).max(1000),
+});
+
+export const queryFeedbackSchema = z.object({
+  feedback: z.enum(["helpful", "not_helpful"]),
+});
+
+export const collectMetricsSchema = z.object({
+  dateRange: z.object({
+    start: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    end: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  }),
+});
+
 // ── Helper: parse with nice error response ──
 
 export function parseBody<T>(schema: z.ZodType<T>, body: unknown): { success: true; data: T } | { success: false; error: string } {
