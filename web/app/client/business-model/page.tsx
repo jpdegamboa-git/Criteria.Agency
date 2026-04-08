@@ -7,10 +7,10 @@ import { BrandSelector } from "@/components/portal/brand-selector";
 import { mockBrands } from "@/lib/portal-mock-data";
 import { cn } from "@/lib/utils";
 import {
-  MessageCircle, Pencil, Plus, X, Check,
+  MessageCircle, Plus,
   Cog, Users, Heart, Truck,
   Lightbulb, Frown, Smile, ShieldCheck, Sparkles,
-  LayoutGrid, BookOpen, Clock, Package,
+  LayoutGrid, Clock, Package,
 } from "lucide-react";
 
 // ══════════════════════════════════════════
@@ -121,19 +121,46 @@ function WorkshopStatusBadge({ status }: { status: WorkshopStatus }) {
   );
 }
 
+function TabWorkshops({ items }: { items: typeof workshops }) {
+  if (!items.length) return null;
+  return (
+    <div className="pt-6 mt-6 border-t border-portal-border">
+      <p className="text-[10px] font-semibold uppercase tracking-[1px] text-portal-text-dim mb-3">Workshops relacionados</p>
+      <div className="grid grid-cols-2 gap-3">
+        {items.map((w) => (
+          <div key={w.id} className="flex items-center gap-3 p-3 rounded-xl bg-[#fafafa] hover:-translate-y-0.5 hover:shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition-all cursor-pointer group">
+            <div className="flex-1 min-w-0">
+              <p className="text-[11px] font-semibold text-portal-text">{w.title}</p>
+              <p className="text-[9px] text-portal-text-muted mt-0.5">{w.time}</p>
+            </div>
+            <WorkshopStatusBadge status={w.status} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ══════════════════════════════════════════
 // TABS
 // ══════════════════════════════════════════
 
 const tabs = [
-  { id: "modelo", label: "Modelo", icon: LayoutGrid },
   { id: "propuesta", label: "Propuesta de Valor", icon: Lightbulb },
+  { id: "nichos", label: "Nichos", icon: Users },
   { id: "productos", label: "Productos y Servicios", icon: Package },
   { id: "canales", label: "Canales", icon: Truck },
-  { id: "workshops", label: "Workshops", icon: BookOpen },
 ] as const;
 
 type TabId = (typeof tabs)[number]["id"];
+
+// Workshops relevant to each tab
+const tabWorkshops: Record<string, typeof workshops[number][]> = {
+  propuesta: [workshops[0]],  // Define tu Propuesta de Valor
+  nichos: [workshops[1], workshops[4]], // Mapea tus Segmentos, Relaciones con Clientes
+  productos: [workshops[3]], // Catálogo de Productos
+  canales: [workshops[2]],   // Diseña tus Canales
+};
 
 // ══════════════════════════════════════════
 // PAGE
@@ -141,13 +168,13 @@ type TabId = (typeof tabs)[number]["id"];
 
 export default function BusinessModelPage() {
   const [brandId, setBrandId] = useState(mockBrands[0].id);
-  const [activeTab, setActiveTab] = useState<TabId>("modelo");
+  const [activeTab, setActiveTab] = useState<TabId>("propuesta");
 
   return (
     <div className="space-y-5">
       {/* ── Header ── */}
       <div className="flex items-center justify-between">
-        <h1 className="text-[22px] font-semibold tracking-[-0.5px] text-portal-text">Business Model</h1>
+        <h1 className="text-[22px] font-semibold tracking-[-0.5px] text-portal-text">Business</h1>
         <div className="flex items-center gap-2">
           <PortalButton variant="primary" size="sm" icon={<MessageCircle size={13} />}>Editar con Copilot</PortalButton>
           <BrandSelector brands={mockBrands} selected={brandId} onChange={setBrandId} />
@@ -166,9 +193,9 @@ export default function BusinessModelPage() {
       </div>
 
       {/* ══════════════════════════════════════════ */}
-      {/* MODELO TAB — Segments + Relationships     */}
+      {/* NICHOS TAB — Segments + Relationships     */}
       {/* ══════════════════════════════════════════ */}
-      {activeTab === "modelo" && (
+      {activeTab === "nichos" && (
         <div className="space-y-4">
           <p className="text-[11px] text-portal-text-muted">Segmentos de clientes con su perfil detallado y tipo de relación.</p>
           <div className="grid grid-cols-2 gap-4">
@@ -230,6 +257,7 @@ export default function BusinessModelPage() {
               </PortalCard>
             ))}
           </div>
+          <TabWorkshops items={tabWorkshops.nichos} />
         </div>
       )}
 
@@ -298,6 +326,7 @@ export default function BusinessModelPage() {
               </div>
             </PortalCard>
           </div>
+          <TabWorkshops items={tabWorkshops.propuesta} />
         </div>
       )}
 
@@ -328,6 +357,7 @@ export default function BusinessModelPage() {
               <span className="text-[11px] font-medium text-portal-text-dim group-hover:text-portal-accent transition-colors">Agregar producto o servicio</span>
             </button>
           </div>
+          <TabWorkshops items={tabWorkshops.productos} />
         </div>
       )}
 
@@ -365,34 +395,7 @@ export default function BusinessModelPage() {
               </PortalCard>
             ))}
           </div>
-        </div>
-      )}
-
-      {/* ══════════════════════════════════════════ */}
-      {/* WORKSHOPS TAB                             */}
-      {/* ══════════════════════════════════════════ */}
-      {activeTab === "workshops" && (
-        <div>
-          <p className="text-[11px] text-portal-text-muted mb-4">Ejercicios guiados para construir y validar cada parte de tu modelo de negocio.</p>
-          <div className="grid grid-cols-2 gap-4">
-            {workshops.map((w) => (
-              <PortalCard key={w.id}>
-                <div className="flex items-start justify-between mb-2">
-                  <p className="text-xs font-semibold text-portal-text">{w.title}</p>
-                  <WorkshopStatusBadge status={w.status} />
-                </div>
-                <p className="text-[10px] text-portal-text-muted leading-relaxed mb-4">{w.description}</p>
-                <div className="flex items-center justify-between">
-                  <span className="text-[9px] text-portal-text-dim flex items-center gap-1">
-                    <Clock size={10} /> {w.time}
-                  </span>
-                  <PortalButton variant={w.status === "completed" ? "secondary" : "primary"} size="sm">
-                    {w.status === "completed" ? "Revisar" : w.status === "in_progress" ? "Continuar" : "Comenzar"}
-                  </PortalButton>
-                </div>
-              </PortalCard>
-            ))}
-          </div>
+          <TabWorkshops items={tabWorkshops.canales} />
         </div>
       )}
     </div>

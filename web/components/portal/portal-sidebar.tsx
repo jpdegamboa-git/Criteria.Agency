@@ -49,7 +49,7 @@ const groups: NavGroup[] = [
     icon: Boxes,
     color: "#7c5cfc",
     items: [
-      { href: "/client/business-model", label: "Business Model", icon: LayoutGrid },
+      { href: "/client/business-model", label: "Business", icon: LayoutGrid },
       { href: "/client/brand", label: "Brand", icon: Palette },
       { href: "/client/productos", label: "Productos y Servicios", icon: Package },
       { href: "/client/revenue", label: "Revenue Streams", icon: DollarSign },
