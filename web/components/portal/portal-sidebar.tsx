@@ -32,6 +32,7 @@ interface NavItem {
 interface NavGroup {
   label: string;
   icon: typeof Home;
+  color: string;
   items: NavItem[];
 }
 
@@ -41,6 +42,7 @@ const groups: NavGroup[] = [
   {
     label: "Fundamentos",
     icon: Boxes,
+    color: "#7c5cfc",
     items: [
       { href: "/client/business-model", label: "Business Model", icon: LayoutGrid },
       { href: "/client/brand", label: "Brand", icon: Palette },
@@ -51,6 +53,7 @@ const groups: NavGroup[] = [
   {
     label: "Inteligencia",
     icon: Radar,
+    color: "#00c2a8",
     items: [
       { href: "/client/mercado", label: "Mercado", icon: Globe },
       { href: "/client/competencia", label: "Competencia", icon: Search },
@@ -59,6 +62,7 @@ const groups: NavGroup[] = [
   {
     label: "Ejecución",
     icon: Zap,
+    color: "#f5a623",
     items: [
       { href: "/client/campaigns", label: "Campaigns", icon: Megaphone },
       { href: "/client/sales", label: "Sales", icon: Banknote },
@@ -67,6 +71,7 @@ const groups: NavGroup[] = [
   {
     label: "Tools",
     icon: Wrench,
+    color: "#ff6b6b",
     items: [],
   },
 ];
@@ -80,7 +85,7 @@ function hasActiveItem(group: NavGroup, pathname: string): boolean {
   return group.items.some((item) => isActive(item.href, pathname));
 }
 
-function SidebarLink({ item, pathname, collapsed }: { item: NavItem; pathname: string; collapsed: boolean }) {
+function SidebarLink({ item, pathname, collapsed, groupColor }: { item: NavItem; pathname: string; collapsed: boolean; groupColor?: string }) {
   const active = isActive(item.href, pathname);
   return (
     <Link
@@ -88,11 +93,12 @@ function SidebarLink({ item, pathname, collapsed }: { item: NavItem; pathname: s
       title={collapsed ? item.label : undefined}
       className={cn(
         "flex items-center gap-2.5 rounded-lg text-sm font-medium transition-colors",
-        collapsed ? "justify-center px-0 py-2" : "pl-9 pr-3 py-1.5",
+        collapsed ? "justify-center px-0 py-2" : "pl-8 pr-3 py-1.5",
         active
-          ? "bg-[#f5f5f7] text-portal-text"
-          : "text-portal-text-muted hover:text-portal-text hover:bg-[#fafafa]"
+          ? "text-portal-text"
+          : "text-portal-text-muted hover:text-portal-text hover:bg-white/60"
       )}
+      style={active && groupColor ? { backgroundColor: groupColor + "12" } : undefined}
     >
       <item.icon size={15} strokeWidth={active ? 2 : 1.5} />
       {!collapsed && <span className="text-[13px]">{item.label}</span>}
@@ -163,9 +169,12 @@ function SidebarGroup({
             open ? "max-h-[500px] opacity-100 mt-0.5" : "max-h-0 opacity-0"
           )}
         >
-          <div className="space-y-0.5">
+          <div
+            className="space-y-0.5 rounded-lg py-1 px-1 mx-1"
+            style={open ? { backgroundColor: group.color + "08" } : undefined}
+          >
             {group.items.map((item) => (
-              <SidebarLink key={item.href} item={item} pathname={pathname} collapsed={false} />
+              <SidebarLink key={item.href} item={item} pathname={pathname} collapsed={false} groupColor={group.color} />
             ))}
           </div>
         </div>
