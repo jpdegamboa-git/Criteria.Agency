@@ -11,8 +11,7 @@ import { cn } from "@/lib/utils";
 import {
   Download, MessageCircle, Shield, TrendingUp, Pencil,
   Image, Smartphone, Monitor, ShoppingBag, FileCheck, Layers,
-  ThumbsUp, ThumbsDown, BookOpen, Eye, Users, Target, Heart,
-  Sparkles, Star, ArrowRight, Zap,
+  ThumbsUp, ThumbsDown, BookOpen, Eye,
 } from "lucide-react";
 
 export default function BrandPage() {
@@ -194,60 +193,6 @@ export default function BrandPage() {
         </div>
       </div>
 
-      {/* ══ ROW 3: Audiences (full width) ══ */}
-      <SectionHeader title="Públicos objetivo" action={<PortalButton variant="secondary" size="sm" icon={<Pencil size={11} />}>Editar</PortalButton>} />
-      <div className="grid grid-cols-3 gap-4">
-        {[
-          {
-            segment: "Principal",
-            name: "Profesional urbano 28-45",
-            avatar: "👨‍💼",
-            traits: ["Valora calidad sobre precio", "Compra online y en tienda", "Instagram y LinkedIn activo"],
-            channels: ["Instagram", "E-commerce", "Tienda"],
-            color: "#7c5cfc",
-          },
-          {
-            segment: "Secundaria",
-            name: "Foodie millennial 22-32",
-            avatar: "🧑‍🍳",
-            traits: ["Explora nuevas experiencias", "Comparte en redes sociales", "Sensible a tendencias"],
-            channels: ["TikTok", "Instagram", "Eventos"],
-            color: "#00c2a8",
-          },
-          {
-            segment: "Nicho",
-            name: "Barista profesional",
-            avatar: "☕",
-            traits: ["Técnico, valora origen y proceso", "Influenciador en su comunidad", "Busca relación directa con productor"],
-            channels: ["YouTube", "Talleres", "Wholesale"],
-            color: "#f5a623",
-          },
-        ].map((p) => (
-          <PortalCard key={p.segment}>
-            <div className="flex items-center gap-2 mb-3">
-              <span className="text-lg">{p.avatar}</span>
-              <div>
-                <span className="text-[8px] font-bold uppercase tracking-wide" style={{ color: p.color }}>{p.segment}</span>
-                <p className="text-xs font-semibold text-portal-text">{p.name}</p>
-              </div>
-            </div>
-            <div className="space-y-1.5 mb-3">
-              {p.traits.map((t) => (
-                <div key={t} className="flex items-start gap-1.5">
-                  <div className="w-1 h-1 rounded-full mt-1.5 shrink-0" style={{ backgroundColor: p.color }} />
-                  <p className="text-[10px] text-portal-text-secondary">{t}</p>
-                </div>
-              ))}
-            </div>
-            <div className="flex gap-1.5">
-              {p.channels.map((ch) => (
-                <span key={ch} className="text-[8px] font-medium bg-[#f5f5f7] text-portal-text-muted px-1.5 py-0.5 rounded">{ch}</span>
-              ))}
-            </div>
-          </PortalCard>
-        ))}
-      </div>
-
       {/* ══ ROW 4: Tone + Do's/Don'ts (side by side) ══ */}
       <div className="grid grid-cols-2 gap-4">
         {/* Tone of voice */}
@@ -296,48 +241,26 @@ export default function BrandPage() {
         </PortalCard>
       </div>
 
-      {/* ══ ROW 5: Products + Brand Score Improvements (side by side) ══ */}
-      <div className="grid grid-cols-2 gap-4">
-        {/* Products & Services */}
-        <PortalCard>
-          <SectionHeader title="Productos y servicios" action={<PortalButton variant="secondary" size="sm" icon={<Pencil size={11} />}>Editar</PortalButton>} />
-          <div className="space-y-0">
-            {[
-              { name: "Café en grano (250g, 500g, 1kg)", type: "Producto" },
-              { name: "Suscripción mensual de café", type: "Servicio" },
-              { name: "Cursos de barismo", type: "Servicio" },
-              { name: "Merch (tazas, camisetas)", type: "Producto" },
-              { name: "Café preparado en tienda", type: "Producto" },
-            ].map((p, i) => (
-              <div key={p.name} className={cn("flex items-center gap-3 py-2", i < 4 && "border-b border-[#f0f0f0]")}>
-                <p className="text-[10px] text-portal-text flex-1">{p.name}</p>
-                <span className="text-[8px] font-medium bg-[#f5f5f7] text-portal-text-muted px-1.5 py-0.5 rounded">{p.type}</span>
-              </div>
-            ))}
-          </div>
-        </PortalCard>
-
-        {/* Score improvements */}
-        <PortalCard>
-          <SectionHeader title="Oportunidades de mejora" />
-          <div className="space-y-1.5">
-            {[
-              { text: "Guía de tono de voz para redes", impact: "+8", area: "Tono", color: "#7c5cfc" },
-              { text: "Logo para fondos oscuros", impact: "+5", area: "Visual", color: "#00c2a8" },
-              { text: "Propuesta de valor diferenciada", impact: "+4", area: "Mensaje", color: "#f5a623" },
-              { text: "Estilo fotográfico unificado", impact: "+3", area: "Visual", color: "#00c2a8" },
-            ].map((idea) => (
-              <div key={idea.text} className="flex items-center gap-2 group">
-                <div className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: idea.color }} />
-                <p className="text-[10px] text-portal-text flex-1">{idea.text}</p>
-                <span className="text-[7px] font-medium px-1.5 py-0.5 rounded" style={{ backgroundColor: idea.color + "12", color: idea.color }}>{idea.area}</span>
-                <span className="text-[10px] font-bold text-[#00c2a8]">{idea.impact}</span>
-                <span className="text-[9px] text-portal-accent opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">Aplicar →</span>
-              </div>
-            ))}
-          </div>
-        </PortalCard>
-      </div>
+      {/* ══ ROW 5: Brand Score Improvements (full width) ══ */}
+      <PortalCard>
+        <SectionHeader title="Oportunidades de mejora" />
+        <div className="space-y-1.5">
+          {[
+            { text: "Guía de tono de voz para redes", impact: "+8", area: "Tono", color: "#7c5cfc" },
+            { text: "Logo para fondos oscuros", impact: "+5", area: "Visual", color: "#00c2a8" },
+            { text: "Propuesta de valor diferenciada", impact: "+4", area: "Mensaje", color: "#f5a623" },
+            { text: "Estilo fotográfico unificado", impact: "+3", area: "Visual", color: "#00c2a8" },
+          ].map((idea) => (
+            <div key={idea.text} className="flex items-center gap-2 group">
+              <div className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: idea.color }} />
+              <p className="text-[10px] text-portal-text flex-1">{idea.text}</p>
+              <span className="text-[7px] font-medium px-1.5 py-0.5 rounded" style={{ backgroundColor: idea.color + "12", color: idea.color }}>{idea.area}</span>
+              <span className="text-[10px] font-bold text-[#00c2a8]">{idea.impact}</span>
+              <span className="text-[9px] text-portal-accent opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">Aplicar →</span>
+            </div>
+          ))}
+        </div>
+      </PortalCard>
 
       {/* ══ ROW 6: Guardian + Manual (side by side) ══ */}
       <div className="grid grid-cols-3 gap-4">
