@@ -9,6 +9,7 @@ import { mockCampaigns } from "@/lib/portal-mock-data";
 import { ArrowLeft, Pause, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { PortalButton } from "@/components/portal/portal-button";
 
 export default function CampaignDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -50,12 +51,8 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
             </div>
           </div>
           <div className="flex gap-2">
-            <button className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-white border border-portal-border rounded-[10px] text-portal-text-secondary hover:border-portal-text-dim transition-colors">
-              <Pause size={14} />Pausar
-            </button>
-            <button className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-portal-text text-white rounded-[10px] hover:opacity-80 transition-opacity">
-              <MessageCircle size={14} />Hablar con Copilot
-            </button>
+            <PortalButton variant="secondary" icon={<Pause size={14} />}>Pausar</PortalButton>
+            <PortalButton variant="primary" icon={<MessageCircle size={14} />}>Hablar con Copilot</PortalButton>
           </div>
         </div>
       </div>
@@ -72,9 +69,9 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
             <p className="text-[10px] text-portal-accent mt-1 font-medium">Esperando tu revisión</p>
           </div>
           <div className="flex gap-2">
-            <button className="px-3 py-1.5 text-xs font-medium bg-white border border-portal-border rounded-[10px] text-portal-text-secondary">Ver anterior</button>
-            <button className="px-3 py-1.5 text-xs font-medium bg-white border border-portal-border rounded-[10px] text-portal-text-secondary">Pedir cambios</button>
-            <button className="px-3 py-1.5 text-xs font-medium bg-portal-accent text-white rounded-[10px]">Revisar</button>
+            <PortalButton variant="secondary">Ver anterior</PortalButton>
+            <PortalButton variant="secondary">Pedir cambios</PortalButton>
+            <PortalButton variant="accent">Revisar</PortalButton>
           </div>
         </div>
       </PortalCard>

@@ -8,6 +8,7 @@ import { BrandSelector } from "@/components/portal/brand-selector";
 import { SectionHeader } from "@/components/portal/section-header";
 import { mockBrands } from "@/lib/portal-mock-data";
 import { Download, MessageCircle, Shield, FileText, TrendingUp } from "lucide-react";
+import { PortalButton } from "@/components/portal/portal-button";
 
 export default function BrandPage() {
   const [brandId, setBrandId] = useState(mockBrands[0].id);
@@ -18,12 +19,8 @@ export default function BrandPage() {
       <div className="flex items-center justify-between">
         <h1 className="text-[28px] font-light tracking-[-0.5px] text-portal-text">Brand</h1>
         <div className="flex items-center gap-3">
-          <button className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-white border border-portal-border rounded-[10px] text-portal-text-secondary hover:border-portal-text-dim transition-colors">
-            <Download size={14} />Descargar brand kit
-          </button>
-          <button className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-portal-text text-white rounded-[10px] hover:opacity-80 transition-opacity">
-            <MessageCircle size={14} />Editar con Copilot
-          </button>
+          <PortalButton variant="secondary" icon={<Download size={14} />}>Descargar brand kit</PortalButton>
+          <PortalButton variant="primary" icon={<MessageCircle size={14} />}>Editar con Copilot</PortalButton>
           <BrandSelector brands={mockBrands} selected={brandId} onChange={setBrandId} />
         </div>
       </div>
@@ -89,7 +86,7 @@ export default function BrandPage() {
       </div>
 
       <PortalCard>
-        <SectionHeader title="Tono de voz" action={<button className="text-[11px] font-semibold text-portal-accent hover:underline">Editar →</button>} />
+        <SectionHeader title="Tono de voz" action={<PortalButton variant="secondary" size="sm">Editar →</PortalButton>} />
         <div className="space-y-4">
           <ToneSlider labelLeft="Formal" labelRight="Casual" value={brand.toneScores.formal} />
           <ToneSlider labelLeft="Serio" labelRight="Divertido" value={brand.toneScores.serious} />
@@ -98,7 +95,7 @@ export default function BrandPage() {
       </PortalCard>
 
       <PortalCard>
-        <SectionHeader title="Positioning" action={<button className="text-[11px] font-semibold text-portal-accent hover:underline">Editar →</button>} />
+        <SectionHeader title="Positioning" action={<PortalButton variant="secondary" size="sm">Editar →</PortalButton>} />
         <blockquote className="text-sm text-portal-text-secondary italic border-l-2 border-portal-accent pl-4">{brand.positioning}</blockquote>
       </PortalCard>
 
@@ -131,8 +128,8 @@ export default function BrandPage() {
             </div>
           </div>
           <div className="flex gap-2">
-            <button className="px-3 py-1.5 text-xs font-medium bg-white border border-portal-border rounded-[10px] text-portal-text-secondary hover:border-portal-text-dim transition-colors">Vista previa</button>
-            <button className="px-3 py-1.5 text-xs font-medium bg-portal-text text-white rounded-[10px] hover:opacity-80 transition-opacity">Descargar PDF</button>
+            <PortalButton variant="secondary">Vista previa</PortalButton>
+            <PortalButton variant="primary">Descargar PDF</PortalButton>
           </div>
         </div>
       </PortalCard>

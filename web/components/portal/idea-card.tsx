@@ -1,4 +1,5 @@
-import { Clock, ArrowRight } from "lucide-react";
+import { Clock } from "lucide-react";
+import { PortalButton } from "@/components/portal/portal-button";
 import type { CampaignIdea } from "@/lib/portal-types";
 
 export function IdeaCard({ title, description, tags, urgent, urgencyDays }: CampaignIdea) {
@@ -18,9 +19,7 @@ export function IdeaCard({ title, description, tags, urgent, urgencyDays }: Camp
         <span className="text-[9px] font-medium bg-gray-100 text-portal-text-muted px-2 py-0.5 rounded">{tags.channel}</span>
         <span className="text-[9px] font-medium bg-gray-100 text-portal-text-muted px-2 py-0.5 rounded">{tags.time}</span>
       </div>
-      <button className="flex items-center gap-1 text-[11px] font-semibold text-portal-accent hover:underline">
-        Crear <ArrowRight size={12} />
-      </button>
+      <PortalButton variant="accent" size="sm">Crear →</PortalButton>
     </div>
   );
 }

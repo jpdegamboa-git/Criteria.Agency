@@ -5,6 +5,7 @@ import { PortalCard } from "@/components/portal/portal-card";
 import { SectionHeader } from "@/components/portal/section-header";
 import { cn } from "@/lib/utils";
 import { Building, Users, Plug, CreditCard, Bot, PaintBucket } from "lucide-react";
+import { PortalButton } from "@/components/portal/portal-button";
 
 const sections = [
   { id: "cuenta", label: "Cuenta", icon: Building },
@@ -66,10 +67,9 @@ export default function SetupPage() {
                 ].map((int) => (
                   <div key={int.name} className="flex items-center justify-between py-2 border-b border-portal-border last:border-0">
                     <span className="text-xs text-portal-text">{int.name}</span>
-                    <button className={cn("text-[10px] font-semibold px-3 py-1 rounded-lg",
-                      int.connected ? "bg-[#edfbf8] text-[#00a88e]" : "bg-gray-50 text-portal-text-muted hover:text-portal-text")}>
+                    <PortalButton variant="secondary" size="sm" className={int.connected ? "text-[#00a88e]" : ""}>
                       {int.connected ? "Conectado" : "Conectar"}
-                    </button>
+                    </PortalButton>
                   </div>
                 ))}
               </div>
@@ -104,8 +104,8 @@ export default function SetupPage() {
                   <p className="text-[10px] text-portal-text-muted">Light / Dark mode</p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <button className="px-3 py-1.5 text-xs font-medium bg-portal-text text-white rounded-lg">Light</button>
-                  <button className="px-3 py-1.5 text-xs font-medium bg-gray-50 text-portal-text-muted rounded-lg hover:text-portal-text">Dark</button>
+                  <PortalButton variant="primary" size="sm">Light</PortalButton>
+                  <PortalButton variant="secondary" size="sm">Dark</PortalButton>
                 </div>
               </div>
             </PortalCard>
