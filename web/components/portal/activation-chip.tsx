@@ -1,7 +1,7 @@
 import { StateBadge } from "./state-badge";
-import type { Activation, Channel } from "@/lib/portal-types";
+import type { Activation } from "@/lib/portal-types";
 import Link from "next/link";
-import { channelIconMap } from "./channel-icons";
+import { platformIconMap } from "./channel-icons";
 
 const mediaColors: Record<string, string> = {
   paid: "#7c5cfc",
@@ -13,7 +13,7 @@ const mediaColors: Record<string, string> = {
 const chipBg = "#f8f8fa";
 
 export function ActivationChip({ activation }: { activation: Activation }) {
-  const Icon = channelIconMap[activation.channel];
+  const Icon = platformIconMap[activation.platform || "generic"];
   const color = mediaColors[activation.mediaType];
 
   return (

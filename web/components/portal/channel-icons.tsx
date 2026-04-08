@@ -123,17 +123,66 @@ export function UsersIcon({ size = 14, className }: IconProps) {
   );
 }
 
-// Map channel types to their primary icon component
-import type { Channel } from "@/lib/portal-types";
+// ── Mailchimp (simplified monkey silhouette) ──
+
+export function MailchimpIcon({ size = 14, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" className={className}>
+      <path d="M18.86 12.76c.24-.39.38-.84.38-1.32 0-1.38-1.12-2.5-2.5-2.5s-2.5 1.12-2.5 2.5c0 .48.14.93.38 1.32A4.97 4.97 0 0 0 12 17c-1.3 0-2.48-.5-3.37-1.31.02-.06.03-.13.03-.19 0-.55-.45-1-1-1s-1 .45-1 1c0 .26.1.5.27.68A6.96 6.96 0 0 0 12 19a6.96 6.96 0 0 0 5.07-2.82c.17-.18.27-.42.27-.68 0-.55-.45-1-1-1s-1 .45-1 1c0 .06.01.13.03.19A4.97 4.97 0 0 1 12 17a4.97 4.97 0 0 1-2.62-4.24c.24-.39.38-.84.38-1.32 0-1.38-1.12-2.5-2.5-2.5S4.76 10.06 4.76 11.44c0 .48.14.93.38 1.32" fill="none" stroke="#FFE01B" strokeWidth="1.5"/>
+      <circle cx="12" cy="12" r="9" fill="none" stroke="#FFE01B" strokeWidth="1.5"/>
+    </svg>
+  );
+}
+
+// ── Generic (circle with dot) ──
+
+export function GenericIcon({ size = 14, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <circle cx="12" cy="12" r="10"/>
+      <circle cx="12" cy="12" r="3"/>
+    </svg>
+  );
+}
+
+// ── Map: Channels → generic icons (for row labels) ──
+import type { Channel, Platform } from "@/lib/portal-types";
 import type { ComponentType } from "react";
 
+// Row labels use generic icons representing the channel category
 export const channelIconMap: Record<Channel, ComponentType<IconProps>> = {
-  sem: GoogleIcon,
-  social_ads: MetaIcon,
+  sem: ({ size, className }: IconProps) => (
+    <svg width={size || 14} height={size || 14} viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+    </svg>
+  ),
+  social_ads: ({ size, className }: IconProps) => (
+    <svg width={size || 14} height={size || 14} viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/>
+    </svg>
+  ),
   display: DisplayIcon,
-  video_ott: YouTubeIcon,
+  video_ott: ({ size, className }: IconProps) => (
+    <svg width={size || 14} height={size || 14} viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <polygon points="5 3 19 12 5 21 5 3"/>
+    </svg>
+  ),
   seo_content: SEOIcon,
   email: MailIcon,
-  social_org: InstagramIcon,
+  social_org: UsersIcon,
   influencers: StarIcon,
+};
+
+// ── Map: Platform → real brand icons (for activation chips) ──
+
+export const platformIconMap: Record<Platform, ComponentType<IconProps>> = {
+  google: GoogleIcon,
+  meta: MetaIcon,
+  instagram: InstagramIcon,
+  youtube: YouTubeIcon,
+  linkedin: LinkedInIcon,
+  tiktok: TikTokIcon,
+  x: XIcon,
+  mailchimp: MailIcon,
+  generic: GenericIcon,
 };

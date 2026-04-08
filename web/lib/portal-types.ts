@@ -68,6 +68,17 @@ export interface Campaign {
   activations: Activation[];
 }
 
+export type Platform =
+  | "google"
+  | "meta"
+  | "instagram"
+  | "youtube"
+  | "linkedin"
+  | "tiktok"
+  | "x"
+  | "mailchimp"
+  | "generic";
+
 export interface Activation {
   id: string;
   campaignId: string;
@@ -76,6 +87,7 @@ export interface Activation {
   funnelStage: FunnelStage;
   mediaType: MediaType;
   state: CampaignState;
+  platform?: Platform;
   kpis: { label: string; value: string }[];
 }
 

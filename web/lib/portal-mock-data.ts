@@ -109,16 +109,16 @@ export const mockOpportunities: Opportunity[] = [
 // ── Campaigns & Activations ──
 
 export const mockActivations: Activation[] = [
-  { id: "a1", campaignId: "c1", name: "Meta Awareness Ads", channel: "social_ads", funnelStage: "awareness", mediaType: "paid", state: "ejecutar", kpis: [{ label: "CPM", value: "$4.20" }, { label: "Reach", value: "45K" }] },
-  { id: "a2", campaignId: "c1", name: "Google Search", channel: "sem", funnelStage: "consideration", mediaType: "paid", state: "ejecutar", kpis: [{ label: "CPC", value: "$0.85" }, { label: "CTR", value: "3.2%" }] },
-  { id: "a3", campaignId: "c1", name: "Landing page SEO", channel: "seo_content", funnelStage: "consideration", mediaType: "owned", state: "plan", kpis: [] },
-  { id: "a4", campaignId: "c1", name: "Email nurture sequence", channel: "email", funnelStage: "conversion", mediaType: "owned", state: "plan", kpis: [] },
-  { id: "a5", campaignId: "c1", name: "Meta Retargeting", channel: "social_ads", funnelStage: "conversion", mediaType: "paid", state: "seguimiento", kpis: [{ label: "ROAS", value: "3.8x" }, { label: "Conv", value: "12" }] },
-  { id: "a6", campaignId: "c2", name: "Instagram Reels", channel: "social_ads", funnelStage: "awareness", mediaType: "paid", state: "ejecutar", kpis: [{ label: "Views", value: "22K" }] },
-  { id: "a7", campaignId: "c2", name: "Blog posts", channel: "seo_content", funnelStage: "awareness", mediaType: "owned", state: "ejecutar", kpis: [{ label: "Sessions", value: "1.2K" }] },
-  { id: "a8", campaignId: "c2", name: "Influencer collab", channel: "influencers", funnelStage: "awareness", mediaType: "earned", state: "plan", kpis: [] },
-  { id: "a9", campaignId: "c3", name: "Newsletter mensual", channel: "email", funnelStage: "retention", mediaType: "owned", state: "ejecutar", kpis: [{ label: "Open", value: "42%" }] },
-  { id: "a10", campaignId: "c3", name: "NPS survey email", channel: "email", funnelStage: "retention", mediaType: "owned", state: "plan", kpis: [] },
+  { id: "a1", campaignId: "c1", name: "Meta Awareness Ads", channel: "social_ads", funnelStage: "awareness", mediaType: "paid", state: "ejecutar", platform: "meta", kpis: [{ label: "CPM", value: "$4.20" }, { label: "Reach", value: "45K" }] },
+  { id: "a2", campaignId: "c1", name: "Google Search", channel: "sem", funnelStage: "consideration", mediaType: "paid", state: "ejecutar", platform: "google", kpis: [{ label: "CPC", value: "$0.85" }, { label: "CTR", value: "3.2%" }] },
+  { id: "a3", campaignId: "c1", name: "Landing page SEO", channel: "seo_content", funnelStage: "consideration", mediaType: "owned", state: "plan", platform: "generic", kpis: [] },
+  { id: "a4", campaignId: "c1", name: "Email nurture sequence", channel: "email", funnelStage: "conversion", mediaType: "owned", state: "plan", platform: "mailchimp", kpis: [] },
+  { id: "a5", campaignId: "c1", name: "Meta Retargeting", channel: "social_ads", funnelStage: "conversion", mediaType: "paid", state: "seguimiento", platform: "meta", kpis: [{ label: "ROAS", value: "3.8x" }, { label: "Conv", value: "12" }] },
+  { id: "a6", campaignId: "c2", name: "Instagram Reels", channel: "social_ads", funnelStage: "awareness", mediaType: "paid", state: "ejecutar", platform: "instagram", kpis: [{ label: "Views", value: "22K" }] },
+  { id: "a7", campaignId: "c2", name: "Blog posts", channel: "seo_content", funnelStage: "awareness", mediaType: "owned", state: "ejecutar", platform: "generic", kpis: [{ label: "Sessions", value: "1.2K" }] },
+  { id: "a8", campaignId: "c2", name: "Influencer collab", channel: "influencers", funnelStage: "awareness", mediaType: "earned", state: "plan", platform: "instagram", kpis: [] },
+  { id: "a9", campaignId: "c3", name: "Newsletter mensual", channel: "email", funnelStage: "retention", mediaType: "owned", state: "ejecutar", platform: "mailchimp", kpis: [{ label: "Open", value: "42%" }] },
+  { id: "a10", campaignId: "c3", name: "NPS survey email", channel: "email", funnelStage: "retention", mediaType: "owned", state: "plan", platform: "mailchimp", kpis: [] },
 ];
 
 export const mockCampaigns: Campaign[] = [
