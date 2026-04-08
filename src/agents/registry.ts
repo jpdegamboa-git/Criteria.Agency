@@ -517,4 +517,6 @@ export const AGENT_REGISTRY: Record<string, AgentRegistryEntry> = {
   "SC-001": { id: "SC-001", name: "Code Guardian", skillFile: "agents/SC-001_code_guardian.md", team: 35, level: "sub", steps: ["sec_scan", "sec_remediate"] as any, gates: [], autonomy: 80 },
   "SC-002": { id: "SC-002", name: "Data Protection Officer", skillFile: "agents/SC-002_data_protection_officer.md", team: 35, level: "sub", steps: ["sec_scan"] as any, gates: [], autonomy: 75 },
   "SC-003": { id: "SC-003", name: "Agent Auditor", skillFile: "agents/SC-003_agent_auditor.md", team: 35, level: "sub", steps: ["sec_scan"] as any, gates: [], autonomy: 80 },
+  "SC-004": { id: "SC-004", name: "Threat Hunter", skillFile: "agents/SC-004_threat_hunter.md", team: 35, level: "sub", steps: ["sec_scan"] as any, gates: [], autonomy: 85 },
+  "SC-005": { id: "SC-005", name: "Infrastructure Sentinel", skillFile: "agents/SC-005_infrastructure_sentinel.md", team: 35, level: "sub", steps: ["sec_scan", "sec_remediate"] as any, gates: [], autonomy: 95 },
 };
