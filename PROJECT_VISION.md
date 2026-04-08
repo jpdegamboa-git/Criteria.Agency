@@ -96,17 +96,35 @@ Tiers are defined by **capabilities included**, not by motor access. This makes 
 
 > See Capabilities Map §5.4 for the full tier breakdown.
 
-### 6 Client Spaces (outcome-based navigation)
-Clients navigate by outcomes, not by the 24 motors underneath. Each Space groups capabilities that solve related pain points:
+### 9 Client Spaces (role-based navigation)
+Clients navigate via a left sidebar grouped by role. Each group provides a mental model:
 
-| Space | Outcome | Capabilities | Motors Behind |
-|-------|---------|-------------|--------------|
-| **Crear** | "I need content" | C-009 to C-015, C-042, C-043 | Video, Design, Web, Audio, Events, Print |
-| **Comunicar** | "I need to reach people" | C-016 to C-022 | Ads, Community Management, Email, SEO/Content |
-| **Entender** | "I need to understand my market" | C-023 to C-027, C-033 to C-037 | 4 Listeners, Opportunity Agent, Analytics |
-| **Vender** | "I need to sell" | C-028 to C-032 | Sales/CRM |
-| **Mi Marca** | "I need my brand defined/protected" | C-006 to C-008, C-048, C-049 | Brand Builder, Brand Guardian |
-| **Cuenta** | "I need to manage my account" | C-038 to C-041, C-045, C-046 | Settings, billing, team, integrations |
+**Fundamentos** — who you are, what you sell, how you make money
+
+| Space | Purpose | Key Content |
+|-------|---------|-------------|
+| **Business Model** | Business logic & structure | BMC, Value Proposition Canvas, Unit Economics |
+| **Brand** | Brand identity & protection | DNA, visual identity, tone of voice, guardian |
+| **Productos y Servicios** | Product/service catalog | Editable product list |
+| **Revenue Streams** | Revenue sources & trends | Stream details, amounts, progress |
+
+**Inteligencia** — what's happening outside your business
+
+| Space | Purpose | Key Content |
+|-------|---------|-------------|
+| **Mercado** | Market intelligence | Industry, trends, opportunities, studies, audiences |
+| **Competencia** | Competitive intelligence | Landscape analysis, real-time monitoring |
+
+**Ejecución** — what you're doing about it
+
+| Space | Purpose | Key Content |
+|-------|---------|-------------|
+| **Campaigns** | Plan, create, distribute, monitor | Strategy, budget, matrix, calendar, list |
+| **Sales** | Manage sales pipeline | Pipeline, leads, proposals |
+
+**Cuenta** stays in the avatar dropdown (settings, billing, team, integrations).
+
+Content creation without a campaign is available via quick actions on Home.
 
 ---
 
