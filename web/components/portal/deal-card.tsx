@@ -4,7 +4,7 @@ const tempColors: Record<string, string> = { hot: "#ff6b6b", warm: "#f5a623", co
 
 export function DealCard({ deal }: { deal: Deal }) {
   return (
-    <div className="bg-white rounded-xl p-3 portal-shadow border border-portal-border hover:portal-shadow-hover transition-shadow">
+    <div className="bg-white rounded-xl p-3 portal-shadow hover:-translate-y-0.5 hover:shadow-[0_2px_8px_rgba(0,0,0,0.08)] transition-all">
       <div className="flex items-center gap-1.5 mb-1">
         <span className="w-2 h-2 rounded-full" style={{ backgroundColor: tempColors[deal.temperature] }} />
         <h3 className="text-[11px] font-semibold text-portal-text truncate">{deal.name}</h3>

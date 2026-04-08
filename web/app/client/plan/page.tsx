@@ -71,7 +71,7 @@ export default function PlanPage() {
                 { segment: "Secundaria", name: "Foodie millennial 22-32", traits: "Explora cafés, TikTok, experiencias" },
                 { segment: "Nicho", name: "Barista profesional", traits: "Técnico, valora origen, comunidad" },
               ].map((p) => (
-                <div key={p.segment} className="border border-portal-border rounded-xl p-4">
+                <div key={p.segment} className="portal-shadow rounded-xl p-4">
                   <span className="text-[9px] font-semibold uppercase tracking-wide text-portal-accent">{p.segment}</span>
                   <p className="text-xs font-semibold text-portal-text mt-1">{p.name}</p>
                   <p className="text-[11px] text-portal-text-muted mt-1">{p.traits}</p>

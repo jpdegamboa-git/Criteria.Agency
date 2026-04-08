@@ -16,7 +16,7 @@ const typeLabels: Record<string, string> = {
 
 export function OpportunityCard({ type, title, description, action }: Opportunity) {
   return (
-    <div className="bg-white rounded-2xl p-4 portal-shadow border border-portal-border">
+    <div className="bg-white rounded-2xl p-4 portal-shadow">
       <div className="flex items-center gap-1.5 mb-2">
         <span className="w-2 h-2 rounded-full" style={{ backgroundColor: typeColors[type] }} />
         <span className="text-[10px] font-semibold uppercase tracking-wide text-portal-text-muted">{typeLabels[type]}</span>

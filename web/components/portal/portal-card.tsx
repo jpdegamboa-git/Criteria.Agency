@@ -7,7 +7,7 @@ interface PortalCardProps extends HTMLAttributes<HTMLDivElement> {
 
 export function PortalCard({ className, noPadding, children, ...props }: PortalCardProps) {
   return (
-    <div className={cn("bg-white rounded-2xl portal-shadow border border-portal-border", !noPadding && "p-5", className)} {...props}>
+    <div className={cn("bg-white rounded-2xl portal-shadow", !noPadding && "p-5", className)} {...props}>
       {children}
     </div>
   );

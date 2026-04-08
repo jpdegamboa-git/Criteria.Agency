@@ -10,7 +10,7 @@ const mediaColors: Record<string, string> = {
 
 export function ActivationChip({ activation }: { activation: Activation }) {
   return (
-    <Link href={`/client/campaigns/${activation.campaignId}`} className="block bg-white rounded-xl p-3 portal-shadow border border-portal-border hover:portal-shadow-hover transition-shadow">
+    <Link href={`/client/campaigns/${activation.campaignId}`} className="block bg-white rounded-xl p-3 portal-shadow hover:-translate-y-0.5 hover:shadow-[0_2px_8px_rgba(0,0,0,0.08)] transition-all">
       <p className="text-[11px] font-semibold mb-1" style={{ color: mediaColors[activation.mediaType] }}>{activation.name}</p>
       <StateBadge state={activation.state} />
       {activation.kpis.length > 0 && (

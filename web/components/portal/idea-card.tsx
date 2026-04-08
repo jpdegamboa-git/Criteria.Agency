@@ -3,7 +3,7 @@ import type { CampaignIdea } from "@/lib/portal-types";
 
 export function IdeaCard({ title, description, tags, urgent, urgencyDays }: CampaignIdea) {
   return (
-    <div className="bg-white rounded-2xl p-5 portal-shadow border border-portal-border hover:portal-shadow-hover transition-shadow">
+    <div className="bg-white rounded-2xl p-5 portal-shadow hover:-translate-y-0.5 hover:shadow-[0_2px_8px_rgba(0,0,0,0.08)] transition-all">
       <div className="flex items-start justify-between mb-2">
         <h3 className="text-[13px] font-semibold text-portal-text">{title}</h3>
         {urgent && urgencyDays && (
