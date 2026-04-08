@@ -21,6 +21,10 @@ import {
   Radar,
   Zap,
   Wrench,
+  ShoppingBag,
+  BookUser,
+  HardDrive,
+  FileBarChart,
 } from "lucide-react";
 
 interface NavItem {
@@ -72,7 +76,12 @@ const groups: NavGroup[] = [
     label: "Tools",
     icon: Wrench,
     color: "#ff6b6b",
-    items: [],
+    items: [
+      { href: "/client/marketplace", label: "Marketplace", icon: ShoppingBag },
+      { href: "/client/directorio", label: "Directorio", icon: BookUser },
+      { href: "/client/drive", label: "Drive", icon: HardDrive },
+      { href: "/client/reportes", label: "Reportes", icon: FileBarChart },
+    ],
   },
 ];
 
