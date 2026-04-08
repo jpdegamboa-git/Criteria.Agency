@@ -27,11 +27,14 @@ export function AvatarDropdown({ name, email }: AvatarDropdownProps) {
 
   return (
     <div className="relative" ref={ref}>
-      <button onClick={() => setOpen(!open)} className="w-8 h-8 rounded-full bg-portal-text text-white text-xs font-semibold flex items-center justify-center hover:opacity-80 transition-opacity">
-        {initials}
+      <button onClick={() => setOpen(!open)} className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+        <div className="w-8 h-8 rounded-full bg-[#111] text-white text-[10px] font-semibold flex items-center justify-center">
+          {initials}
+        </div>
+        <span className="text-xs font-medium text-[#444] hidden sm:inline">{name.split(" ")[0]}</span>
       </button>
       {open && (
-        <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-2xl portal-shadow border border-portal-border z-50 overflow-hidden">
+        <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-xl shadow-[0_4px_16px_rgba(0,0,0,0.12)] border border-[#eee] z-50 overflow-hidden">
           <div className="px-4 py-3 border-b border-portal-border">
             <p className="text-xs font-semibold text-portal-text">{name}</p>
             {email && <p className="text-[10px] text-portal-text-muted">{email}</p>}
