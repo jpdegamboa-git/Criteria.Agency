@@ -3,9 +3,30 @@
 import React from "react";
 import { ActivationChip } from "./activation-chip";
 import { MediaDot } from "./media-dot";
-import { Plus } from "lucide-react";
+import {
+  Plus,
+  Search,
+  Share2,
+  Monitor,
+  Play,
+  FileText,
+  Mail,
+  Users,
+  Star,
+} from "lucide-react";
 import type { Activation, Channel, FunnelStage } from "@/lib/portal-types";
 import { CHANNELS, FUNNEL_STAGES } from "@/lib/portal-mock-data";
+
+const channelIcons: Record<Channel, typeof Search> = {
+  sem: Search,
+  social_ads: Share2,
+  display: Monitor,
+  video_ott: Play,
+  seo_content: FileText,
+  email: Mail,
+  social_org: Users,
+  influencers: Star,
+};
 
 const channelOrder: Channel[] = [
   "sem", "social_ads", "display", "video_ott",
@@ -34,7 +55,7 @@ export function FunnelMatrix({ activations }: FunnelMatrixProps) {
         className="bg-white rounded-2xl portal-shadow overflow-hidden"
         style={{
           display: "grid",
-          gridTemplateColumns: "140px repeat(4, 1fr)",
+          gridTemplateColumns: "160px repeat(4, 1fr)",
         }}
       >
         {/* Header row: empty corner + 4 funnel stages */}
@@ -54,18 +75,28 @@ export function FunnelMatrix({ activations }: FunnelMatrixProps) {
             {/* Row label */}
             <div
               key={`${channel}-label`}
-              className="p-3 border-r border-[#f0f0f0] flex items-start gap-1.5"
+              className="p-3 border-r border-[#f0f0f0] flex items-start gap-2"
               style={{
                 borderBottom: rowIdx < channelOrder.length - 1 ? "1px solid #f0f0f0" : "none",
               }}
             >
-              <div className="flex gap-0.5 mt-0.5">
-                {channelMediaTypes[channel].map((mt) => (
-                  <MediaDot key={mt} type={mt} size={6} />
-                ))}
-              </div>
+              {(() => {
+                const Icon = channelIcons[channel];
+                return (
+                  <div className="w-7 h-7 rounded-lg bg-[#f5f5f7] flex items-center justify-center shrink-0 mt-0.5">
+                    <Icon size={14} className="text-portal-text-muted" strokeWidth={1.5} />
+                  </div>
+                );
+              })()}
               <div>
-                <p className="text-[11px] font-medium text-portal-text">{CHANNELS[channel].label}</p>
+                <div className="flex items-center gap-1.5">
+                  <p className="text-[11px] font-medium text-portal-text">{CHANNELS[channel].label}</p>
+                  <div className="flex gap-0.5">
+                    {channelMediaTypes[channel].map((mt) => (
+                      <MediaDot key={mt} type={mt} size={5} />
+                    ))}
+                  </div>
+                </div>
                 <p className="text-[9px] text-portal-text-dim">{CHANNELS[channel].description}</p>
               </div>
             </div>
