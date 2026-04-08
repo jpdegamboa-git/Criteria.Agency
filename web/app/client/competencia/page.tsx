@@ -45,21 +45,60 @@ export default function CompetenciaPage() {
       </div>
 
       {activeTab === "landscape" && (
-        <PortalCard>
-          <SectionHeader title="Landscape" />
-          <div className="text-xs text-portal-text-dim text-center py-12">
-            Competitive landscape — who they are, positioning, benchmark analysis — placeholder
+        <div className="space-y-4">
+          <div className="grid grid-cols-3 gap-4">
+            {[
+              { name: "Britt Coffee", position: "Premium masivo", threat: "Alta", color: "#ff6b6b", strengths: ["Distribución nacional", "Marca reconocida", "Exportación"], share: "15%" },
+              { name: "Café Volio", position: "Artesanal local", threat: "Media", color: "#f5a623", strengths: ["Trazabilidad", "Comunidad fiel", "E-commerce"], share: "3%" },
+              { name: "Doka Estate", position: "Turismo + retail", threat: "Baja", color: "#00c2a8", strengths: ["Tour de café", "B2B hoteles", "Experiencia"], share: "5%" },
+            ].map((c) => (
+              <PortalCard key={c.name}>
+                <div className="flex items-start justify-between mb-2">
+                  <div>
+                    <p className="text-xs font-semibold text-portal-text">{c.name}</p>
+                    <span className="text-[8px] font-medium bg-[#f5f5f7] text-portal-text-muted px-1.5 py-0.5 rounded mt-1 inline-block">{c.position}</span>
+                  </div>
+                  <span className="text-[8px] font-bold px-1.5 py-0.5 rounded" style={{ backgroundColor: c.color + "15", color: c.color }}>Amenaza {c.threat}</span>
+                </div>
+                <div className="space-y-1 mt-3">
+                  {c.strengths.map((s) => (
+                    <div key={s} className="flex items-center gap-1.5">
+                      <div className="w-1 h-1 rounded-full shrink-0" style={{ backgroundColor: c.color }} />
+                      <p className="text-[10px] text-portal-text-secondary">{s}</p>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-3 pt-2 border-t border-[#f0f0f0] flex justify-between">
+                  <p className="text-[9px] text-portal-text-dim">Market share</p>
+                  <p className="text-[10px] font-semibold text-portal-text">{c.share}</p>
+                </div>
+              </PortalCard>
+            ))}
           </div>
-        </PortalCard>
+          <PortalCard>
+            <SectionHeader title="Benchmark comparativo" />
+            <div className="text-xs text-portal-text-dim text-center py-8">
+              Tabla de comparación de features, precios y posicionamiento — placeholder
+            </div>
+          </PortalCard>
+        </div>
       )}
 
       {activeTab === "monitor" && (
-        <PortalCard>
-          <SectionHeader title="Monitor" />
-          <div className="text-xs text-portal-text-dim text-center py-12">
-            Competition Listener real-time feed — placeholder
-          </div>
-        </PortalCard>
+        <div className="grid grid-cols-2 gap-4">
+          <PortalCard>
+            <SectionHeader title="Actividad reciente" />
+            <div className="text-xs text-portal-text-dim text-center py-8">
+              Competition Listener real-time feed — placeholder
+            </div>
+          </PortalCard>
+          <PortalCard>
+            <SectionHeader title="Alertas" />
+            <div className="text-xs text-portal-text-dim text-center py-8">
+              Competitor alerts and notifications — placeholder
+            </div>
+          </PortalCard>
+        </div>
       )}
     </div>
   );
