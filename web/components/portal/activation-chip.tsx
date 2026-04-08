@@ -1,16 +1,7 @@
 import { StateBadge } from "./state-badge";
 import type { Activation, Channel } from "@/lib/portal-types";
 import Link from "next/link";
-import {
-  Search,
-  Share2,
-  Monitor,
-  Play,
-  FileText,
-  Mail,
-  Users,
-  Star,
-} from "lucide-react";
+import { channelIconMap } from "./channel-icons";
 
 const mediaColors: Record<string, string> = {
   paid: "#7c5cfc",
@@ -21,19 +12,8 @@ const mediaColors: Record<string, string> = {
 // Chip background: near-white gray for all types
 const chipBg = "#f8f8fa";
 
-const channelIcons: Record<Channel, typeof Search> = {
-  sem: Search,
-  social_ads: Share2,
-  display: Monitor,
-  video_ott: Play,
-  seo_content: FileText,
-  email: Mail,
-  social_org: Users,
-  influencers: Star,
-};
-
 export function ActivationChip({ activation }: { activation: Activation }) {
-  const Icon = channelIcons[activation.channel];
+  const Icon = channelIconMap[activation.channel];
   const color = mediaColors[activation.mediaType];
 
   return (
@@ -46,9 +26,9 @@ export function ActivationChip({ activation }: { activation: Activation }) {
         {/* Channel icon */}
         <div
           className="w-5 h-5 rounded-md flex items-center justify-center shrink-0 mt-0.5"
-          style={{ backgroundColor: `${color}12` }}
+          style={{ backgroundColor: "#f0f0f2" }}
         >
-          <Icon size={11} style={{ color }} strokeWidth={2} />
+          <Icon size={11} />
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-[11px] font-semibold leading-tight" style={{ color }}>

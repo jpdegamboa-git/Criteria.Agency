@@ -3,30 +3,10 @@
 import React from "react";
 import { ActivationChip } from "./activation-chip";
 import { MediaDot } from "./media-dot";
-import {
-  Plus,
-  Search,
-  Share2,
-  Monitor,
-  Play,
-  FileText,
-  Mail,
-  Users,
-  Star,
-} from "lucide-react";
+import { Plus } from "lucide-react";
 import type { Activation, Channel, FunnelStage } from "@/lib/portal-types";
 import { CHANNELS, FUNNEL_STAGES } from "@/lib/portal-mock-data";
-
-const channelIcons: Record<Channel, typeof Search> = {
-  sem: Search,
-  social_ads: Share2,
-  display: Monitor,
-  video_ott: Play,
-  seo_content: FileText,
-  email: Mail,
-  social_org: Users,
-  influencers: Star,
-};
+import { channelIconMap } from "./channel-icons";
 
 const channelOrder: Channel[] = [
   "sem", "social_ads", "display", "video_ott",
@@ -81,10 +61,10 @@ export function FunnelMatrix({ activations }: FunnelMatrixProps) {
               }}
             >
               {(() => {
-                const Icon = channelIcons[channel];
+                const Icon = channelIconMap[channel];
                 return (
                   <div className="w-7 h-7 rounded-lg bg-[#f5f5f7] flex items-center justify-center shrink-0 mt-0.5">
-                    <Icon size={14} className="text-portal-text-muted" strokeWidth={1.5} />
+                    <Icon size={14} />
                   </div>
                 );
               })()}
