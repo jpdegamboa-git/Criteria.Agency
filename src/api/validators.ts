@@ -588,6 +588,22 @@ export const generatePnlSchema = z.object({
   periodEnd: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
 });
 
+// ── Campaign (Scale Engine) ──
+
+export const createCampaignSchema = z.object({
+  name: z.string().min(1).max(255),
+  briefText: z.string().min(10),
+  channels: z.array(z.string().min(1)).min(1),
+  budgetTotal: z.number().positive(),
+  currency: z.string().default("USD"),
+  briefProjectId: z.string().uuid().optional(),
+  brandDnaProjectId: z.string().uuid().optional(),
+});
+
+export const updateCampaignStatusSchema = z.object({
+  status: z.enum(["draft", "decomposing", "dispatched", "in_progress", "consolidating", "delivered", "failed"]),
+});
+
 // ── Helper: parse with nice error response ──
 
 export function parseBody<T>(schema: z.ZodType<T>, body: unknown): { success: true; data: T } | { success: false; error: string } {
