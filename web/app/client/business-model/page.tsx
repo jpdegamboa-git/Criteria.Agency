@@ -174,7 +174,7 @@ export default function BusinessModelPage() {
     <div className="space-y-5">
       {/* ── Header ── */}
       <div className="flex items-center justify-between">
-        <h1 className="text-[22px] font-semibold tracking-[-0.5px] text-portal-text">Business</h1>
+        <h1 className="text-[22px] font-semibold tracking-[-0.5px] text-portal-text">Core</h1>
         <div className="flex items-center gap-2">
           <PortalButton variant="primary" size="sm" icon={<MessageCircle size={13} />}>Editar con Copilot</PortalButton>
           <BrandSelector brands={mockBrands} selected={brandId} onChange={setBrandId} />

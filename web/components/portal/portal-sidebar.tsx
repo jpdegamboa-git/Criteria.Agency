@@ -21,6 +21,7 @@ import {
   Radar,
   Zap,
   Wrench,
+  Target,
   ShoppingBag,
   BookUser,
   HardDrive,
@@ -49,7 +50,7 @@ const groups: NavGroup[] = [
     icon: Boxes,
     color: "#7c5cfc",
     items: [
-      { href: "/client/business-model", label: "Business", icon: LayoutGrid },
+      { href: "/client/business-model", label: "Core", icon: LayoutGrid },
       { href: "/client/brand", label: "Brand", icon: Palette },
       { href: "/client/productos", label: "Productos y Servicios", icon: Package },
       { href: "/client/revenue", label: "Revenue Streams", icon: DollarSign },
@@ -69,6 +70,7 @@ const groups: NavGroup[] = [
     icon: Zap,
     color: "#f5a623",
     items: [
+      { href: "/client/metas", label: "Metas", icon: Target },
       { href: "/client/campaigns", label: "Campaigns", icon: Megaphone },
       { href: "/client/sales", label: "Sales", icon: Banknote },
     ],
