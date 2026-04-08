@@ -8,19 +8,21 @@ import { BrandSelector } from "@/components/portal/brand-selector";
 import { FunnelMatrix } from "@/components/portal/funnel-matrix";
 import { CampaignCalendar } from "@/components/portal/campaign-calendar";
 import { StateBadge } from "@/components/portal/state-badge";
-import { mockBrands, mockCampaigns, mockActivations } from "@/lib/portal-mock-data";
-import { Lightbulb, Zap } from "lucide-react";
+import { BudgetEqualizer } from "@/components/portal/budget-equalizer";
+import { SectionHeader } from "@/components/portal/section-header";
+import { mockBrands, mockCampaigns, mockActivations, mockBudgetQ2 } from "@/lib/portal-mock-data";
+import { Lightbulb, Zap, Target, BarChart3, CalendarDays, List, LayoutGrid } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 
-type ViewMode = "matrix" | "calendario" | "lista";
+type ViewMode = "estrategia" | "budget" | "matrix" | "calendario" | "lista";
 
 export default function CampaignsPage() {
   const [brandId, setBrandId] = useState(mockBrands[0].id);
   const [mediaFilter, setMediaFilter] = useState("all");
   const [onlyActive, setOnlyActive] = useState(false);
   const [campaignFilter, setCampaignFilter] = useState("all");
-  const [view, setView] = useState<ViewMode>("matrix");
+  const [view, setView] = useState<ViewMode>("estrategia");
 
   const filtered = mockActivations.filter((a) => {
     if (mediaFilter !== "all" && a.mediaType !== mediaFilter) return false;
@@ -55,48 +57,89 @@ export default function CampaignsPage() {
         </div>
       </div>
 
-      {/* Filters row: media type | active toggle | view toggle */}
-      <div className="flex items-center gap-3 flex-wrap">
-        <FilterGroup
-          options={[
-            { label: "All", value: "all" },
-            { label: "Paid", value: "paid", dot: "#7c5cfc" },
-            { label: "Owned", value: "owned", dot: "#00c2a8" },
-            { label: "Earned", value: "earned", dot: "#ff6b6b" },
-          ]}
-          value={mediaFilter}
-          onChange={setMediaFilter}
-        />
-
-        {/* Active-only toggle button */}
-        <button
-          onClick={() => setOnlyActive(!onlyActive)}
-          className={cn(
-            "flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-medium transition-all border",
-            onlyActive
-              ? "bg-[#111] text-white border-[#111] shadow-[0_2px_8px_rgba(0,0,0,0.25)]"
-              : "bg-white text-[#888] border-[#e8e8e8] shadow-[0_1px_3px_rgba(0,0,0,0.06)] hover:text-[#444] hover:shadow-[0_2px_8px_rgba(0,0,0,0.1)]"
-          )}
-        >
-          <Zap size={12} />
-          Solo activas
-        </button>
-
-        {/* View toggle right-aligned */}
-        <div className="ml-auto">
-          <FilterGroup
-            options={[
-              { label: "Matrix", value: "matrix" },
-              { label: "Calendar", value: "calendario" },
-              { label: "List", value: "lista" },
-            ]}
-            value={view}
-            onChange={(v) => setView(v as ViewMode)}
-          />
-        </div>
+      {/* Tab bar */}
+      <div className="flex items-center gap-1 border-b border-portal-border mb-4">
+        {[
+          { id: "estrategia", label: "Estrategia", icon: Target },
+          { id: "budget", label: "Budget", icon: BarChart3 },
+          { id: "matrix", label: "Matrix", icon: LayoutGrid },
+          { id: "calendario", label: "Calendar", icon: CalendarDays },
+          { id: "lista", label: "Lista", icon: List },
+        ].map((tab) => (
+          <button key={tab.id} onClick={() => setView(tab.id as ViewMode)}
+            className={cn("flex items-center gap-1.5 px-4 py-2.5 text-xs font-medium transition-colors border-b-2 -mb-px",
+              view === tab.id ? "border-portal-text text-portal-text" : "border-transparent text-portal-text-muted hover:text-portal-text")}>
+            <tab.icon size={14} />{tab.label}
+          </button>
+        ))}
       </div>
 
+      {/* Filters row: media type | active toggle (only for matrix/calendario/lista) */}
+      {(view === "matrix" || view === "calendario" || view === "lista") && (
+        <div className="flex items-center gap-3 flex-wrap">
+          <FilterGroup
+            options={[
+              { label: "All", value: "all" },
+              { label: "Paid", value: "paid", dot: "#7c5cfc" },
+              { label: "Owned", value: "owned", dot: "#00c2a8" },
+              { label: "Earned", value: "earned", dot: "#ff6b6b" },
+            ]}
+            value={mediaFilter}
+            onChange={setMediaFilter}
+          />
+
+          {/* Active-only toggle button */}
+          <button
+            onClick={() => setOnlyActive(!onlyActive)}
+            className={cn(
+              "flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-medium transition-all border",
+              onlyActive
+                ? "bg-[#111] text-white border-[#111] shadow-[0_2px_8px_rgba(0,0,0,0.25)]"
+                : "bg-white text-[#888] border-[#e8e8e8] shadow-[0_1px_3px_rgba(0,0,0,0.06)] hover:text-[#444] hover:shadow-[0_2px_8px_rgba(0,0,0,0.1)]"
+            )}
+          >
+            <Zap size={12} />
+            Solo activas
+          </button>
+        </div>
+      )}
+
       {/* View content */}
+      {view === "estrategia" && (
+        <div className="space-y-6">
+          <PortalCard>
+            <SectionHeader title="Plan de Marketing" />
+            <div className="space-y-4">
+              {[
+                { obj: "Incrementar ventas online 20%", progress: 45, metric: "₡2.3M / ₡5M" },
+                { obj: "Generar 100 leads calificados Q2", progress: 23, metric: "23 / 100" },
+                { obj: "Brand awareness +30%", progress: 60, metric: "60% recall rate" },
+              ].map((item) => (
+                <div key={item.obj} className="flex items-center gap-4">
+                  <div className="flex-1">
+                    <p className="text-xs font-medium text-portal-text">{item.obj}</p>
+                    <div className="mt-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                      <div className="h-full bg-portal-accent rounded-full" style={{ width: `${item.progress}%` }} />
+                    </div>
+                  </div>
+                  <span className="text-[11px] text-portal-text-muted w-28 text-right">{item.metric}</span>
+                </div>
+              ))}
+            </div>
+          </PortalCard>
+        </div>
+      )}
+
+      {view === "budget" && (
+        <PortalCard>
+          <SectionHeader title="Budget Allocator — Q2 2026" />
+          <p className="text-[11px] text-portal-text-muted mb-4">
+            Presupuesto anual: $30,667 · Q2: ${mockBudgetQ2.amount.toLocaleString()} ({mockBudgetQ2.percentage}%)
+          </p>
+          <BudgetEqualizer root={mockBudgetQ2} annualBudget={30667} />
+        </PortalCard>
+      )}
+
       {view === "matrix" && (
         <>
           <FunnelMatrix activations={filtered} />
