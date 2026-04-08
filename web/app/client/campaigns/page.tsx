@@ -57,7 +57,7 @@ export default function CampaignsPage() {
           { label: "Seguimiento", value: "seguimiento" },
         ]} value={stateFilter} onChange={setStateFilter} />
         <select value={campaignFilter} onChange={(e) => setCampaignFilter(e.target.value)}
-          className="px-3 py-1.5 bg-white border border-portal-border rounded-[10px] text-xs font-medium text-portal-text-secondary appearance-none cursor-pointer">
+          className="px-4 py-2 bg-white border border-[#e8e8e8] rounded-xl text-xs font-medium text-[#444] shadow-[0_1px_3px_rgba(0,0,0,0.06)] hover:shadow-[0_2px_8px_rgba(0,0,0,0.1)] transition-all cursor-pointer appearance-none">
           <option value="all">All campaigns</option>
           {mockCampaigns.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
         </select>
