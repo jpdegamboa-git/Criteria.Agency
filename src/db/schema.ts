@@ -808,6 +808,58 @@ export const proposals = pgTable("proposals", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+// ── Sales Engine: Touchpoints, Follow-Ups, Scoring ──
+
+export const followUpStatusEnum = pgEnum("follow_up_status", [
+  "scheduled", "sent", "opened", "replied", "bounced", "cancelled",
+]);
+
+export const leadTouchpoints = pgTable("lead_touchpoints", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  leadId: uuid("lead_id").references(() => leads.id).notNull(),
+  channel: varchar("channel", { length: 50 }).notNull(),
+  campaign: varchar("campaign", { length: 200 }),
+  content: varchar("content", { length: 200 }),
+  medium: varchar("medium", { length: 50 }),
+  interaction: varchar("interaction", { length: 50 }).notNull(),
+  metadata: jsonb("metadata").default({}),
+  timestamp: timestamp("timestamp").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+}, (table) => [
+  index("lead_touchpoints_lead_id_idx").on(table.leadId),
+]);
+
+export const followUps = pgTable("follow_ups", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  dealId: uuid("deal_id").references(() => deals.id),
+  leadId: uuid("lead_id").references(() => leads.id).notNull(),
+  type: varchar("type", { length: 50 }).notNull(),
+  channel: varchar("channel", { length: 30 }).notNull(),
+  content: text("content"),
+  sentAt: timestamp("sent_at"),
+  openedAt: timestamp("opened_at"),
+  repliedAt: timestamp("replied_at"),
+  status: followUpStatusEnum("status").default("scheduled").notNull(),
+  scheduledFor: timestamp("scheduled_for").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+}, (table) => [
+  index("follow_ups_lead_id_idx").on(table.leadId),
+  index("follow_ups_status_idx").on(table.status),
+]);
+
+export const scoringRules = pgTable("scoring_rules", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  clientId: uuid("client_id").references(() => clients.id).notNull(),
+  component: varchar("component", { length: 20 }).notNull(),
+  signal: varchar("signal", { length: 100 }).notNull(),
+  points: integer("points").notNull(),
+  condition: jsonb("condition"),
+  enabled: boolean("enabled").default(true).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+}, (table) => [
+  index("scoring_rules_client_id_idx").on(table.clientId),
+]);
+
 // ── Waitlist ──
 
 export const waitlistStatusEnum = pgEnum("waitlist_status", [
