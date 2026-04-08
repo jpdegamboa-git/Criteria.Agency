@@ -73,19 +73,20 @@ const groups: NavGroup[] = [
       { href: "/client/sales", label: "Sales", icon: Banknote },
     ],
   },
-  {
-    label: "Tools",
-    icon: Wrench,
-    color: "#ff6b6b",
-    items: [
-      { href: "/client/studio", label: "Studio", icon: Clapperboard },
-      { href: "/client/marketplace", label: "Marketplace", icon: ShoppingBag },
-      { href: "/client/directorio", label: "Directorio", icon: BookUser },
-      { href: "/client/drive", label: "Drive", icon: HardDrive },
-      { href: "/client/reportes", label: "Reportes", icon: FileBarChart },
-    ],
-  },
 ];
+
+const toolsGroup: NavGroup = {
+  label: "Tools",
+  icon: Wrench,
+  color: "#ff6b6b",
+  items: [
+    { href: "/client/studio", label: "Studio", icon: Clapperboard },
+    { href: "/client/marketplace", label: "Marketplace", icon: ShoppingBag },
+    { href: "/client/directorio", label: "Directorio", icon: BookUser },
+    { href: "/client/drive", label: "Drive", icon: HardDrive },
+    { href: "/client/reportes", label: "Reportes", icon: FileBarChart },
+  ],
+};
 
 function isActive(href: string, pathname: string): boolean {
   if (href === "/client") return pathname === "/client";
@@ -221,7 +222,7 @@ export function PortalSidebar() {
         </button>
       </div>
 
-      <nav className={cn("flex-1 py-3 space-y-0.5", collapsed ? "px-2" : "px-3")}>
+      <nav className={cn("flex-1 py-3 space-y-0.5 overflow-y-auto", collapsed ? "px-2" : "px-3")}>
         {/* Home */}
         <SidebarLink item={homeItem} pathname={pathname} collapsed={collapsed} />
 
@@ -230,6 +231,11 @@ export function PortalSidebar() {
           <SidebarGroup key={group.label} group={group} pathname={pathname} collapsed={collapsed} />
         ))}
       </nav>
+
+      {/* Tools — pinned to bottom */}
+      <div className={cn("border-t border-portal-border", collapsed ? "px-2 py-2" : "px-3 py-2")}>
+        <SidebarGroup group={toolsGroup} pathname={pathname} collapsed={collapsed} />
+      </div>
     </aside>
   );
 }
