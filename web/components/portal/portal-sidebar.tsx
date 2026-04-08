@@ -104,8 +104,8 @@ function SidebarLink({ item, pathname, collapsed, groupColor }: { item: NavItem;
       href={item.href}
       title={collapsed ? item.label : undefined}
       className={cn(
-        "flex items-center gap-2.5 rounded-lg text-sm font-medium transition-colors",
-        collapsed ? "justify-center px-0 py-2" : "pl-8 pr-3 py-1.5",
+        "flex items-center rounded-lg font-medium transition-colors",
+        collapsed ? "justify-center w-9 h-9 mx-auto" : "gap-2.5 pl-8 pr-3 py-1.5 text-sm",
         active
           ? "text-portal-text"
           : "text-portal-text-muted hover:text-portal-text hover:bg-white/60"
@@ -139,15 +139,26 @@ function SidebarGroup({
 
   if (collapsed) {
     return (
-      <div className="pt-2">
-        <div className="flex justify-center py-1.5" title={group.label}>
-          <GroupIcon size={16} className={cn("transition-colors", groupHasActive ? "text-portal-text" : "text-portal-text-muted")} strokeWidth={groupHasActive ? 2 : 1.5} />
-        </div>
-        <div className="space-y-0.5">
-          {group.items.map((item) => (
-            <SidebarLink key={item.href} item={item} pathname={pathname} collapsed />
-          ))}
-        </div>
+      <div className="pt-1">
+        <button
+          onClick={() => setOpen(!open)}
+          title={group.label}
+          className={cn(
+            "flex items-center justify-center w-9 h-9 mx-auto rounded-lg transition-colors cursor-pointer",
+            groupHasActive || open
+              ? "text-portal-text bg-[#f5f5f7]"
+              : "text-portal-text-muted hover:text-portal-text hover:bg-[#fafafa]"
+          )}
+        >
+          <GroupIcon size={16} strokeWidth={groupHasActive ? 2 : 1.5} />
+        </button>
+        {open && group.items.length > 0 && (
+          <div className="mt-0.5 space-y-0.5">
+            {group.items.map((item) => (
+              <SidebarLink key={item.href} item={item} pathname={pathname} collapsed groupColor={group.color} />
+            ))}
+          </div>
+        )}
       </div>
     );
   }
@@ -223,8 +234,23 @@ export function PortalSidebar() {
       </div>
 
       <nav className={cn("flex-1 py-3 space-y-0.5 overflow-y-auto", collapsed ? "px-2" : "px-3")}>
-        {/* Home */}
-        <SidebarLink item={homeItem} pathname={pathname} collapsed={collapsed} />
+        {/* Home — same style as category buttons */}
+        <Link
+          href={homeItem.href}
+          title={collapsed ? homeItem.label : undefined}
+          className={cn(
+            "flex items-center rounded-lg font-medium transition-colors",
+            collapsed
+              ? "justify-center w-9 h-9 mx-auto"
+              : "gap-2.5 px-3 py-2 text-sm",
+            pathname === "/client"
+              ? "bg-[#f5f5f7] text-portal-text"
+              : "text-portal-text-muted hover:text-portal-text hover:bg-[#fafafa]"
+          )}
+        >
+          <Home size={16} strokeWidth={pathname === "/client" ? 2 : 1.5} />
+          {!collapsed && <span className="flex-1 text-left">Home</span>}
+        </Link>
 
         {/* Groups */}
         {groups.map((group) => (
