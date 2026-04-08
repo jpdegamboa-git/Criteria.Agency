@@ -1083,3 +1083,57 @@ export const brandManuals = pgTable("brand_manuals", {
   index("brand_manuals_client_idx").on(table.clientId),
   index("brand_manuals_token_idx").on(table.shareToken),
 ]);
+
+// ── Analytics Engine Tables ──
+
+export const analyticsMetrics = pgTable(
+  "analytics_metrics",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    clientId: uuid("client_id").notNull(),
+    date: varchar("date", { length: 10 }).notNull(),
+    metric: varchar("metric", { length: 100 }).notNull(),
+    value: numeric("value", { precision: 14, scale: 4 }).notNull(),
+    dimensions: jsonb("dimensions").default("{}"),
+    source: varchar("source", { length: 50 }).notNull(),
+    createdAt: timestamp("created_at").defaultNow(),
+  },
+  (table) => [
+    index("idx_analytics_metrics_lookup").on(table.clientId, table.metric, table.date),
+    index("idx_analytics_metrics_source").on(table.clientId, table.source, table.date),
+  ],
+);
+
+export const dashboardConfigs = pgTable("dashboard_configs", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  clientId: uuid("client_id").notNull(),
+  dashboardType: varchar("dashboard_type", { length: 50 }).notNull(),
+  config: jsonb("config").notNull(),
+  isDefault: boolean("is_default").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const generatedReports = pgTable("generated_reports", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  clientId: uuid("client_id").notNull(),
+  type: varchar("type", { length: 30 }).notNull(),
+  periodStart: varchar("period_start", { length: 10 }).notNull(),
+  periodEnd: varchar("period_end", { length: 10 }).notNull(),
+  content: jsonb("content").notNull(),
+  renderedMarkdown: text("rendered_markdown"),
+  deliveredVia: jsonb("delivered_via"),
+  deliveredAt: timestamp("delivered_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const nlQueries = pgTable("nl_queries", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  clientId: uuid("client_id").notNull(),
+  question: text("question").notNull(),
+  answer: text("answer").notNull(),
+  data: jsonb("data"),
+  confidence: numeric("confidence", { precision: 3, scale: 2 }),
+  feedback: varchar("feedback", { length: 20 }),
+  createdAt: timestamp("created_at").defaultNow(),
+});
