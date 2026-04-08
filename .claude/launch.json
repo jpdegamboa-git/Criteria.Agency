@@ -6,7 +6,8 @@
       "runtimeExecutable": "/Users/juanpa/.nvm/versions/node/v22.22.2/bin/node",
       "runtimeArgs": ["node_modules/.bin/tsx", "src/api/server.ts"],
       "env": { "PATH": "/Users/juanpa/.nvm/versions/node/v22.22.2/bin:/usr/local/bin:/usr/bin:/bin" },
-      "port": 3000
+      "port": 3000,
+      "autoPort": false
     },
     {
       "name": "web",

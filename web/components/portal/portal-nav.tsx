@@ -3,11 +3,12 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { Home, Palette, Target, Megaphone, DollarSign } from "lucide-react";
+import { Home, Palette, LayoutGrid, Target, Megaphone, DollarSign } from "lucide-react";
 
 const navItems = [
   { href: "/client", label: "Home", icon: Home },
   { href: "/client/brand", label: "Brand", icon: Palette },
+  { href: "/client/blueprint", label: "Blueprint", icon: LayoutGrid },
   { href: "/client/plan", label: "Plan", icon: Target },
   { href: "/client/campaigns", label: "Campaigns", icon: Megaphone },
   { href: "/client/sales", label: "Sales", icon: DollarSign },
