@@ -140,72 +140,6 @@ export default function ClientHome() {
         )}
       </div>
 
-      {/* ── Brand Score + Trend + Improvement Opportunities (vertical) ── */}
-      <PortalCard>
-        {/* Top: Score + Sparkline */}
-        <div className="flex items-center gap-4 pb-4 border-b border-[#f0f0f0]">
-          <div className="text-center shrink-0">
-            <p className="text-[28px] font-[800] tracking-[-1px] text-portal-text leading-none">
-              {activeBrand?.score || 78}
-            </p>
-            <p className="text-[9px] text-portal-text-dim mt-0.5">Brand Score</p>
-          </div>
-          <div className="shrink-0">
-            <svg width="120" height="36" viewBox="0 0 120 36">
-              <line x1="0" y1="9" x2="120" y2="9" stroke="#f0f0f0" strokeWidth="0.5" />
-              <line x1="0" y1="18" x2="120" y2="18" stroke="#f0f0f0" strokeWidth="0.5" />
-              <line x1="0" y1="27" x2="120" y2="27" stroke="#f0f0f0" strokeWidth="0.5" />
-              <path d="M0,30 L20,26 L40,24 L60,22 L80,16 L100,10 L120,7 L120,36 L0,36 Z"
-                fill="url(#scoreGrad)" opacity="0.15" />
-              <path d="M0,30 L20,26 L40,24 L60,22 L80,16 L100,10 L120,7"
-                fill="none" stroke="#f5a623" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              <circle cx="120" cy="7" r="3" fill="#f5a623" />
-              <defs>
-                <linearGradient id="scoreGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#f5a623" />
-                  <stop offset="100%" stopColor="#f5a623" stopOpacity="0" />
-                </linearGradient>
-              </defs>
-            </svg>
-            <div className="flex justify-between mt-0.5">
-              <span className="text-[8px] text-portal-text-dim">Oct</span>
-              <span className="text-[8px] text-portal-text-dim">Ene</span>
-              <span className="text-[8px] text-portal-text-dim font-semibold text-portal-accent">Abr</span>
-            </div>
-          </div>
-          <div className="flex items-center gap-1 text-[10px] font-semibold text-[#00c2a8]">
-            <TrendingUp size={12} /> +12pts en 6 meses
-          </div>
-        </div>
-
-        {/* Bottom: Improvement opportunities */}
-        <div className="pt-4">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.5px] text-portal-text-muted mb-2">
-            Oportunidades de mejora
-          </p>
-          <div className="space-y-2">
-            {[
-              { text: "Definir guía de tono de voz para redes sociales", impact: "+8", area: "Tono", color: "#7c5cfc" },
-              { text: "Crear variaciones de logo para fondos oscuros", impact: "+5", area: "Visual", color: "#00c2a8" },
-              { text: "Documentar propuesta de valor diferenciada", impact: "+4", area: "Mensaje", color: "#f5a623" },
-              { text: "Unificar estilo fotográfico en todas las plataformas", impact: "+3", area: "Visual", color: "#00c2a8" },
-            ].map((idea) => (
-              <div key={idea.text} className="flex items-center gap-2.5 group">
-                <div className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: idea.color }} />
-                <p className="text-[11px] text-portal-text flex-1">{idea.text}</p>
-                <span className="text-[8px] font-medium px-1.5 py-0.5 rounded" style={{ backgroundColor: idea.color + "12", color: idea.color }}>
-                  {idea.area}
-                </span>
-                <span className="text-[10px] font-bold text-[#00c2a8]">{idea.impact}</span>
-                <span className="text-[10px] text-portal-accent opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                  Aplicar →
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </PortalCard>
-
       {/* ── Quick stats (compact inline instead of 4 big cards) ── */}
       <div className="flex items-center gap-6">
         {mockHomeKPIs.map((kpi) => (
@@ -223,7 +157,73 @@ export default function ClientHome() {
 
       {/* ── Business Model / Revenue Streams ── */}
       <div className="grid grid-cols-3 gap-4">
-        <div className="col-span-2">
+        <div className="col-span-2 space-y-4">
+          {/* Brand Score + Opportunities */}
+          <PortalCard>
+            {/* Top: Score + Sparkline */}
+            <div className="flex items-center gap-4 pb-4 border-b border-[#f0f0f0]">
+              <div className="text-center shrink-0">
+                <p className="text-[28px] font-[800] tracking-[-1px] text-portal-text leading-none">
+                  {activeBrand?.score || 78}
+                </p>
+                <p className="text-[9px] text-portal-text-dim mt-0.5">Brand Score</p>
+              </div>
+              <div className="shrink-0">
+                <svg width="120" height="36" viewBox="0 0 120 36">
+                  <line x1="0" y1="9" x2="120" y2="9" stroke="#f0f0f0" strokeWidth="0.5" />
+                  <line x1="0" y1="18" x2="120" y2="18" stroke="#f0f0f0" strokeWidth="0.5" />
+                  <line x1="0" y1="27" x2="120" y2="27" stroke="#f0f0f0" strokeWidth="0.5" />
+                  <path d="M0,30 L20,26 L40,24 L60,22 L80,16 L100,10 L120,7 L120,36 L0,36 Z"
+                    fill="url(#scoreGrad)" opacity="0.15" />
+                  <path d="M0,30 L20,26 L40,24 L60,22 L80,16 L100,10 L120,7"
+                    fill="none" stroke="#f5a623" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  <circle cx="120" cy="7" r="3" fill="#f5a623" />
+                  <defs>
+                    <linearGradient id="scoreGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#f5a623" />
+                      <stop offset="100%" stopColor="#f5a623" stopOpacity="0" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+                <div className="flex justify-between mt-0.5">
+                  <span className="text-[8px] text-portal-text-dim">Oct</span>
+                  <span className="text-[8px] text-portal-text-dim">Ene</span>
+                  <span className="text-[8px] text-portal-text-dim font-semibold text-portal-accent">Abr</span>
+                </div>
+              </div>
+              <div className="flex items-center gap-1 text-[10px] font-semibold text-[#00c2a8]">
+                <TrendingUp size={12} /> +12pts en 6 meses
+              </div>
+            </div>
+            {/* Bottom: Improvement opportunities */}
+            <div className="pt-3">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.5px] text-portal-text-muted mb-2">
+                Oportunidades de mejora
+              </p>
+              <div className="space-y-1.5">
+                {[
+                  { text: "Definir guía de tono de voz para redes sociales", impact: "+8", area: "Tono", color: "#7c5cfc" },
+                  { text: "Crear variaciones de logo para fondos oscuros", impact: "+5", area: "Visual", color: "#00c2a8" },
+                  { text: "Documentar propuesta de valor diferenciada", impact: "+4", area: "Mensaje", color: "#f5a623" },
+                  { text: "Unificar estilo fotográfico en todas las plataformas", impact: "+3", area: "Visual", color: "#00c2a8" },
+                ].map((idea) => (
+                  <div key={idea.text} className="flex items-center gap-2.5 group">
+                    <div className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: idea.color }} />
+                    <p className="text-[11px] text-portal-text flex-1">{idea.text}</p>
+                    <span className="text-[8px] font-medium px-1.5 py-0.5 rounded" style={{ backgroundColor: idea.color + "12", color: idea.color }}>
+                      {idea.area}
+                    </span>
+                    <span className="text-[10px] font-bold text-[#00c2a8]">{idea.impact}</span>
+                    <span className="text-[10px] text-portal-accent opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                      Aplicar →
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </PortalCard>
+
+          {/* Revenue Streams */}
           <SectionHeader
             title="Revenue streams"
             action={
