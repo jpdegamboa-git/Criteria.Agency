@@ -507,6 +507,7 @@ export const AGENT_REGISTRY: Record<string, AgentRegistryEntry> = {
   "AN-003": { id: "AN-003", name: "Dashboard Builder", skillFile: "agents/AN-003_dashboard_builder.md", team: 33, level: "sub", steps: ["an_visualize"] as any, gates: [], autonomy: 80 },
   "AN-004": { id: "AN-004", name: "Report Generator", skillFile: "agents/AN-004_report_generator.md", team: 33, level: "sub", steps: ["an_visualize"] as any, gates: [], autonomy: 80 },
   "AN-005": { id: "AN-005", name: "NL Query Agent", skillFile: "agents/AN-005_nl_query_agent.md", team: 33, level: "sub", steps: ["an_analyze"] as any, gates: [], autonomy: 75 },
+  "AN-006": { id: "AN-006", name: "Insight Detector", skillFile: "agents/AN-006_insight_detector.md", team: 33, level: "sub", steps: ["an_detect"] as any, gates: [], autonomy: 85 },
   // ── Financial Motor (evolves XA-001) ──
   "FN-L": { id: "FN-L", name: "Financial Director", skillFile: "agents/FN-L_financial_director.md", team: 34, level: "leader", steps: ["fn_request", "fn_deliver"] as any, gates: ["fn-g1"] as any, autonomy: 75 },
   "FN-001": { id: "FN-001", name: "Budget Allocator", skillFile: "agents/FN-001_budget_allocator.md", team: 34, level: "sub", steps: ["fn_budget"] as any, gates: [], autonomy: 80 },
