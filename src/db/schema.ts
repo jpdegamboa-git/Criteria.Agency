@@ -66,6 +66,8 @@ export const projectStatusEnum = pgEnum("project_status", [
   // Positioning Engine
   "po_perception_audit", "po_gap_analysis", "po_positioning_definition", "po_validation",
   "po_current_audit", "po_target_definition", "po_transition_plan", "po_phase_design", "po_execution_monitoring",
+  // Budget Engine
+  "bu_allocation", "bu_spend_tracking", "bu_vendor_validation", "bu_roi_calculation",
   // Shared
   "delivered", "paused",
 ]);
@@ -95,6 +97,7 @@ export const gateTypeEnum = pgEnum("gate_type", [
   "fn-g1",
   "sec-g1",
   "po-g1", "po-g2",
+  "bu-g1",
 ]);
 
 export const gateDecisionEnum = pgEnum("gate_decision", ["pass", "fail"]);
@@ -1137,3 +1140,86 @@ export const nlQueries = pgTable("nl_queries", {
   feedback: varchar("feedback", { length: 20 }),
   createdAt: timestamp("created_at").defaultNow(),
 });
+
+// ── Budget Engine ──
+
+export const marketingBudgets = pgTable("marketing_budgets", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  clientId: uuid("client_id").references(() => clients.id).notNull(),
+  periodStart: timestamp("period_start").notNull(),
+  periodEnd: timestamp("period_end").notNull(),
+  totalBudget: numeric("total_budget", { precision: 12, scale: 2 }).notNull(),
+  currency: varchar("currency", { length: 3 }).default("USD").notNull(),
+  strategy: varchar("strategy", { length: 20 }).default("balanced").notNull(),
+  allocations: jsonb("allocations").default([]),
+  constraints: jsonb("constraints").default({}),
+  status: varchar("status", { length: 20 }).default("draft").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+}, (table) => [
+  index("idx_marketing_budgets_client").on(table.clientId),
+  index("idx_marketing_budgets_period").on(table.clientId, table.periodStart, table.periodEnd),
+]);
+
+export const campaignSpend = pgTable("campaign_spend", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  clientId: uuid("client_id").references(() => clients.id).notNull(),
+  budgetId: uuid("budget_id").references(() => marketingBudgets.id),
+  campaignName: varchar("campaign_name", { length: 255 }).notNull(),
+  channel: varchar("channel", { length: 50 }).notNull(),
+  date: timestamp("date").notNull(),
+  amount: numeric("amount", { precision: 10, scale: 2 }).notNull(),
+  currency: varchar("currency", { length: 3 }).default("USD").notNull(),
+  source: varchar("source", { length: 50 }).notNull(),
+  metadata: jsonb("metadata").default({}),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+}, (table) => [
+  index("idx_campaign_spend_lookup").on(table.clientId, table.budgetId, table.date),
+  index("idx_campaign_spend_channel").on(table.clientId, table.channel, table.date),
+]);
+
+export const clientVendors = pgTable("client_vendors", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  clientId: uuid("client_id").references(() => clients.id).notNull(),
+  name: varchar("name", { length: 255 }).notNull(),
+  category: varchar("category", { length: 50 }).notNull(),
+  contactInfo: jsonb("contact_info").default({}),
+  score: jsonb("score"),
+  notes: text("notes"),
+  status: varchar("status", { length: 20 }).default("active").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+}, (table) => [
+  index("idx_client_vendors_client").on(table.clientId),
+  index("idx_client_vendors_category").on(table.clientId, table.category),
+]);
+
+export const vendorQuotations = pgTable("vendor_quotations", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  vendorId: uuid("vendor_id").references(() => clientVendors.id).notNull(),
+  clientId: uuid("client_id").references(() => clients.id).notNull(),
+  serviceDescription: text("service_description").notNull(),
+  quotedPrice: numeric("quoted_price", { precision: 10, scale: 2 }).notNull(),
+  marketRate: jsonb("market_rate"),
+  verdict: varchar("verdict", { length: 20 }),
+  status: varchar("status", { length: 20 }).default("pending").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+}, (table) => [
+  index("idx_vendor_quotations_vendor").on(table.vendorId),
+  index("idx_vendor_quotations_client").on(table.clientId),
+]);
+
+export const campaignPnl = pgTable("campaign_pnl", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  clientId: uuid("client_id").references(() => clients.id).notNull(),
+  campaignName: varchar("campaign_name", { length: 255 }).notNull(),
+  periodStart: timestamp("period_start").notNull(),
+  periodEnd: timestamp("period_end").notNull(),
+  revenue: jsonb("revenue").default({}),
+  costs: jsonb("costs").default({}),
+  metrics: jsonb("metrics").default({}),
+  generatedAt: timestamp("generated_at").defaultNow().notNull(),
+}, (table) => [
+  index("idx_campaign_pnl_client").on(table.clientId),
+  index("idx_campaign_pnl_period").on(table.clientId, table.periodStart),
+]);
