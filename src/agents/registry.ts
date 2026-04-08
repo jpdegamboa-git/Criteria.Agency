@@ -508,6 +508,12 @@ export const AGENT_REGISTRY: Record<string, AgentRegistryEntry> = {
   "AN-004": { id: "AN-004", name: "Report Generator", skillFile: "agents/AN-004_report_generator.md", team: 33, level: "sub", steps: ["an_visualize"] as any, gates: [], autonomy: 80 },
   "AN-005": { id: "AN-005", name: "NL Query Agent", skillFile: "agents/AN-005_nl_query_agent.md", team: 33, level: "sub", steps: ["an_analyze"] as any, gates: [], autonomy: 75 },
   "AN-006": { id: "AN-006", name: "Insight Detector", skillFile: "agents/AN-006_insight_detector.md", team: 33, level: "sub", steps: ["an_detect"] as any, gates: [], autonomy: 85 },
+  // ── Budget Engine (Team 36) ──
+  "BU-L": { id: "BU-L", name: "Budget Director", skillFile: "agents/BU-L_budget_director.md", team: 36, level: "leader", steps: ["bu_allocation", "bu_roi_calculation"] as any, gates: ["bu-g1"] as any, autonomy: 70 },
+  "BU-001": { id: "BU-001", name: "Budget Allocator", skillFile: "agents/BU-001_budget_allocator.md", team: 36, level: "sub", steps: ["bu_allocation"] as any, gates: [], autonomy: 80 },
+  "BU-002": { id: "BU-002", name: "Spend Monitor", skillFile: "agents/BU-002_spend_monitor.md", team: 36, level: "sub", steps: ["bu_spend_tracking"] as any, gates: [], autonomy: 90 },
+  "BU-003": { id: "BU-003", name: "Vendor Analyst", skillFile: "agents/BU-003_vendor_analyst.md", team: 36, level: "sub", steps: ["bu_vendor_validation"] as any, gates: [], autonomy: 85 },
+  "BU-004": { id: "BU-004", name: "ROI Analyst", skillFile: "agents/BU-004_roi_analyst.md", team: 36, level: "sub", steps: ["bu_roi_calculation"] as any, gates: [], autonomy: 85 },
   // ── Financial Motor (evolves XA-001) ──
   "FN-L": { id: "FN-L", name: "Financial Director", skillFile: "agents/FN-L_financial_director.md", team: 34, level: "leader", steps: ["fn_request", "fn_deliver"] as any, gates: ["fn-g1"] as any, autonomy: 75 },
   "FN-001": { id: "FN-001", name: "Budget Allocator", skillFile: "agents/FN-001_budget_allocator.md", team: 34, level: "sub", steps: ["fn_budget"] as any, gates: [], autonomy: 80 },
