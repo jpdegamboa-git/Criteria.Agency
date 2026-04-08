@@ -532,6 +532,62 @@ export const collectMetricsSchema = z.object({
   }),
 });
 
+// ── Budget Engine ──
+
+export const createBudgetSchema = z.object({
+  totalBudget: z.number().positive(),
+  currency: z.string().length(3).default("USD"),
+  periodStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  periodEnd: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  strategy: z.enum(["growth", "efficiency", "balanced"]).default("balanced"),
+  constraints: z.object({
+    minPerChannel: z.number().min(0).default(0),
+    maxPerChannel: z.number().positive().optional(),
+    fixedAllocations: z.array(z.object({
+      channel: z.string(),
+      amount: z.number().positive(),
+      reason: z.string(),
+    })).default([]),
+  }).optional(),
+});
+
+export const updateBudgetSchema = z.object({
+  totalBudget: z.number().positive().optional(),
+  strategy: z.enum(["growth", "efficiency", "balanced"]).optional(),
+  status: z.enum(["draft", "active", "closed"]).optional(),
+});
+
+export const spendEntrySchema = z.object({
+  campaignName: z.string().min(1),
+  channel: z.string().min(1),
+  amount: z.number().positive(),
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  source: z.enum(["meta_ads", "google_ads", "manual", "vendor_invoice"]),
+  metadata: z.record(z.unknown()).optional(),
+});
+
+export const createVendorSchema = z.object({
+  name: z.string().min(1),
+  category: z.enum(["media", "print", "events", "freelance", "influencer"]),
+  contactInfo: z.object({
+    email: z.string().email().optional(),
+    phone: z.string().optional(),
+    whatsapp: z.string().optional(),
+    website: z.string().url().optional(),
+  }).optional(),
+});
+
+export const vendorQuotationSchema = z.object({
+  serviceDescription: z.string().min(1),
+  quotedPrice: z.number().positive(),
+  region: z.string().optional(),
+});
+
+export const generatePnlSchema = z.object({
+  periodStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  periodEnd: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+});
+
 // ── Helper: parse with nice error response ──
 
 export function parseBody<T>(schema: z.ZodType<T>, body: unknown): { success: true; data: T } | { success: false; error: string } {
