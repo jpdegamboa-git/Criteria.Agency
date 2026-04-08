@@ -319,6 +319,60 @@ export const brandOverrideSchema = z.object({
   feedback: z.string().min(1).max(5000),
 });
 
+// ── Security: Autonomy ──
+
+export const upsertAutonomyConfigSchema = z.object({
+  globalLevel: z.number().int().min(1).max(5).optional(),
+  overrides: z.array(z.object({
+    scope: z.object({
+      motor: z.string().max(50).optional(),
+      actionType: z.string().max(50).optional(),
+      budgetThreshold: z.number().positive().optional(),
+    }),
+    level: z.number().int().min(1).max(5),
+    reason: z.string().min(1).max(500),
+  })).optional(),
+  escalation: z.object({
+    autoEscalateAfter: z.number().int().min(1).max(168),
+    escalateTo: z.array(z.string().email()),
+    fallbackAction: z.enum(["block", "approve_with_flag"]),
+  }).optional(),
+  schedule: z.object({
+    businessHours: z.object({
+      start: z.string().regex(/^\d{2}:\d{2}$/),
+      end: z.string().regex(/^\d{2}:\d{2}$/),
+      timezone: z.string().min(1).max(50),
+    }),
+    afterHoursLevel: z.number().int().min(1).max(5),
+  }).optional(),
+});
+
+// ── Security: Gate Config ──
+
+export const upsertGateConfigSchema = z.object({
+  gates: z.array(z.object({
+    gateId: z.string().min(1).max(20),
+    type: z.enum(["ai", "human", "hybrid"]),
+    hybridThreshold: z.object({
+      autoPass: z.number().int().min(0).max(100),
+      autoFail: z.number().int().min(0).max(100),
+    }).optional(),
+    evaluators: z.array(z.string()).default([]),
+    maxIterations: z.number().int().min(1).max(10).default(6),
+    escalation: z.object({
+      afterIterations: z.number().int().min(1).max(10),
+      escalateTo: z.string().min(1).max(100),
+    }),
+    required: z.boolean().default(true),
+  })),
+});
+
+// ── Security: Isolation Audit ──
+
+export const runIsolationAuditSchema = z.object({
+  clientId: z.string().uuid(),
+});
+
 // ── Helper: parse with nice error response ──
 
 export function parseBody<T>(schema: z.ZodType<T>, body: unknown): { success: true; data: T } | { success: false; error: string } {
