@@ -68,6 +68,8 @@ export const projectStatusEnum = pgEnum("project_status", [
   "po_current_audit", "po_target_definition", "po_transition_plan", "po_phase_design", "po_execution_monitoring",
   // Budget Engine
   "bu_allocation", "bu_spend_tracking", "bu_vendor_validation", "bu_roi_calculation",
+  // Scale Engine
+  "sk_decompose", "sk_dispatch", "sk_monitor", "sk_consolidate",
   // Shared
   "delivered", "paused",
 ]);
@@ -98,6 +100,7 @@ export const gateTypeEnum = pgEnum("gate_type", [
   "sec-g1",
   "po-g1", "po-g2",
   "bu-g1",
+  "sk-g1",
 ]);
 
 export const gateDecisionEnum = pgEnum("gate_decision", ["pass", "fail"]);
@@ -1223,3 +1226,77 @@ export const campaignPnl = pgTable("campaign_pnl", {
   index("idx_campaign_pnl_client").on(table.clientId),
   index("idx_campaign_pnl_period").on(table.clientId, table.periodStart),
 ]);
+
+// ── Scale Engine tables ──
+
+export const campaigns = pgTable("campaigns", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  clientId: text("client_id").notNull().references(() => user.id),
+  name: varchar("name", { length: 255 }).notNull(),
+  briefProjectId: uuid("brief_project_id").references(() => projects.id),
+  brandDnaProjectId: uuid("brand_dna_project_id").references(() => projects.id),
+  status: varchar("status", { length: 30 }).default("draft").notNull(),
+  sharedContext: jsonb("shared_context").notNull().$type<{
+    campaignMessage: string;
+    visualDirection: string;
+    toneGuidelines: string;
+    targetAudience: string;
+    callToAction: string;
+  }>(),
+  budget: jsonb("budget").$type<{
+    total: number;
+    currency: string;
+    allocated: Record<string, number>;
+    spent: Record<string, number>;
+  }>(),
+  subProjects: jsonb("sub_projects").default([]).$type<Array<{
+    projectId: string;
+    motor: string;
+    channel: string;
+    status: string;
+    priority: number;
+    deliverables: string[];
+  }>>(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const assetRegistry = pgTable("asset_registry", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  artifactId: uuid("artifact_id").notNull().references(() => artifacts.id),
+  clientId: text("client_id").notNull().references(() => user.id),
+  type: varchar("type", { length: 30 }).notNull(),
+  tags: jsonb("tags").default([]).$type<string[]>(),
+  description: text("description"),
+  originalContext: jsonb("original_context").notNull().$type<{
+    projectId: string;
+    campaign: string;
+    channel: string;
+    step: string;
+  }>(),
+  performance: jsonb("performance").default({ timesUsed: 0, channels: [], engagement: null }).$type<{
+    timesUsed: number;
+    channels: string[];
+    engagement: number | null;
+  }>(),
+  adaptations: jsonb("adaptations").default([]).$type<Array<{
+    assetId: string;
+    channel: string;
+    format: string;
+  }>>(),
+  expiresAt: timestamp("expires_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  lastUsedAt: timestamp("last_used_at"),
+}, (table) => [
+  index("idx_asset_registry_client").on(table.clientId),
+]);
+
+export const agentCapacityLog = pgTable("agent_capacity_log", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  timestamp: timestamp("timestamp").defaultNow().notNull(),
+  concurrentAgents: integer("concurrent_agents").notNull(),
+  queueDepth: integer("queue_depth").notNull(),
+  agentsByStatus: jsonb("agents_by_status").$type<Record<string, number>>(),
+  avgResponseTimeMs: integer("avg_response_time_ms"),
+  errorCount: integer("error_count").default(0),
+});
