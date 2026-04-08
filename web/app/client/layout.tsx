@@ -3,7 +3,7 @@
 import { useSession } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { PortalNav } from "@/components/portal/portal-nav";
+import { PortalSidebar } from "@/components/portal/portal-sidebar";
 import { NotificationsDropdown } from "@/components/portal/notifications-dropdown";
 import { AvatarDropdown } from "@/components/portal/avatar-dropdown";
 import { CopilotFAB } from "@/components/portal/copilot-fab";
@@ -34,7 +34,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   const userEmail = session?.user?.email || "juanpa@criteriafilms.com";
 
   return (
-    <div className="min-h-screen relative" style={{ backgroundColor: "#f5f5f7" }}>
+    <div className="min-h-screen relative flex" style={{ backgroundColor: "#f5f5f7" }}>
       {/* Dot pattern — sits above the page bg, below content */}
       <div
         className="fixed inset-0 pointer-events-none"
@@ -45,24 +45,28 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         }}
         aria-hidden="true"
       />
-      <header className="relative z-10 bg-white/80 backdrop-blur-sm border-b border-[#eee] sticky top-0">
-        <div className="max-w-[1140px] mx-auto px-8 h-14 flex items-center justify-between">
-          <div className="flex items-center gap-6">
-            <span className="text-base font-bold text-portal-text tracking-tight">
-              criteria<span className="text-portal-accent">.</span>agency
-            </span>
-            <PortalNav />
+
+      {/* Sidebar */}
+      <div className="relative z-10">
+        <PortalSidebar />
+      </div>
+
+      {/* Main area */}
+      <div className="flex-1 relative z-[1] min-h-screen flex flex-col">
+        <header className="bg-white/80 backdrop-blur-sm border-b border-[#eee] sticky top-0 z-10">
+          <div className="max-w-[1140px] mx-auto px-8 h-14 flex items-center justify-end">
+            <div className="flex items-center gap-2">
+              <button className="p-2 rounded-lg hover:bg-black/5 transition-colors">
+                <Sun size={16} className="text-portal-text-muted" />
+              </button>
+              <NotificationsDropdown />
+              <AvatarDropdown name={userName} email={userEmail} />
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <button className="p-2 rounded-lg hover:bg-black/5 transition-colors">
-              <Sun size={16} className="text-portal-text-muted" />
-            </button>
-            <NotificationsDropdown />
-            <AvatarDropdown name={userName} email={userEmail} />
-          </div>
-        </div>
-      </header>
-      <main className="relative z-[1] max-w-[1140px] mx-auto px-8 py-7">{children}</main>
+        </header>
+        <main className="max-w-[1140px] mx-auto px-8 py-7 flex-1">{children}</main>
+      </div>
+
       <CopilotFAB />
     </div>
   );
