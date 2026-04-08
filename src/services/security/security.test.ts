@@ -12,11 +12,14 @@ vi.mock("../../db/index.js", () => ({
     update: vi.fn().mockReturnThis(),
     set: vi.fn().mockReturnThis(),
     execute: vi.fn().mockResolvedValue({ rows: [{ count: 0 }] }),
+    innerJoin: vi.fn().mockReturnThis(),
+    orderBy: vi.fn().mockReturnThis(),
+    offset: vi.fn().mockResolvedValue([]),
   },
   schema: {
     autonomyConfigs: { clientId: "client_id" },
     approvalRequests: {},
-    auditLog: {},
+    auditLog: { clientId: "client_id", action: "action", actorType: "actor_type", resourceType: "resource_type", timestamp: "timestamp" },
     projects: { id: "id", clientId: "client_id" },
     gateReviews: { projectId: "project_id" },
   },
@@ -238,5 +241,71 @@ describe("DataProtector", () => {
       expect(result.checks.length).toBeGreaterThan(0);
       expect(result.checks.every((c) => c.status === "pass")).toBe(true);
     });
+  });
+});
+
+// ── Gate Manager Tests ──
+
+describe("GateManager", () => {
+  describe("evaluateGate", () => {
+    it("auto-passes when score >= autoPass threshold", async () => {
+      const { evaluateGate } = await import("./gate-manager.js");
+      const result = evaluateGate(98);
+      expect(result.verdict).toBe("pass");
+    });
+
+    it("auto-fails when score <= autoFail threshold", async () => {
+      const { evaluateGate } = await import("./gate-manager.js");
+      const result = evaluateGate(35);
+      expect(result.verdict).toBe("fail");
+    });
+
+    it("sends to human review when score is borderline", async () => {
+      const { evaluateGate } = await import("./gate-manager.js");
+      const result = evaluateGate(70);
+      expect(result.verdict).toBe("needs_human_review");
+    });
+
+    it("uses custom thresholds when provided", async () => {
+      const { evaluateGate } = await import("./gate-manager.js");
+      const result = evaluateGate(80, { autoPass: 75, autoFail: 50 });
+      expect(result.verdict).toBe("pass");
+    });
+  });
+
+  describe("resolveGateType", () => {
+    it("returns hybrid by default when no config exists", async () => {
+      const { resolveGateType } = await import("./gate-manager.js");
+      const type = await resolveGateType("client-1", "video-production", "G1");
+      expect(type).toBe("hybrid");
+    });
+  });
+
+  describe("getMotorGateConfig", () => {
+    it("returns default config with one hybrid gate", async () => {
+      const { getMotorGateConfig } = await import("./gate-manager.js");
+      const config = await getMotorGateConfig("client-1", "video-production");
+      expect(config.gates).toHaveLength(1);
+      expect(config.gates[0].type).toBe("hybrid");
+      expect(config.gates[0].gateId).toBe("G1");
+    });
+  });
+});
+
+// ── Audit Service Tests ──
+
+describe("AuditService", () => {
+  it("writes an audit entry", async () => {
+    const { writeAuditEntry } = await import("./audit-service.js");
+    const entry = await writeAuditEntry({
+      clientId: "client-1",
+      actor: "BG-001",
+      actorType: "agent",
+      action: "brand.validate.execute",
+      resourceType: "brand_validation",
+      resourceId: "val-1",
+      details: { score: 85 },
+    });
+    expect(entry.id).toBe("test-id");
   });
 });
