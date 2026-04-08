@@ -25,6 +25,7 @@ import {
   BookUser,
   HardDrive,
   FileBarChart,
+  Clapperboard,
 } from "lucide-react";
 
 interface NavItem {
@@ -77,6 +78,7 @@ const groups: NavGroup[] = [
     icon: Wrench,
     color: "#ff6b6b",
     items: [
+      { href: "/client/studio", label: "Studio", icon: Clapperboard },
       { href: "/client/marketplace", label: "Marketplace", icon: ShoppingBag },
       { href: "/client/directorio", label: "Directorio", icon: BookUser },
       { href: "/client/drive", label: "Drive", icon: HardDrive },
