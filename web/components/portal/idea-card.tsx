@@ -1,0 +1,26 @@
+import { Clock, ArrowRight } from "lucide-react";
+import type { CampaignIdea } from "@/lib/portal-types";
+
+export function IdeaCard({ title, description, tags, urgent, urgencyDays }: CampaignIdea) {
+  return (
+    <div className="bg-white rounded-2xl p-5 portal-shadow border border-portal-border hover:portal-shadow-hover transition-shadow">
+      <div className="flex items-start justify-between mb-2">
+        <h3 className="text-[13px] font-semibold text-portal-text">{title}</h3>
+        {urgent && urgencyDays && (
+          <span className="flex items-center gap-1 text-[10px] font-medium text-[#e09600] bg-[#fff8eb] px-2 py-0.5 rounded-full">
+            <Clock size={10} />{urgencyDays} días
+          </span>
+        )}
+      </div>
+      <p className="text-[12px] text-portal-text-secondary mb-3 leading-relaxed">{description}</p>
+      <div className="flex items-center gap-2 mb-3">
+        <span className="text-[9px] font-medium bg-gray-100 text-portal-text-muted px-2 py-0.5 rounded">{tags.type}</span>
+        <span className="text-[9px] font-medium bg-gray-100 text-portal-text-muted px-2 py-0.5 rounded">{tags.channel}</span>
+        <span className="text-[9px] font-medium bg-gray-100 text-portal-text-muted px-2 py-0.5 rounded">{tags.time}</span>
+      </div>
+      <button className="flex items-center gap-1 text-[11px] font-semibold text-portal-accent hover:underline">
+        Crear <ArrowRight size={12} />
+      </button>
+    </div>
+  );
+}
