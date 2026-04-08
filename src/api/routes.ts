@@ -32,6 +32,8 @@ import { positioningRoutes } from "./positioning-routes.js";
 import { analyticsRoutes } from "./analytics-routes.js";
 import { budgetRoutes } from "./budget-routes.js";
 import { campaignRoutes } from "./campaign-routes.js";
+import { assetRoutes } from "./asset-routes.js";
+import { capacityRoutes } from "./capacity-routes.js";
 import { auth } from "../auth.js";
 import { config } from "../shared/config.js";
 
@@ -119,6 +121,9 @@ app.use("/api/positioning/:clientId/*", requireSession, requireTenantMatch);
 app.use("/api/analytics/:clientId/*", requireSession, requireTenantMatch);
 app.use("/api/budget/:clientId/*", requireSession, requireTenantMatch);
 app.use("/api/campaigns/:clientId/*", requireSession, requireTenantMatch);
+app.use("/api/assets/:clientId/*", requireSession, requireTenantMatch);
+app.use("/api/capacity", requireSession, requireAdmin);
+app.use("/api/capacity/*", requireSession, requireAdmin);
 app.use("/api/content/*", requireSession);
 app.use("/api/copilot/*", requireSession);
 app.use("/api/entities/*", requireSession);
@@ -146,6 +151,8 @@ app.route("/", positioningRoutes);
 app.route("/", analyticsRoutes);
 app.route("/", budgetRoutes);
 app.route("/", campaignRoutes);
+app.route("/", assetRoutes);
+app.route("/", capacityRoutes);
 
 // Health
 app.get("/health", (c) => c.json({ status: "ok", version: "0.1.0" }));
