@@ -419,6 +419,111 @@ export default function BrandPage() {
           </div>
         </div>
       </PortalCard>
+      {/* ── Marketplace: Consultores y Workshops ── */}
+      <SectionHeader
+        title="Marketplace de branding"
+        action={
+          <PortalButton variant="secondary" size="sm">Ver todos →</PortalButton>
+        }
+      />
+      <PortalCard>
+        <p className="text-[11px] text-portal-text-muted mb-4">
+          Consultores, workshops y servicios especializados para crear, definir y hacer crecer tu marca.
+        </p>
+        <div className="grid grid-cols-2 gap-3">
+          {[
+            {
+              name: "Workshop: Brand DNA",
+              provider: "criteria.agency",
+              desc: "Sesión guiada para definir propósito, valores, arquetipo y personificación de tu marca.",
+              duration: "4 horas",
+              price: "$350",
+              tag: "Crear",
+              color: "#7c5cfc",
+              badge: "Recomendado",
+            },
+            {
+              name: "Auditoría de marca",
+              provider: "criteria.agency",
+              desc: "Análisis completo de tu identidad visual, verbal y de posicionamiento vs competencia.",
+              duration: "1 semana",
+              price: "$500",
+              tag: "Evaluar",
+              color: "#00c2a8",
+              badge: null,
+            },
+            {
+              name: "Workshop: Tono de voz",
+              provider: "criteria.agency",
+              desc: "Define cómo habla tu marca en cada canal. Incluye guía de estilo y ejemplos.",
+              duration: "2 horas",
+              price: "$200",
+              tag: "Definir",
+              color: "#f5a623",
+              badge: null,
+            },
+            {
+              name: "Diseño de identidad visual",
+              provider: "criteria.agency",
+              desc: "Logo, paleta, tipografía, aplicaciones y manual de marca completo.",
+              duration: "2-3 semanas",
+              price: "$1,200",
+              tag: "Crear",
+              color: "#7c5cfc",
+              badge: null,
+            },
+            {
+              name: "Naming y estrategia verbal",
+              provider: "criteria.agency",
+              desc: "Nombre de marca, tagline, arquitectura de mensajes y storytelling.",
+              duration: "1 semana",
+              price: "$600",
+              tag: "Definir",
+              color: "#f5a623",
+              badge: null,
+            },
+            {
+              name: "Brand Growth Sprint",
+              provider: "criteria.agency",
+              desc: "Plan de 90 días para escalar tu marca: posicionamiento, contenido y campañas.",
+              duration: "3 meses",
+              price: "$2,500",
+              tag: "Crecer",
+              color: "#ff6b6b",
+              badge: "Popular",
+            },
+          ].map((service) => (
+            <div
+              key={service.name}
+              className="flex gap-3 p-4 rounded-xl bg-[#fafafa] hover:-translate-y-0.5 hover:shadow-[0_2px_8px_rgba(0,0,0,0.08)] transition-all cursor-pointer group"
+            >
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-1">
+                  <p className="text-[11px] font-semibold text-portal-text">{service.name}</p>
+                  {service.badge && (
+                    <span className="text-[8px] font-bold text-white bg-[#111] px-1.5 py-0.5 rounded">{service.badge}</span>
+                  )}
+                </div>
+                <p className="text-[10px] text-portal-text-muted mb-2">{service.desc}</p>
+                <div className="flex items-center gap-2">
+                  <span className="text-[8px] font-medium px-1.5 py-0.5 rounded" style={{ backgroundColor: service.color + "12", color: service.color }}>
+                    {service.tag}
+                  </span>
+                  <span className="text-[8px] font-medium bg-[#f0f0f0] text-portal-text-dim px-1.5 py-0.5 rounded">
+                    {service.duration}
+                  </span>
+                </div>
+              </div>
+              <div className="text-right shrink-0 flex flex-col justify-between">
+                <p className="text-sm font-[800] text-portal-text">{service.price}</p>
+                <span className="text-[10px] text-portal-accent opacity-0 group-hover:opacity-100 transition-opacity">
+                  Contratar →
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </PortalCard>
     </div>
   );
 }
