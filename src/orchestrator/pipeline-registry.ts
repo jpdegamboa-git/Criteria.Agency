@@ -447,3 +447,43 @@ PipelineRegistry.register({
     "sec-g1": { afterStep: "sec_scan", evaluators: ["SC-L"], maxIterations: 2, failReturnTo: "sec_scan" },
   },
 });
+
+// ── Positioning Diagnosis Pipeline (C-048) ──
+
+PipelineRegistry.register({
+  type: "positioning-diagnosis",
+  steps: [
+    "po_perception_audit", "po_gap_analysis", "po_positioning_definition", "po_validation", "delivered",
+  ],
+  stepAgents: {
+    po_perception_audit: ["PO-001"],
+    po_gap_analysis: ["PO-L"],
+    po_positioning_definition: ["PO-L", "PO-002"],
+    po_validation: ["PO-L"],
+    delivered: ["PO-L"],
+  },
+  gates: {
+    "po-g1": { afterStep: "po_gap_analysis", evaluators: ["PO-L", "BG-L"], maxIterations: 3, failReturnTo: "po_gap_analysis" },
+    "po-g2": { afterStep: "po_validation", evaluators: ["human"], maxIterations: 1, failReturnTo: "po_validation" },
+  },
+});
+
+// ── Repositioning Pipeline (C-049) ──
+
+PipelineRegistry.register({
+  type: "repositioning",
+  steps: [
+    "po_current_audit", "po_target_definition", "po_transition_plan", "po_phase_design", "delivered",
+  ],
+  stepAgents: {
+    po_current_audit: ["PO-001"],
+    po_target_definition: ["PO-L"],
+    po_transition_plan: ["PO-L", "PO-003"],
+    po_phase_design: ["PO-003"],
+    delivered: ["PO-L"],
+  },
+  gates: {
+    "po-g1": { afterStep: "po_target_definition", evaluators: ["PO-L", "BG-L"], maxIterations: 3, failReturnTo: "po_target_definition" },
+    "po-g2": { afterStep: "po_phase_design", evaluators: ["human"], maxIterations: 1, failReturnTo: "po_phase_design" },
+  },
+});
