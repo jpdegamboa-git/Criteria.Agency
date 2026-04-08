@@ -3,6 +3,8 @@
 > Date: 2026-04-08
 > Status: Design approved, pending implementation plan
 
+> **Navigation superseded:** The top tab bar and route structure described in this spec (sections 2.1 and 2.3) have been replaced by the left sidebar model documented in `docs/superpowers/specs/2026-04-08-navigation-redesign.md`. The new navigation uses 4 groups — Fundamentos, Inteligencia, Ejecución, Tools — with a left sidebar instead of a top nav. Route `/blueprint` is now `/business`; the Plan page's Mercado and Competencia tabs are now top-level sidebar items under Inteligencia. All other page-level content in this spec remains valid.
+
 ---
 
 ## 1. Overview
@@ -32,12 +34,18 @@ The Client Portal is the primary interface for criteria.agency customers. It all
 ```
 /client
   ├── /                    (Home — KPIs, ideas, opportunities, charts, feed)
+  ├── /business            (formerly /blueprint — Business plan, model canvas, objectives)
   ├── /brand               (Identity, guidelines, guardian, positioning)
-  ├── /plan                (Strategy, budget allocator, audiences, markets, opportunities, studies)
+  ├── /productos           (Productos y Servicios)
+  ├── /revenue             (Revenue Streams)
+  ├── /mercado             (formerly Plan > Mercados tab — market analysis, audiences)
+  ├── /competencia         (formerly Plan > Estrategia/Competencia tab — competitor cards)
   ├── /campaigns           (Funnel matrix, calendar gantt, list, campaign detail)
   │   └── /[id]            (Campaign detail — activations, stepper, artifacts)
   ├── /sales               (Pipeline kanban, leads, proposals, attribution)
   └── /setup               (Account, team, billing, integrations — via avatar dropdown)
+
+> Note: /plan route is deprecated. Its content is split across /mercado, /competencia, and /campaigns. /blueprint is renamed /business.
 ```
 
 ### 2.2 Auth
@@ -48,7 +56,7 @@ The Client Portal is the primary interface for criteria.agency customers. It all
 
 ### 2.3 Layout
 
-- **Top nav bar:** 5 tabs (Home, Brand, Plan, Campaigns, Sales)
+- **Left sidebar:** 4 groups — Fundamentos (Business, Brand, Productos y Servicios, Revenue Streams), Inteligencia (Mercado, Competencia), Ejecución (Campaigns, Sales), Tools (Studio, Marketplace, Directorio, Drive, Reportes). Replaces the original top nav bar (Home, Brand, Plan, Campaigns, Sales).
 - **Right side of nav:** Theme toggle (light/dark), Notifications bell (with badge + dropdown), Avatar with dropdown (name, Setup link, sign out)
 - **Copilot:** Floating action button (bottom-right), opens as right-side drawer (~350px)
 - **Background:** Dot pattern texture on light gray (#f5f5f7)

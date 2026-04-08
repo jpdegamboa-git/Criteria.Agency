@@ -114,9 +114,9 @@ This table represents the complete tier structure as motors are activated. At la
 | **Target** | Founder without team | Marketing manager, monthly volume | Multi-market company, full operation |
 | **Video** (launch) | 1 project/month (up to 2 min) | 4 projects/month (up to 5 min) | Unlimited + premium formats (documentary, fiction) |
 | **Brand Builder** (coming soon) | Basic Brand DNA (1 brand) | Complete Brand DNA + revisions | Multiple brands + active Brand Guardian |
-| **Comunicar** (coming soon) | 2 channels, 10 posts/month | All channels, 50 posts/month | Unlimited + managed ads |
-| **Entender** (coming soon) | Basic monthly reports | Full analytics + listeners | Complete intelligence + Opportunity Agent |
-| **Vender** (coming soon) | 50 leads, basic CRM | 500 leads + automations | Unlimited + custom integrations |
+| **Campaigns** (coming soon) | 2 channels, 10 posts/month | All channels, 50 posts/month | Unlimited + managed ads |
+| **Inteligencia** (coming soon) | Basic monthly reports | Full analytics + listeners | Complete intelligence + Opportunity Agent |
+| **Sales** (coming soon) | 50 leads, basic CRM | 500 leads + automations | Unlimited + custom integrations |
 | **Ads (Pauta)** | Not included | Not included (add-on) | Included with budget management |
 | **Support** | Self-service + AI Copilot | Priority + AI Copilot | Dedicated Account Executive |
 | **Price** | **$500/month** | **$2,000/month** | **Custom ($5,000+/month)** |

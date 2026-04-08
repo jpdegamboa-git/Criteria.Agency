@@ -142,7 +142,7 @@
 - [ ] Multi-tenancy + tenant isolation
 - [ ] Event Bus cross-motor (Redis + BullMQ)
 - [ ] Other 23 motors (Brand Builder, Comunicar, etc.)
-- [ ] Full Client Portal (6 Spaces)
+- [ ] Full Client Portal (sidebar nav: Fundamentos, Inteligencia, Ejecución, Tools)
 - [ ] Full Admin Portal (Mission Control)
 - [ ] Conexion BG (real bank API)
 - [ ] Mobile responsive landing page refinement

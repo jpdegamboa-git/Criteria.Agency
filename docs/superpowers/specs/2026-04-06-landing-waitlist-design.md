@@ -10,7 +10,7 @@
 
 The GTM strategy requires a landing page live in Week 1 with: pitch, demo videos, pricing, and waitlist capture. The platform currently has only a Hono backend API — no frontend framework.
 
-This spec adds **Next.js** as the frontend, starting with the landing page. This establishes the foundation for the future Client Portal (6 Spaces) and full public site.
+This spec adds **Next.js** as the frontend, starting with the landing page. This establishes the foundation for the future Client Portal (left sidebar with Fundamentos/Inteligencia/Ejecución/Tools groups) and full public site.
 
 ### Why Next.js Now
 - SSR/SSG for SEO (landing page must rank)

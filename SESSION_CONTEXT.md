@@ -180,7 +180,7 @@ BRIEF → CONCEPT → [G1] → SCRIPT → [G2] → VISUAL_LOOK → STORYBOARD �
 
 | Spec | Lines | Covers |
 |------|-------|--------|
-| `PORTAL_SPECS.md` | ~841 | Admin portal (24 motors, Mission Control, backoffice), Client portal (6 Spaces), Public portal, Alert system, SSE, Design system, Permission matrix |
+| `PORTAL_SPECS.md` | ~841 | Admin portal (24 motors, Mission Control, backoffice), Client portal (sidebar nav — Fundamentos/Inteligencia/Ejecución/Tools), Public portal, Alert system, SSE, Design system, Permission matrix |
 | `docs/superpowers/specs/2026-04-06-marketing-engine-design.md` | ~943 | All 24 motors (taxonomy, pipelines, agents, gates), Shared orchestration framework, Event Bus, Agent communication, Agent tooling, Cross-motor integration, 4-phase rollout |
 | `docs/superpowers/specs/2026-04-06-security-framework-design.md` | ~857 | Threat model, OWASP compliance, infrastructure security, data protection (GDPR baseline), agent security (sandboxing, prompt injection, permissions), secrets management, auth, operational security, compliance matrix, implementation priorities |
 
@@ -210,16 +210,16 @@ Finanzas, Contabilidad, RRHH, Proyectos Internos, Clientes/Usuarios, Analytics I
 
 ## 8. Client Portal — Design Complete
 
-### 6 Spaces (outcome-based navigation)
+### Left Sidebar Navigation (4 groups)
 
-| Space | Purpose |
-|-------|---------|
-| **Crear** | Video, design, web, audio, events, print projects |
-| **Comunicar** | Ads, social media, email, SEO/content |
-| **Entender** | Listeners, analytics, reports, opportunities |
-| **Vender** | Sales/CRM, leads, pipeline |
-| **Mi Marca** | Brand DNA, Brand Guardian, brand consistency |
-| **Cuenta** | Settings, billing, team, integrations |
+| Group | Items |
+|-------|-------|
+| **Fundamentos** | Business, Brand, Productos y Servicios, Revenue Streams |
+| **Inteligencia** | Mercado, Competencia |
+| **Ejecución** | Campaigns, Sales |
+| **Tools** | Studio, Marketplace, Directorio, Drive, Reportes |
+
+> Note: Replaced the original 6 outcome-based Spaces (Crear, Comunicar, Entender, Vender, Mi Marca, Cuenta). "Blueprint" renamed to "Business"; Plan's Mercado and Competencia tabs promoted to top-level Inteligencia items. See DEC-036.
 
 ### Tiered Access
 - Free/Pro: Self-service + AI Copilot
@@ -252,7 +252,7 @@ Finanzas, Contabilidad, RRHH, Proyectos Internos, Clientes/Usuarios, Analytics I
 | Motor lifecycle | 3 modes (Project/Continuous/Hybrid) | Different motors operate fundamentally differently |
 | Configurable autonomy | User chooses per motor | Balance between automation and human control |
 | Agent communication | Hybrid (intra-motor messages + cross-motor Event Bus) | Different communication patterns for different scopes |
-| Client navigation | 6 outcome-based Spaces | Hide 24 motors behind simple goal-oriented UX |
+| Client navigation | Left sidebar with 4 groups (Fundamentos/Inteligencia/Ejecución/Tools) | Replaced 6 outcome-based Spaces — better fit for portal's actual sections (see DEC-036) |
 | Admin navigation | Real structure (motor taxonomy) | Admin needs to see and manage the actual system |
 | Security baseline | GDPR | Strictest standard simplifies multi-jurisdiction compliance |
 | Agent sandboxing | Soft sandbox + critical action gates | Pragmatic security without container-per-agent overhead |

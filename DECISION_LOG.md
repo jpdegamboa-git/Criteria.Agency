@@ -220,7 +220,7 @@ Format per entry: date, context, decision, alternatives considered, impact, stat
 ### DEC-030: Portal specs complete rewrite
 
 - **Context:** PORTAL_SPECS.md was CriteriaFilms-centric (220 lines, video-only). Needed to reflect 24-motor platform.
-- **Decision:** Complete rewrite to 841 lines covering: Admin Portal (Mission Control, 24 motors by category, backoffice modules by role), Client Portal (6 outcome-based Spaces, tiered access), Public Portal (SaaS marketing site + pricing).
+- **Decision:** Complete rewrite to 841 lines covering: Admin Portal (Mission Control, 24 motors by category, backoffice modules by role), Client Portal (sidebar nav with Fundamentos/Inteligencia/Ejecución/Tools, tiered access — originally spec'd as 6 outcome-based Spaces, see DEC-036), Public Portal (SaaS marketing site + pricing).
 - **Impact:** Defines the complete UI/UX spec for all three portals.
 - **Status:** Active.
 
@@ -230,6 +230,14 @@ Format per entry: date, context, decision, alternatives considered, impact, stat
 - **Decision:** 6 Spaces: Crear, Comunicar, Entender, Vender, Mi Marca, Cuenta. Clients navigate by what they want to achieve, not by which motor does it.
 - **Alternatives considered:** Exposing motors directly (rejected — too complex for target audience); category-based (rejected — categories are system-oriented, not outcome-oriented).
 - **Impact:** Client portal UX completely hides the 24-motor structure.
+- **Status:** Superseded by DEC-036.
+
+### DEC-036: Client navigation redesigned as left sidebar with 4 groups
+
+- **Context:** Outcome-based Spaces (DEC-031) were replaced during implementation. The portal grew to include intelligence, marketplace, and file management sections that didn't map cleanly to the original 6 Spaces. Also, "Blueprint" was renamed "Business" and "Plan" was split into discrete sections.
+- **Decision:** Left sidebar with 4 named groups — Fundamentos (Business, Brand, Productos y Servicios, Revenue Streams), Inteligencia (Mercado, Competencia), Ejecución (Campaigns, Sales), Tools (Studio, Marketplace, Directorio, Drive, Reportes). Route `/blueprint` → `/business`. Former Plan tabs (Mercado, Competencia) promoted to top-level sidebar items under Inteligencia; Campaigns remains under Ejecución.
+- **Alternatives considered:** Keeping 6 Spaces (rejected — didn't accommodate new sections cleanly); flat list (rejected — too long without grouping).
+- **Impact:** Client portal sidebar replaces top tab bar. All route references to `/blueprint` and `/plan` are superseded.
 - **Status:** Active.
 
 ### DEC-032: Admin navigation shows real structure
