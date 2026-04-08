@@ -26,8 +26,8 @@ criteria.agency is a platform of 24 specialized motors sharing a common orchestr
             └──────────────┘    └───────────────┘    └─────────────┘
                                         │                    │
                                  ┌──────▼──────┐      ┌─────▼─────┐
-                                 │  6 Spaces   │      │ Real      │
-                                 │ (by outcome)│      │ Structure │
+                                 │  Sidebar    │      │ Real      │
+                                 │ (role groups│      │ Structure │
                                  └─────────────┘      │ (motors,  │
                                                       │  teams,   │
                                                       │  agents)  │
@@ -135,15 +135,15 @@ Visitor → Landing → Engines/Pricing → Signup (Free tier)
 - Portfolio media on CDN (Bunny Stream / R2)
 - Contact form feeds Sales/CRM motor directly
 
-### Pricing structure (by Space)
+### Pricing structure (by capability group)
 
-| Space | Free | Pro | Enterprise |
+| Group | Free | Pro | Enterprise |
 |-------|------|-----|-----------|
-| **Crear** | 1 project/month, watermark | Unlimited projects, no watermark | Priority processing, dedicated agents |
-| **Comunicar** | 2 channels, 10 posts/month | All channels, unlimited posts | Custom channels, advanced optimization |
-| **Entender** | Basic reports | Full analytics, all listeners | Custom dashboards, API access |
-| **Vender** | 50 leads | Unlimited leads, automation | Custom scoring, API integrations |
-| **Mi Marca** | 1 brand | 3 brands | Unlimited brands, white-label |
+| **Fundamentos** | Business + Brand (read-only after setup) | Full edit, all tabs | Unlimited brands, white-label |
+| **Ejecución — Campaigns** | 2 channels, 10 posts/month | All channels, unlimited campaigns | Custom channels, advanced optimization |
+| **Ejecución — Sales** | 50 leads | Unlimited leads, automation | Custom scoring, API integrations |
+| **Inteligencia** | Basic reports | Full analytics, all listeners | Custom dashboards, API access |
+| **Studio** | 1 project/month, watermark | Unlimited projects, no watermark | Priority processing, dedicated agents |
 
 ---
 
@@ -161,75 +161,94 @@ Visitor → Landing → Engines/Pricing → Signup (Free tier)
 
 ### 3.1 Layout
 
-- **Sidebar:** 6 Spaces (icons + labels), collapsible
+- **Sidebar:** Groups (Fundamentos, Inteligencia, Ejecución) + Tools pinned at bottom, collapsible
 - **Header:** criteria.agency logo + org switcher dropdown (if user belongs to 2+ orgs) + notifications bell + global search (Cmd+K) + user avatar + plan badge
 - **Theme:** Light mode default, dark mode toggle
 - **Responsive:** Optimized for 768px+ (tablet and desktop). Mobile: simplified view with bottom navigation.
 
-### 3.2 The 6 Spaces
+### 3.2 Sidebar Navigation
 
-The client navigates by **outcome**, not by motor. Each Space hides 2-6 motors behind a simple, goal-oriented interface.
+The client sidebar is organized into 3 role-based groups plus pinned Tools. Each group provides a mental model for what the client is doing.
 
-#### Space 1: Crear
+#### Group: Fundamentos — who you are, what you sell, how you make money
 
-**What the client sees:** All creative projects — videos, designs, websites, audio, events, printed pieces.
+| Item | Route | Tabs | Purpose |
+|------|-------|------|---------|
+| **Business** | /client/business-model | Propuesta de Valor, Nichos, Productos y Servicios, Canales | Business logic, BMC, value proposition canvas |
+| **Brand** | /client/brand | DNA, Identidad, Voz, Guardian, Marketplace | Brand identity, tone, guardian, services marketplace |
+| **Productos y Servicios** | /client/productos | — | Editable product/service catalog |
+| **Revenue Streams** | /client/revenue | — | Revenue sources, amounts, progress |
 
-**Motors behind it:** Video Production, Graphic Design, Web, Audio, Events, Print Production
+#### Group: Inteligencia — what's happening outside your business
 
-| Screen | Purpose |
-|--------|---------|
-| **Projects** | List of all creation projects with status, type (video/design/web/audio/event/print), progress bar, delivery date |
-| **New Project** | Wizard: select type → guided brief (conversational, powered by Creative Director agent) → file upload → budget estimate → confirmation |
-| **Project Detail** | Progress visualization (pipeline steps per motor type), current step highlighted, deliverables by phase, comment threads |
-| **Deliverable Review** | Full-screen viewer (video player / image viewer / document viewer / audio player), commenting interface with inline annotations |
-| **File Upload** | Drag-and-drop, 15-day retention with countdown, accepted formats per project type |
+| Item | Route | Tabs | Purpose |
+|------|-------|------|---------|
+| **Mercado** | /client/mercado | Industria, Tendencias, Oportunidades, Estudios, Audiencias | Full market intelligence |
+| **Competencia** | /client/competencia | Landscape, Monitor | Competitive landscape and real-time monitoring |
 
-**Brief creation flow (guided by AI):**
+#### Group: Ejecución — what you're doing about it
+
+| Item | Route | Tabs | Purpose |
+|------|-------|------|---------|
+| **Campaigns** | /client/campaigns | Estrategia, Budget, Matrix, Calendar, Lista | Plan, create, distribute, and monitor campaigns |
+| **Sales** | /client/sales | Pipeline, Leads, Proposals | Manage sales pipeline and leads |
+
+#### Tools (pinned bottom)
+
+| Tool | Purpose |
+|------|---------|
+| **Studio** | Content creation without a campaign |
+| **Marketplace** | Browse and contract providers |
+| **Directorio** | Media and partner directory |
+| **Drive** | Brand asset library and uploaded files |
+| **Reportes** | On-demand and scheduled reports |
+
+#### Cuenta (avatar dropdown)
+
+Setup: subscription, billing, team, integrations, motor settings, help.
+
+---
+
+#### Brand page — detailed tab content
+
+**DNA tab:** Full brand document — purpose, vision, values, archetype, persona, beliefs. Versioned (stored in `brandDna` table). Editing creates a new draft version; activating archives previous. Edits trigger Brand Guardian re-validation.
+
+**Identidad tab:** Colors (hex/RGB), typography, logo versions and applications, imagery style, do's and don'ts. Asset download.
+
+**Voz tab:** Tone of voice, vocabulary, key phrases, messaging framework, what the brand says and doesn't say.
+
+**Guardian tab:** Brand Guardian report — consistency score across all recent outputs, violations flagged, trends.
+
+**Marketplace tab:** Branding services available — workshops, audits, identity design, naming, growth sprints.
+
+**First-time experience:**
 ```
-Client clicks "New Project"
-    → Type selection (video, design, web, audio, event, print)
-    → AI-guided conversational brief:
-        - What's this for? (objective)
-        - Who's the audience? (auto-suggests from Brand DNA)
-        - Key messages
-        - Style/tone preferences (references from Brand DNA)
-        - Format/specs needed
-        - Budget range
-        - Timeline
-    → AI generates brief summary for review
-    → Client confirms → enters motor pipeline
+New client with no Brand DNA:
+    → Brand > DNA tab shows Brand Builder wizard
+    → Guided workshop (conversational AI):
+        - Tell me about your business
+        - What makes you different?
+        - Who are your customers?
+        - What's your brand personality?
+        - Visual preferences (show examples, client picks)
+    → AI generates Brand DNA draft
+    → Client reviews and approves
+    → Brand DNA persisted → injected into all motors
 ```
 
-**Deliverable review by type:**
+#### Campaigns page — detailed tab content
 
-| Type | Viewer | Comment format |
-|------|--------|---------------|
-| Video | Video player with timestamp markers | Timestamp-anchored comments |
-| Design | Image viewer with zoom/pan | Area-based annotations (click on region) |
-| Web | Live preview with responsive toggle | Page-section comments |
-| Audio | Waveform player with markers | Timestamp-anchored comments |
-| Event | Rundown/timeline view | Item-based comments |
-| Print | Mockup viewer (how it looks printed) | Area-based annotations |
-
-#### Space 2: Comunicar
-
-**What the client sees:** All active campaigns, content calendar, social media, email, SEO. The Funnel Matrix is the central organizing view.
-
-**Motors behind it:** Pauta (Ads), Community Management, Email Marketing, SEO/Content, Channel Manager
-
-| Screen | Purpose |
-|--------|---------|
-| **Funnel Matrix** | Central view: rows = channels (Paid/Owned/Earned), columns = funnel stages (Awareness/Consideration/Conversion/Retention). Each active cell shows campaign performance. Click to drill down. |
-| **Campaigns** | List of all campaigns with status, channels, budget, KPIs. Filterable by channel, funnel stage, status. |
-| **New Campaign** | Wizard: objective → audience (from Brand DNA) → AI recommends channels and funnel stages → budget allocation → creative brief → launch |
-| **Campaign Detail** | Performance dashboard: KPIs per channel, spend vs budget, creative performance, A/B test results, optimization suggestions |
-| **Content Calendar** | Monthly/weekly calendar view. Scheduled posts, emails, content pieces. Color-coded by channel. Drag to reschedule. |
-| **Social Feed** | Real-time feed of all social activity: scheduled posts, published posts, mentions, comments, DMs. Quick-reply interface. |
-| **Email Hub** | Active flows, campaign history, subscriber metrics, deliverability health |
+| Tab | Content |
+|-----|---------|
+| **Estrategia** | Campaign strategy overview, objectives, audience targeting from Brand DNA |
+| **Budget** | Budget allocation by channel and campaign, spend vs target |
+| **Matrix** | Funnel Matrix: rows = channels (Paid/Owned/Earned), columns = funnel stages (Awareness/Consideration/Conversion/Retention). Each active cell shows performance. Click to drill down or create campaign. |
+| **Calendar** | Monthly/weekly calendar view. Scheduled posts, emails, content pieces. Color-coded by channel. Drag to reschedule. |
+| **Lista** | Full campaign list with status, channels, budget, KPIs. Filterable by channel, funnel stage, status. |
 
 **Funnel Matrix interaction:**
 ```
-Client opens Comunicar → sees Funnel Matrix
+Client opens Campaigns > Matrix → sees Funnel Matrix
 
 Matrix cell [Meta Ads × Awareness] is green (active, performing well)
 Matrix cell [Email × Conversion] is yellow (active, below target)
@@ -246,87 +265,22 @@ Client clicks yellow cell → sees performance detail + AI recommendations:
 3. Adjust send time to 10am (your audience is most active)"
 ```
 
-#### Space 3: Entender
+#### Sales page — detailed tab content
 
-**What the client sees:** Market intelligence, performance analytics, opportunities, insights.
-
-**Motors behind it:** Brand Listening, Culture Listening, Industry Listening, Competitive Listening, Opportunity Agent, Media Scout, Analytics
-
-| Screen | Purpose |
-|--------|---------|
-| **Dashboard** | Executive overview: top KPIs (revenue attributed, CAC, ROAS, LTV), trend charts, health scores per area |
-| **Opportunities** | Feed of detected opportunities from Opportunity Agent: trending moment + relevance + suggested action + time window. One-click to create campaign from opportunity. |
-| **Brand Health** | Sentiment over time, mention volume, share of voice, perception themes, crisis alerts |
-| **Market Intel** | Competitive moves, industry trends, culture signals. Organized by relevance to client's brand. |
-| **Reports** | Library of generated reports (weekly, monthly, campaign-specific). On-demand: ask in natural language, AI generates report. |
-| **Media Opportunities** | Media Scout discoveries: podcasts, influencers, partnerships, spaces relevant to the brand. With cost estimates and audience match %. |
-
-#### Space 4: Vender
-
-**What the client sees:** Leads, sales pipeline, CRM.
-
-**Motors behind it:** Sales/CRM
-
-| Screen | Purpose |
-|--------|---------|
+| Tab | Content |
+|-----|---------|
 | **Pipeline** | Kanban: New → Contacted → Qualified → Proposal → Negotiation → Closed Won / Lost. Cards show lead name, company, score, value, last activity. |
-| **Leads** | Full lead list with search, filters (source, score, status, date). Inline enrichment data. |
-| **Lead Detail** | Full profile: contact info, company, enrichment data, score breakdown (fit + intent + budget), activity timeline, linked campaigns/events |
-| **Automations** | Active nurture flows, follow-up sequences, email templates. Toggle on/off. |
-
-#### Space 5: Mi Marca
-
-**What the client sees:** Their brand identity, Brand DNA, guidelines, assets.
-
-**Motors behind it:** Brand Builder, Brand Guardian
-
-| Screen | Purpose |
-|--------|---------|
-| **Brand DNA** | Full brand document: mission, vision, values, positioning, audiences, tone, personality. Versioned (stored in `brandDna` table). Editing creates a new draft version; activating archives previous. Edits trigger Brand Guardian re-validation. |
-| **Visual Identity** | Colors (with hex/RGB), typography, logo versions, imagery style, do's and don'ts. Asset download. |
-| **Verbal Identity** | Tone of voice, vocabulary, key phrases, messaging framework, what the brand says and doesn't say. |
-| **Brand Health** | Brand Guardian report: consistency score across all recent outputs, violations flagged, trends. |
-| **Asset Library** | All brand assets in one place: logos, templates, fonts, guidelines PDF, social media kits. |
-
-**First-time experience:**
-```
-New client with no Brand DNA:
-    → "Mi Marca" space shows Brand Builder wizard
-    → Guided workshop (conversational AI):
-        - Tell me about your business
-        - What makes you different?
-        - Who are your customers?
-        - What's your brand personality?
-        - Visual preferences (show examples, client picks)
-    → AI generates Brand DNA draft
-    → Client reviews and approves
-    → Brand DNA persisted → injected into all motors
-```
-
-#### Space 6: Cuenta
-
-**What the client sees:** Subscription, billing, team, settings.
-
-**Motors behind it:** Marketplace (contracted providers), Financial Agent (billing)
-
-| Screen | Purpose |
-|--------|---------|
-| **Plan** | Current subscription tier, included features, usage metrics, upgrade CTA |
-| **Billing** | Invoices, payment methods, billing history. Stripe customer portal integration. |
-| **Team** | Team members with roles (owner, admin, editor, viewer). Invite new members. Roles apply globally across all Spaces — no per-Space permissions. |
-| **Providers** | Contracted providers from Marketplace: active contracts, history, ratings, spend. |
-| **Settings** | Notifications preferences, language, timezone, connected accounts (social, ads, email). |
-| **Motor Settings** | Per-motor autonomy toggle (AI decides vs AI recommends). Enable/disable motors available in plan. Motor-specific preferences. |
-| **Help** | AI chat support (powered by support agent), help center, contact human support (Pro/Enterprise). |
+| **Leads** | Full lead list with search, filters (source, score, status, date). Inline enrichment data. Lead detail: contact info, company, enrichment, score breakdown (fit + intent + budget), activity timeline, linked campaigns. |
+| **Proposals** | Active nurture flows, follow-up sequences, email templates. Toggle on/off. |
 
 ### 3.3 Tier Gating (hybrid approach)
 
-All 6 Spaces are always visible regardless of plan. Within each Space:
+All sidebar items are always visible regardless of plan. Within each section:
 
 | Element | Free | Pro | Enterprise |
 |---------|------|-----|-----------|
-| Space navigation | Visible | Visible | Visible |
-| Motors within Space | Available motors shown; unavailable motors show card with "Upgrade to Pro/Enterprise" + feature preview | All motors active | All motors + dedicated AE |
+| Sidebar navigation | Visible | Visible | Visible |
+| Features within section | Available features shown; unavailable features show card with "Upgrade to Pro/Enterprise" + feature preview | All features active | All features + dedicated AE |
 | Advanced features | Locked with upgrade badge (e.g., "A/B testing — Pro", "Custom dashboards — Enterprise") | Unlocked | Unlocked + custom |
 | Usage limits | Soft limits with counter ("3/5 projects this month") | Higher or no limits | No limits |
 
@@ -334,12 +288,12 @@ All 6 Spaces are always visible regardless of plan. Within each Space:
 
 ### 3.4 AI Copilot (transversal)
 
-A persistent AI assistant available across all Spaces via a chat bubble or Cmd+K:
+A persistent AI assistant available across all sections via a chat bubble or Cmd+K:
 
 - **Proactive suggestions:** "Your TikTok campaign is underperforming. Want me to generate new creative variants?"
 - **Natural language queries:** "How much did I spend on Meta Ads last month?" → generates answer from Analytics
 - **Quick actions:** "Create a post about our new product for Instagram" → routes to Community Management
-- **Opportunity alerts:** "Trending topic X is relevant to your audience. Want to create content?" → routes to Crear or Comunicar
+- **Opportunity alerts:** "Trending topic X is relevant to your audience. Want to create content?" → routes to Studio or Campaigns
 - **Budget warnings:** "You've used 80% of your monthly Ads budget with 10 days remaining."
 
 The copilot's proactiveness depends on the autonomy setting (AI decides vs AI recommends).
