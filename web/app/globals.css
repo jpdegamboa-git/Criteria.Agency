@@ -94,3 +94,48 @@ body::before {
   background-size: 40px 40px;
   opacity: 0.03;
 }
+
+/* ── Portal tokens (Client Portal) ── */
+@theme inline {
+  --color-portal-bg: #f5f5f7;
+  --color-portal-text: #111111;
+  --color-portal-text-secondary: #444444;
+  --color-portal-text-muted: #888888;
+  --color-portal-text-dim: #bbbbbb;
+  --color-portal-border: #eeeeee;
+  --color-portal-accent: #f5a623;
+
+  --color-media-paid: #7c5cfc;
+  --color-media-owned: #00c2a8;
+  --color-media-earned: #ff6b6b;
+
+  --color-state-plan-bg: #f4f1ff;
+  --color-state-plan-text: #7c5cfc;
+  --color-state-exec-bg: #fff8eb;
+  --color-state-exec-text: #e09600;
+  --color-state-track-bg: #edfbf8;
+  --color-state-track-text: #00a88e;
+
+  --color-lead-hot: #ff6b6b;
+  --color-lead-warm: #f5a623;
+  --color-lead-cold: #7c5cfc;
+  --color-lead-won: #00c2a8;
+}
+
+/* ── Portal dot pattern background ── */
+.portal-dot-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.15) 0.8px, transparent 0.8px);
+  background-size: 20px 20px;
+}
+
+/* ── Portal card shadow ── */
+.portal-shadow {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+.portal-shadow-hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
