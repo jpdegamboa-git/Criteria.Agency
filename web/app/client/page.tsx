@@ -140,10 +140,10 @@ export default function ClientHome() {
         )}
       </div>
 
-      {/* ── Quick stats (compact inline instead of 4 big cards) ── */}
+      {/* ── Quick stats + Brand Score sparkline ── */}
       <div className="flex items-center gap-6">
         {mockHomeKPIs.map((kpi) => (
-          <div key={kpi.label} className="flex items-baseline gap-2">
+          <div key={kpi.label} className="flex items-center gap-2">
             <span className="text-lg font-[800] text-portal-text leading-none">{kpi.value}</span>
             <span className="text-[10px] text-portal-text-muted">{kpi.label}</span>
             {kpi.delta && kpi.trend && (
@@ -151,103 +151,99 @@ export default function ClientHome() {
                 {kpi.delta}
               </span>
             )}
+            {/* Inline sparkline for Brand Score */}
+            {kpi.label === "Brand score" && (
+              <svg width="60" height="20" viewBox="0 0 60 20" className="ml-1">
+                <path d="M0,16 L10,14 L20,13 L30,12 L40,8 L50,5 L60,3 L60,20 L0,20 Z" fill="url(#miniGrad)" opacity="0.15" />
+                <path d="M0,16 L10,14 L20,13 L30,12 L40,8 L50,5 L60,3" fill="none" stroke="#f5a623" strokeWidth="1.5" strokeLinecap="round" />
+                <circle cx="60" cy="3" r="2" fill="#f5a623" />
+                <defs><linearGradient id="miniGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#f5a623" /><stop offset="100%" stopColor="#f5a623" stopOpacity="0" /></linearGradient></defs>
+              </svg>
+            )}
           </div>
         ))}
       </div>
 
-      {/* ── Business Model / Revenue Streams ── */}
-      <div className="grid grid-cols-3 gap-4">
-        <div className="col-span-2 space-y-4">
-          {/* Brand Score + Opportunities */}
-          <PortalCard>
-            {/* Top: Score + Sparkline */}
-            <div className="flex items-center gap-4 pb-4 border-b border-[#f0f0f0]">
-              <div className="text-center shrink-0">
-                <p className="text-[28px] font-[800] tracking-[-1px] text-portal-text leading-none">
-                  {activeBrand?.score || 78}
-                </p>
-                <p className="text-[9px] text-portal-text-dim mt-0.5">Brand Score</p>
-              </div>
-              <div className="shrink-0">
-                <svg width="120" height="36" viewBox="0 0 120 36">
-                  <line x1="0" y1="9" x2="120" y2="9" stroke="#f0f0f0" strokeWidth="0.5" />
-                  <line x1="0" y1="18" x2="120" y2="18" stroke="#f0f0f0" strokeWidth="0.5" />
-                  <line x1="0" y1="27" x2="120" y2="27" stroke="#f0f0f0" strokeWidth="0.5" />
-                  <path d="M0,30 L20,26 L40,24 L60,22 L80,16 L100,10 L120,7 L120,36 L0,36 Z"
-                    fill="url(#scoreGrad)" opacity="0.15" />
-                  <path d="M0,30 L20,26 L40,24 L60,22 L80,16 L100,10 L120,7"
-                    fill="none" stroke="#f5a623" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  <circle cx="120" cy="7" r="3" fill="#f5a623" />
-                  <defs>
-                    <linearGradient id="scoreGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#f5a623" />
-                      <stop offset="100%" stopColor="#f5a623" stopOpacity="0" />
-                    </linearGradient>
-                  </defs>
-                </svg>
-                <div className="flex justify-between mt-0.5">
-                  <span className="text-[8px] text-portal-text-dim">Oct</span>
-                  <span className="text-[8px] text-portal-text-dim">Ene</span>
-                  <span className="text-[8px] text-portal-text-dim font-semibold text-portal-accent">Abr</span>
-                </div>
-              </div>
-              <div className="flex items-center gap-1 text-[10px] font-semibold text-[#00c2a8]">
-                <TrendingUp size={12} /> +12pts en 6 meses
-              </div>
-            </div>
-            {/* Bottom: Improvement opportunities */}
-            <div className="pt-3">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.5px] text-portal-text-muted mb-2">
-                Oportunidades de mejora
+      {/* ── Modelo de Negocio (unified: propuesta + productos + segmentos + revenue streams + métricas) ── */}
+      <SectionHeader
+        title="Modelo de negocio"
+        action={
+          <PortalButton variant="secondary" size="sm" icon={<Pencil size={12} />}>
+            Editar
+          </PortalButton>
+        }
+      />
+      <PortalCard>
+        <div className="grid grid-cols-3 gap-6">
+          {/* Left column: Propuesta + Segmentos + Canales */}
+          <div className="space-y-4">
+            <div>
+              <p className="text-[9px] font-semibold uppercase tracking-[0.5px] text-portal-text-muted mb-1">Propuesta de valor</p>
+              <p className="text-[11px] text-portal-text leading-relaxed">
+                Café de especialidad costarricense con trazabilidad completa y experiencia premium.
               </p>
-              <div className="space-y-1.5">
+            </div>
+            <div>
+              <p className="text-[9px] font-semibold uppercase tracking-[0.5px] text-portal-text-muted mb-1">Productos y servicios</p>
+              <div className="space-y-1">
                 {[
-                  { text: "Definir guía de tono de voz para redes sociales", impact: "+8", area: "Tono", color: "#7c5cfc" },
-                  { text: "Crear variaciones de logo para fondos oscuros", impact: "+5", area: "Visual", color: "#00c2a8" },
-                  { text: "Documentar propuesta de valor diferenciada", impact: "+4", area: "Mensaje", color: "#f5a623" },
-                  { text: "Unificar estilo fotográfico en todas las plataformas", impact: "+3", area: "Visual", color: "#00c2a8" },
-                ].map((idea) => (
-                  <div key={idea.text} className="flex items-center gap-2.5 group">
-                    <div className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: idea.color }} />
-                    <p className="text-[11px] text-portal-text flex-1">{idea.text}</p>
-                    <span className="text-[8px] font-medium px-1.5 py-0.5 rounded" style={{ backgroundColor: idea.color + "12", color: idea.color }}>
-                      {idea.area}
-                    </span>
-                    <span className="text-[10px] font-bold text-[#00c2a8]">{idea.impact}</span>
-                    <span className="text-[10px] text-portal-accent opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                      Aplicar →
-                    </span>
+                  { name: "Café en grano (250g, 500g, 1kg)", type: "Producto" },
+                  { name: "Suscripción mensual", type: "Servicio" },
+                  { name: "Cursos de barismo", type: "Servicio" },
+                  { name: "Merch (tazas, camisetas)", type: "Producto" },
+                ].map((p) => (
+                  <div key={p.name} className="flex items-center gap-2">
+                    <span className="text-[10px] text-portal-text">{p.name}</span>
+                    <span className="text-[8px] font-medium bg-[#f5f5f7] text-portal-text-dim px-1 py-0.5 rounded">{p.type}</span>
                   </div>
                 ))}
               </div>
             </div>
-          </PortalCard>
+            <div>
+              <p className="text-[9px] font-semibold uppercase tracking-[0.5px] text-portal-text-muted mb-1">Segmentos</p>
+              <div className="flex flex-wrap gap-1.5">
+                {["B2C Retail", "B2B Horeca", "D2C Online"].map((seg) => (
+                  <span key={seg} className="text-[9px] font-medium bg-[#f5f5f7] text-portal-text-secondary px-2 py-1 rounded-md">{seg}</span>
+                ))}
+              </div>
+            </div>
+            <div>
+              <p className="text-[9px] font-semibold uppercase tracking-[0.5px] text-portal-text-muted mb-1">Canales</p>
+              <div className="flex flex-wrap gap-1.5">
+                {["Tienda física", "E-commerce", "Wholesale", "Redes sociales"].map((ch) => (
+                  <span key={ch} className="text-[9px] font-medium bg-[#f5f5f7] text-portal-text-secondary px-2 py-1 rounded-md">{ch}</span>
+                ))}
+              </div>
+            </div>
+            <div>
+              <p className="text-[9px] font-semibold uppercase tracking-[0.5px] text-portal-text-muted mb-1">Métricas</p>
+              <div className="grid grid-cols-2 gap-2">
+                <div><p className="text-sm font-[800] text-portal-text">₡18K</p><p className="text-[9px] text-portal-text-dim">LTV</p></div>
+                <div><p className="text-sm font-[800] text-portal-text">₡4.2K</p><p className="text-[9px] text-portal-text-dim">CAC</p></div>
+                <div><p className="text-sm font-[800] text-portal-text">4.3x</p><p className="text-[9px] text-portal-text-dim">LTV:CAC</p></div>
+                <div><p className="text-sm font-[800] text-portal-text">68%</p><p className="text-[9px] text-portal-text-dim">Retención</p></div>
+              </div>
+            </div>
+          </div>
 
-          {/* Revenue Streams */}
-          <SectionHeader
-            title="Revenue streams"
-            action={
-              <PortalButton variant="secondary" size="sm" icon={<Pencil size={12} />}>
-                Editar modelo
-              </PortalButton>
-            }
-          />
-          <PortalCard>
-            <div className="space-y-3">
+          {/* Right columns (span 2): Revenue streams */}
+          <div className="col-span-2 border-l border-[#f0f0f0] pl-6">
+            <p className="text-[9px] font-semibold uppercase tracking-[0.5px] text-portal-text-muted mb-3">Revenue streams</p>
+            <div className="space-y-2.5">
               {revenueStreams.map((rs) => {
                 const Icon = rs.icon;
                 const isNeg = rs.trend.startsWith("-");
                 return (
                   <div key={rs.id} className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: rs.color + "15" }}>
-                      <Icon size={14} style={{ color: rs.color }} />
+                    <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: rs.color + "15" }}>
+                      <Icon size={13} style={{ color: rs.color }} />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
                         <p className="text-[11px] font-semibold text-portal-text truncate">{rs.name}</p>
                         <span className="text-[8px] font-medium bg-[#f5f5f7] text-portal-text-muted px-1.5 py-0.5 rounded">{rs.type}</span>
                       </div>
-                      <div className="mt-1.5 h-1.5 bg-[#f0f0f0] rounded-full overflow-hidden">
+                      <div className="mt-1 h-1 bg-[#f0f0f0] rounded-full overflow-hidden">
                         <div className="h-full rounded-full" style={{ width: `${rs.share}%`, backgroundColor: rs.color }} />
                       </div>
                     </div>
@@ -260,96 +256,61 @@ export default function ClientHome() {
                 );
               })}
             </div>
-            <div className="flex items-center justify-between mt-4 pt-3 border-t border-[#f0f0f0]">
-              <p className="text-[11px] font-semibold text-portal-text-muted">Revenue total</p>
+            <div className="flex items-center justify-between mt-3 pt-3 border-t border-[#f0f0f0]">
+              <p className="text-[11px] font-semibold text-portal-text-muted">Total</p>
               <p className="text-lg font-[800] text-portal-text">₡5.3M</p>
             </div>
-          </PortalCard>
+          </div>
         </div>
+      </PortalCard>
 
-        {/* Business model summary */}
-        <div>
-          <SectionHeader
-            title="Modelo de negocio"
-            action={
-              <PortalButton variant="secondary" size="sm" icon={<Pencil size={12} />}>
-                Editar
-              </PortalButton>
-            }
-          />
-          <PortalCard>
-            <div className="space-y-4">
-              <div>
-                <p className="text-[9px] font-semibold uppercase tracking-[0.5px] text-portal-text-muted mb-1">Propuesta de valor</p>
-                <p className="text-[11px] text-portal-text leading-relaxed">
-                  Café de especialidad costarricense con trazabilidad completa y experiencia premium.
-                </p>
+      {/* ── Ideas y oportunidades (unified) ── */}
+      <SectionHeader title="Ideas y oportunidades" action={
+        <button className="flex items-center gap-1 text-[11px] text-portal-text-muted hover:text-portal-text transition-colors">
+          <RefreshCw size={12} /> Actualizar
+        </button>
+      } />
+      <PortalCard>
+        <div className="space-y-0">
+          {/* Ideas */}
+          {mockIdeas.map((idea) => (
+            <div key={idea.id} className="flex items-center gap-3 py-2.5 group border-b border-[#f0f0f0]">
+              <div className="w-1.5 h-1.5 rounded-full shrink-0 bg-portal-accent" />
+              <div className="flex-1 min-w-0">
+                <p className="text-[11px] font-semibold text-portal-text">{idea.title}</p>
+                <p className="text-[10px] text-portal-text-muted mt-0.5 truncate">{idea.description}</p>
               </div>
-              <div>
-                <p className="text-[9px] font-semibold uppercase tracking-[0.5px] text-portal-text-muted mb-1">Segmentos</p>
-                <div className="flex flex-wrap gap-1.5">
-                  {["B2C Retail", "B2B Horeca", "D2C Online"].map((seg) => (
-                    <span key={seg} className="text-[9px] font-medium bg-[#f5f5f7] text-portal-text-secondary px-2 py-1 rounded-md">{seg}</span>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <p className="text-[9px] font-semibold uppercase tracking-[0.5px] text-portal-text-muted mb-1">Canales clave</p>
-                <div className="flex flex-wrap gap-1.5">
-                  {["Tienda física", "E-commerce", "Wholesale", "Redes sociales"].map((ch) => (
-                    <span key={ch} className="text-[9px] font-medium bg-[#f5f5f7] text-portal-text-secondary px-2 py-1 rounded-md">{ch}</span>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <p className="text-[9px] font-semibold uppercase tracking-[0.5px] text-portal-text-muted mb-1">Métricas clave</p>
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <p className="text-sm font-[800] text-portal-text">₡18K</p>
-                    <p className="text-[9px] text-portal-text-dim">LTV promedio</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-[800] text-portal-text">₡4.2K</p>
-                    <p className="text-[9px] text-portal-text-dim">CAC promedio</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-[800] text-portal-text">4.3x</p>
-                    <p className="text-[9px] text-portal-text-dim">LTV:CAC ratio</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-[800] text-portal-text">68%</p>
-                    <p className="text-[9px] text-portal-text-dim">Retención 6m</p>
-                  </div>
-                </div>
+              <div className="flex items-center gap-2 shrink-0">
+                {idea.urgent && idea.urgencyDays && (
+                  <span className="text-[9px] font-medium text-[#e09600] bg-[#fff8eb] px-1.5 py-0.5 rounded">{idea.urgencyDays}d</span>
+                )}
+                <span className="text-[8px] font-medium bg-[#f5f5f7] text-portal-text-muted px-1.5 py-0.5 rounded">{idea.tags.channel}</span>
+                <span className="text-[8px] font-medium bg-[#fff8eb] text-[#e09600] px-1.5 py-0.5 rounded">Idea</span>
+                <span className="text-[10px] text-portal-accent opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">Crear →</span>
               </div>
             </div>
-          </PortalCard>
+          ))}
+          {/* Opportunities */}
+          {mockOpportunities.map((opp, i) => (
+            <div key={opp.id} className={cn("flex items-center gap-3 py-2.5 group", i < mockOpportunities.length - 1 && "border-b border-[#f0f0f0]")}>
+              <div className="w-1.5 h-1.5 rounded-full shrink-0" style={{
+                backgroundColor: opp.type === "tendencia" ? "#00c2a8" : opp.type === "competencia" ? "#7c5cfc" : opp.type === "cultura" ? "#ff6b6b" : "#f5a623",
+              }} />
+              <div className="flex-1 min-w-0">
+                <p className="text-[11px] font-semibold text-portal-text">{opp.title}</p>
+                <p className="text-[10px] text-portal-text-muted mt-0.5 truncate">{opp.description}</p>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <span className="text-[8px] font-medium uppercase px-1.5 py-0.5 rounded" style={{
+                  backgroundColor: (opp.type === "tendencia" ? "#00c2a8" : opp.type === "competencia" ? "#7c5cfc" : opp.type === "cultura" ? "#ff6b6b" : "#f5a623") + "12",
+                  color: opp.type === "tendencia" ? "#00c2a8" : opp.type === "competencia" ? "#7c5cfc" : opp.type === "cultura" ? "#ff6b6b" : "#f5a623",
+                }}>{opp.type}</span>
+                <span className="text-[10px] text-portal-accent opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">{opp.action} →</span>
+              </div>
+            </div>
+          ))}
         </div>
-      </div>
-
-      {/* ── Ideas + Opportunities ── */}
-      <div className="grid grid-cols-3 gap-4">
-        <div className="col-span-2">
-          <SectionHeader title="Ideas para ti" action={
-            <button className="flex items-center gap-1 text-[11px] text-portal-text-muted hover:text-portal-text transition-colors">
-              <RefreshCw size={12} /> Más ideas
-            </button>
-          } />
-          <div className="grid grid-cols-1 gap-3">
-            {mockIdeas.map((idea) => (<IdeaCard key={idea.id} {...idea} />))}
-          </div>
-        </div>
-        <div>
-          <SectionHeader title="Oportunidades" action={
-            <Link href="/client/plan" className="text-[11px] text-portal-accent hover:underline flex items-center gap-0.5">
-              Ver todas <ArrowRight size={10} />
-            </Link>
-          } />
-          <div className="space-y-3">
-            {mockOpportunities.map((opp) => (<OpportunityCard key={opp.id} {...opp} />))}
-          </div>
-        </div>
-      </div>
+      </PortalCard>
 
       {/* ── Charts ── */}
       <div className="grid grid-cols-2 gap-4">

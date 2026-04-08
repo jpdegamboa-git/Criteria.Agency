@@ -62,7 +62,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
           </div>
         </div>
       </header>
-      <main className="relative max-w-[1140px] mx-auto px-8 py-7">{children}</main>
+      <main className="relative z-[1] max-w-[1140px] mx-auto px-8 py-7">{children}</main>
       <CopilotFAB />
     </div>
   );
