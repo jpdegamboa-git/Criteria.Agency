@@ -440,6 +440,33 @@ export const upsertScoringRulesSchema = z.object({
   })).min(1),
 });
 
+// ── Positioning Validators ──
+
+export const startDiagnosisSchema = z.object({
+  brandName: z.string().min(1).max(200),
+  brandDna: z.string().min(1).max(5000).optional(),
+  listenerData: z.string().max(10000).optional(),
+});
+
+export const startRepositioningSchema = z.object({
+  brandName: z.string().min(1).max(200),
+  businessStrategy: z.string().min(1).max(5000),
+  brandDna: z.string().max(5000).optional(),
+});
+
+export const recordPerceptionSchema = z.object({
+  repositioningProjectId: z.string().uuid(),
+  phase: z.number().int().min(1).max(10),
+  metrics: z.object({
+    brandHealth: z.number().min(0).max(100),
+    attributeScores: z.record(z.number()),
+    sentiment: z.number().min(0).max(100),
+    awarenessLevel: z.number().min(0).max(100),
+  }),
+  status: z.enum(["on_track", "at_risk", "off_track"]),
+  notes: z.string().max(2000).optional(),
+});
+
 // ── Helper: parse with nice error response ──
 
 export function parseBody<T>(schema: z.ZodType<T>, body: unknown): { success: true; data: T } | { success: false; error: string } {
