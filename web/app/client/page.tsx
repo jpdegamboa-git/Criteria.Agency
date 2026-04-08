@@ -15,27 +15,9 @@ import {
   ArrowRight,
   Plus,
   Pencil,
-  DollarSign,
-  ShoppingCart,
-  Repeat,
-  Gift,
   TrendingUp,
-  Megaphone,
-  Layers,
-  Users,
-  Shield,
 } from "lucide-react";
 import Link from "next/link";
-
-// ── Revenue streams mock data ──
-
-const revenueStreams = [
-  { id: "rs1", name: "Venta directa en tienda", type: "Producto", icon: ShoppingCart, revenue: "₡2.4M", share: 45, trend: "+12%", color: "#7c5cfc" },
-  { id: "rs2", name: "Suscripción mensual", type: "Recurrente", icon: Repeat, revenue: "₡1.1M", share: 21, trend: "+34%", color: "#00c2a8" },
-  { id: "rs3", name: "Wholesale B2B", type: "Producto", icon: DollarSign, revenue: "₡980K", share: 18, trend: "+5%", color: "#f5a623" },
-  { id: "rs4", name: "Merchandising", type: "Producto", icon: Gift, revenue: "₡520K", share: 10, trend: "-3%", color: "#ff6b6b" },
-  { id: "rs5", name: "Cursos y talleres", type: "Servicio", icon: TrendingUp, revenue: "₡320K", share: 6, trend: "+22%", color: "#888" },
-];
 
 export default function ClientHome() {
   const { data: session } = useSession();
@@ -164,103 +146,29 @@ export default function ClientHome() {
         ))}
       </div>
 
-      {/* ── Modelo de Negocio (unified: propuesta + productos + segmentos + revenue streams + métricas) ── */}
-      <SectionHeader
-        title="Modelo de negocio"
-        action={
-          <PortalButton variant="secondary" size="sm" icon={<Pencil size={12} />}>
-            Editar
-          </PortalButton>
-        }
-      />
+      {/* ── Blueprint summary (compact) ── */}
       <PortalCard>
-        <div className="grid grid-cols-3 gap-6">
-          {/* Left column: Propuesta + Segmentos + Canales */}
-          <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
             <div>
-              <p className="text-[9px] font-semibold uppercase tracking-[0.5px] text-portal-text-muted mb-1">Propuesta de valor</p>
-              <p className="text-[11px] text-portal-text leading-relaxed">
-                Café de especialidad costarricense con trazabilidad completa y experiencia premium.
-              </p>
+              <p className="text-[9px] font-semibold uppercase tracking-[0.5px] text-portal-text-muted mb-0.5">Propuesta de valor</p>
+              <p className="text-[11px] text-portal-text">Café de especialidad costarricense con trazabilidad completa y experiencia premium.</p>
             </div>
+            <div className="h-8 w-px bg-[#f0f0f0]" />
             <div>
-              <p className="text-[9px] font-semibold uppercase tracking-[0.5px] text-portal-text-muted mb-1">Productos y servicios</p>
-              <div className="space-y-1">
-                {[
-                  { name: "Café en grano (250g, 500g, 1kg)", type: "Producto" },
-                  { name: "Suscripción mensual", type: "Servicio" },
-                  { name: "Cursos de barismo", type: "Servicio" },
-                  { name: "Merch (tazas, camisetas)", type: "Producto" },
-                ].map((p) => (
-                  <div key={p.name} className="flex items-center gap-2">
-                    <span className="text-[10px] text-portal-text">{p.name}</span>
-                    <span className="text-[8px] font-medium bg-[#f5f5f7] text-portal-text-dim px-1 py-0.5 rounded">{p.type}</span>
-                  </div>
-                ))}
-              </div>
+              <p className="text-[9px] font-semibold uppercase tracking-[0.5px] text-portal-text-muted mb-0.5">Revenue</p>
+              <p className="text-base font-[800] text-portal-text">₡5.3M</p>
             </div>
-            <div>
-              <p className="text-[9px] font-semibold uppercase tracking-[0.5px] text-portal-text-muted mb-1">Segmentos</p>
-              <div className="flex flex-wrap gap-1.5">
-                {["B2C Retail", "B2B Horeca", "D2C Online"].map((seg) => (
-                  <span key={seg} className="text-[9px] font-medium bg-[#f5f5f7] text-portal-text-secondary px-2 py-1 rounded-md">{seg}</span>
-                ))}
-              </div>
-            </div>
-            <div>
-              <p className="text-[9px] font-semibold uppercase tracking-[0.5px] text-portal-text-muted mb-1">Canales</p>
-              <div className="flex flex-wrap gap-1.5">
-                {["Tienda física", "E-commerce", "Wholesale", "Redes sociales"].map((ch) => (
-                  <span key={ch} className="text-[9px] font-medium bg-[#f5f5f7] text-portal-text-secondary px-2 py-1 rounded-md">{ch}</span>
-                ))}
-              </div>
-            </div>
-            <div>
-              <p className="text-[9px] font-semibold uppercase tracking-[0.5px] text-portal-text-muted mb-1">Métricas</p>
-              <div className="grid grid-cols-2 gap-2">
-                <div><p className="text-sm font-[800] text-portal-text">₡18K</p><p className="text-[9px] text-portal-text-dim">LTV</p></div>
-                <div><p className="text-sm font-[800] text-portal-text">₡4.2K</p><p className="text-[9px] text-portal-text-dim">CAC</p></div>
-                <div><p className="text-sm font-[800] text-portal-text">4.3x</p><p className="text-[9px] text-portal-text-dim">LTV:CAC</p></div>
-                <div><p className="text-sm font-[800] text-portal-text">68%</p><p className="text-[9px] text-portal-text-dim">Retención</p></div>
-              </div>
+            <div className="h-8 w-px bg-[#f0f0f0]" />
+            <div className="flex gap-2">
+              {["Tienda 45%", "Suscripción 21%", "B2B 18%"].map((s) => (
+                <span key={s} className="text-[9px] font-medium bg-[#f5f5f7] text-portal-text-muted px-2 py-1 rounded-md">{s}</span>
+              ))}
             </div>
           </div>
-
-          {/* Right columns (span 2): Revenue streams */}
-          <div className="col-span-2 border-l border-[#f0f0f0] pl-6">
-            <p className="text-[9px] font-semibold uppercase tracking-[0.5px] text-portal-text-muted mb-3">Revenue streams</p>
-            <div className="space-y-2.5">
-              {revenueStreams.map((rs) => {
-                const Icon = rs.icon;
-                const isNeg = rs.trend.startsWith("-");
-                return (
-                  <div key={rs.id} className="flex items-center gap-3">
-                    <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: rs.color + "15" }}>
-                      <Icon size={13} style={{ color: rs.color }} />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <p className="text-[11px] font-semibold text-portal-text truncate">{rs.name}</p>
-                        <span className="text-[8px] font-medium bg-[#f5f5f7] text-portal-text-muted px-1.5 py-0.5 rounded">{rs.type}</span>
-                      </div>
-                      <div className="mt-1 h-1 bg-[#f0f0f0] rounded-full overflow-hidden">
-                        <div className="h-full rounded-full" style={{ width: `${rs.share}%`, backgroundColor: rs.color }} />
-                      </div>
-                    </div>
-                    <div className="text-right shrink-0">
-                      <p className="text-xs font-[800] text-portal-text">{rs.revenue}</p>
-                      <p className="text-[10px] font-medium" style={{ color: isNeg ? "#ff6b6b" : "#00c2a8" }}>{rs.trend}</p>
-                    </div>
-                    <span className="text-[10px] text-portal-text-dim w-8 text-right">{rs.share}%</span>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="flex items-center justify-between mt-3 pt-3 border-t border-[#f0f0f0]">
-              <p className="text-[11px] font-semibold text-portal-text-muted">Total</p>
-              <p className="text-lg font-[800] text-portal-text">₡5.3M</p>
-            </div>
-          </div>
+          <Link href="/client/business-model" className="text-[11px] text-portal-accent hover:underline flex items-center gap-0.5 shrink-0">
+            Ver Business Model <ArrowRight size={10} />
+          </Link>
         </div>
       </PortalCard>
 
