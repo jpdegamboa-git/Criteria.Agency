@@ -14,9 +14,13 @@ import {
   Search,
   Megaphone,
   Banknote,
-  ChevronRight,
+  ChevronDown,
   PanelLeftClose,
   PanelLeft,
+  Boxes,
+  Radar,
+  Zap,
+  Wrench,
 } from "lucide-react";
 
 interface NavItem {
@@ -27,6 +31,7 @@ interface NavItem {
 
 interface NavGroup {
   label: string;
+  icon: typeof Home;
   items: NavItem[];
 }
 
@@ -35,6 +40,7 @@ const homeItem: NavItem = { href: "/client", label: "Home", icon: Home };
 const groups: NavGroup[] = [
   {
     label: "Fundamentos",
+    icon: Boxes,
     items: [
       { href: "/client/business-model", label: "Business Model", icon: LayoutGrid },
       { href: "/client/brand", label: "Brand", icon: Palette },
@@ -44,6 +50,7 @@ const groups: NavGroup[] = [
   },
   {
     label: "Inteligencia",
+    icon: Radar,
     items: [
       { href: "/client/mercado", label: "Mercado", icon: Globe },
       { href: "/client/competencia", label: "Competencia", icon: Search },
@@ -51,10 +58,16 @@ const groups: NavGroup[] = [
   },
   {
     label: "Ejecución",
+    icon: Zap,
     items: [
       { href: "/client/campaigns", label: "Campaigns", icon: Megaphone },
       { href: "/client/sales", label: "Sales", icon: Banknote },
     ],
+  },
+  {
+    label: "Tools",
+    icon: Wrench,
+    items: [],
   },
 ];
 
@@ -75,14 +88,14 @@ function SidebarLink({ item, pathname, collapsed }: { item: NavItem; pathname: s
       title={collapsed ? item.label : undefined}
       className={cn(
         "flex items-center gap-2.5 rounded-lg text-sm font-medium transition-colors",
-        collapsed ? "justify-center px-0 py-2" : "px-3 py-2",
+        collapsed ? "justify-center px-0 py-2" : "pl-9 pr-3 py-1.5",
         active
           ? "bg-[#f5f5f7] text-portal-text"
           : "text-portal-text-muted hover:text-portal-text hover:bg-[#fafafa]"
       )}
     >
-      <item.icon size={16} strokeWidth={active ? 2 : 1.5} />
-      {!collapsed && item.label}
+      <item.icon size={15} strokeWidth={active ? 2 : 1.5} />
+      {!collapsed && <span className="text-[13px]">{item.label}</span>}
     </Link>
   );
 }
@@ -104,12 +117,13 @@ function SidebarGroup({
     if (groupHasActive) setOpen(true);
   }, [groupHasActive]);
 
+  const GroupIcon = group.icon;
+
   if (collapsed) {
-    // In collapsed mode, show a divider dot and icons only
     return (
-      <div className="pt-4">
-        <div className="flex justify-center pb-2">
-          <div className="w-4 h-px bg-portal-border" />
+      <div className="pt-2">
+        <div className="flex justify-center py-1.5" title={group.label}>
+          <GroupIcon size={16} className={cn("transition-colors", groupHasActive ? "text-portal-text" : "text-portal-text-muted")} strokeWidth={groupHasActive ? 2 : 1.5} />
         </div>
         <div className="space-y-0.5">
           {group.items.map((item) => (
@@ -121,32 +135,41 @@ function SidebarGroup({
   }
 
   return (
-    <div className="pt-4">
+    <div className="pt-1">
       <button
         onClick={() => setOpen(!open)}
-        className="w-full flex items-center gap-1 px-3 pb-2 group cursor-pointer"
-      >
-        <ChevronRight
-          size={10}
-          className={cn(
-            "text-portal-text-dim transition-transform duration-150",
-            open && "rotate-90"
-          )}
-        />
-        <span className="text-[10px] font-semibold uppercase tracking-[1.5px] text-portal-text-dim group-hover:text-portal-text-muted transition-colors">
-          {group.label}
-        </span>
-      </button>
-      <div
         className={cn(
-          "space-y-0.5 overflow-hidden transition-all duration-150",
-          open ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
+          "w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer",
+          groupHasActive
+            ? "text-portal-text"
+            : "text-portal-text-muted hover:text-portal-text hover:bg-[#fafafa]"
         )}
       >
-        {group.items.map((item) => (
-          <SidebarLink key={item.href} item={item} pathname={pathname} collapsed={false} />
-        ))}
-      </div>
+        <GroupIcon size={16} strokeWidth={groupHasActive ? 2 : 1.5} />
+        <span className="flex-1 text-left">{group.label}</span>
+        <ChevronDown
+          size={14}
+          className={cn(
+            "transition-transform duration-150",
+            open ? "rotate-0" : "-rotate-90",
+            groupHasActive ? "text-portal-text-secondary" : "text-portal-text-dim"
+          )}
+        />
+      </button>
+      {group.items.length > 0 && (
+        <div
+          className={cn(
+            "overflow-hidden transition-all duration-150",
+            open ? "max-h-[500px] opacity-100 mt-0.5" : "max-h-0 opacity-0"
+          )}
+        >
+          <div className="space-y-0.5">
+            {group.items.map((item) => (
+              <SidebarLink key={item.href} item={item} pathname={pathname} collapsed={false} />
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -178,7 +201,7 @@ export function PortalSidebar() {
         </button>
       </div>
 
-      <nav className={cn("flex-1 py-4 space-y-1", collapsed ? "px-2" : "px-3")}>
+      <nav className={cn("flex-1 py-3 space-y-0.5", collapsed ? "px-2" : "px-3")}>
         {/* Home */}
         <SidebarLink item={homeItem} pathname={pathname} collapsed={collapsed} />
 
