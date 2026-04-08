@@ -373,6 +373,73 @@ export const runIsolationAuditSchema = z.object({
   clientId: z.string().uuid(),
 });
 
+// ── Sales: Leads ──
+
+export const createLeadSchema = z.object({
+  name: z.string().min(1).max(255),
+  email: z.string().email(),
+  company: z.string().max(255).optional(),
+  title: z.string().max(255).optional(),
+  phone: z.string().max(50).optional(),
+  source: z.string().min(1).max(50),
+  sourceDetail: z.string().max(255).optional(),
+  notes: z.string().max(2000).optional(),
+});
+
+export const updateLeadSchema = z.object({
+  name: z.string().min(1).max(255).optional(),
+  company: z.string().max(255).optional(),
+  title: z.string().max(255).optional(),
+  phone: z.string().max(50).optional(),
+  status: z.enum(["new", "enriched", "scored", "qualified", "nurturing", "proposal", "negotiation", "won", "lost"]).optional(),
+  notes: z.string().max(2000).optional(),
+  assignedTo: z.string().max(50).optional(),
+}).refine(data => Object.keys(data).length > 0, { message: "At least one field is required" });
+
+export const bulkImportLeadsSchema = z.object({
+  leads: z.array(z.object({
+    name: z.string().min(1).max(255),
+    email: z.string().email(),
+    company: z.string().max(255).optional(),
+    title: z.string().max(255).optional(),
+    phone: z.string().max(50).optional(),
+    source: z.string().max(50).default("import"),
+  })).min(1).max(1000),
+});
+
+// ── Sales: Deals ──
+
+export const updateDealSchema = z.object({
+  stage: z.enum(["qualification", "nurture", "proposal", "negotiation", "closing", "won", "lost"]).optional(),
+  value: z.string().regex(/^\d+(\.\d{1,2})?$/).or(z.number().positive().transform(String)).optional(),
+  probability: z.number().int().min(0).max(100).optional(),
+  expectedCloseDate: z.string().datetime().or(z.string().regex(/^\d{4}-\d{2}-\d{2}$/)).optional(),
+  lostReason: z.string().max(50).optional(),
+  notes: z.string().max(2000).optional(),
+}).refine(data => Object.keys(data).length > 0, { message: "At least one field is required" });
+
+export const createDealProposalSchema = z.object({
+  discoveryNotes: z.string().min(1).max(10000).optional(),
+});
+
+// ── Sales: Follow-ups ──
+
+export const updateFollowUpSchema = z.object({
+  status: z.enum(["sent", "opened", "replied", "cancelled"]),
+});
+
+// ── Sales: Scoring Rules ──
+
+export const upsertScoringRulesSchema = z.object({
+  rules: z.array(z.object({
+    component: z.enum(["fit", "intent", "authority", "timing"]),
+    signal: z.string().min(1).max(100),
+    points: z.number().int().min(-50).max(50),
+    condition: z.record(z.unknown()).optional(),
+    enabled: z.boolean().default(true),
+  })).min(1),
+});
+
 // ── Helper: parse with nice error response ──
 
 export function parseBody<T>(schema: z.ZodType<T>, body: unknown): { success: true; data: T } | { success: false; error: string } {
