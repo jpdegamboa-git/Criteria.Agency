@@ -514,6 +514,11 @@ export const AGENT_REGISTRY: Record<string, AgentRegistryEntry> = {
   "BU-002": { id: "BU-002", name: "Spend Monitor", skillFile: "agents/BU-002_spend_monitor.md", team: 36, level: "sub", steps: ["bu_spend_tracking"] as any, gates: [], autonomy: 90 },
   "BU-003": { id: "BU-003", name: "Vendor Analyst", skillFile: "agents/BU-003_vendor_analyst.md", team: 36, level: "sub", steps: ["bu_vendor_validation"] as any, gates: [], autonomy: 85 },
   "BU-004": { id: "BU-004", name: "ROI Analyst", skillFile: "agents/BU-004_roi_analyst.md", team: 36, level: "sub", steps: ["bu_roi_calculation"] as any, gates: [], autonomy: 85 },
+  // ── Scale Engine (team 37) ──
+  "SK-L": { id: "SK-L", name: "Campaign Orchestrator", skillFile: "agents/SK-L_campaign_orchestrator.md", team: 37, level: "leader", steps: ["sk_decompose", "sk_dispatch", "sk_consolidate"] as any, gates: ["sk-g1"] as any, autonomy: 70 },
+  "SK-001": { id: "SK-001", name: "Brief Decomposer", skillFile: "agents/SK-001_brief_decomposer.md", team: 37, level: "sub", steps: ["sk_decompose"] as any, gates: [], autonomy: 85 },
+  "SK-002": { id: "SK-002", name: "Progress Monitor", skillFile: "agents/SK-002_progress_monitor.md", team: 37, level: "sub", steps: ["sk_monitor"] as any, gates: [], autonomy: 90 },
+  "SK-003": { id: "SK-003", name: "Asset Curator", skillFile: "agents/SK-003_asset_curator.md", team: 37, level: "sub", steps: ["sk_dispatch"] as any, gates: [], autonomy: 90 },
   // ── Financial Motor (evolves XA-001) ──
   "FN-L": { id: "FN-L", name: "Financial Director", skillFile: "agents/FN-L_financial_director.md", team: 34, level: "leader", steps: ["fn_request", "fn_deliver"] as any, gates: ["fn-g1"] as any, autonomy: 75 },
   "FN-001": { id: "FN-001", name: "Budget Allocator", skillFile: "agents/FN-001_budget_allocator.md", team: 34, level: "sub", steps: ["fn_budget"] as any, gates: [], autonomy: 80 },
