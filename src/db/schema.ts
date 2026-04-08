@@ -63,6 +63,9 @@ export const projectStatusEnum = pgEnum("project_status", [
   "an_request", "an_collect", "an_analyze", "an_visualize", "an_deliver",
   // Financial Motor
   "fn_request", "fn_budget", "fn_tracking", "fn_pl", "fn_deliver",
+  // Positioning Engine
+  "po_perception_audit", "po_gap_analysis", "po_positioning_definition", "po_validation",
+  "po_current_audit", "po_target_definition", "po_transition_plan", "po_phase_design", "po_execution_monitoring",
   // Shared
   "delivered", "paused",
 ]);
@@ -91,6 +94,7 @@ export const gateTypeEnum = pgEnum("gate_type", [
   "an-g1",
   "fn-g1",
   "sec-g1",
+  "po-g1", "po-g2",
 ]);
 
 export const gateDecisionEnum = pgEnum("gate_decision", ["pass", "fail"]);
@@ -145,6 +149,9 @@ export const artifactStepEnum = pgEnum("artifact_step", [
   "il_scan", "il_analyze", "il_report",
   // Competitive Listener
   "co_scan", "co_analyze", "co_report",
+  // Positioning Engine
+  "po_perception_audit", "po_gap_analysis", "po_positioning_definition", "po_validation",
+  "po_current_audit", "po_target_definition", "po_transition_plan", "po_phase_design", "po_execution_monitoring",
   // Shared
   "model_config", "gate_review",
 ]);
@@ -858,6 +865,27 @@ export const scoringRules = pgTable("scoring_rules", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 }, (table) => [
   index("scoring_rules_client_id_idx").on(table.clientId),
+]);
+
+// ── Positioning Engine: Perception Tracking ──
+
+export const perceptionTrackingStatusEnum = pgEnum("perception_tracking_status", [
+  "on_track", "at_risk", "off_track",
+]);
+
+export const perceptionTracking = pgTable("perception_tracking", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  clientId: uuid("client_id").references(() => clients.id).notNull(),
+  repositioningProjectId: uuid("repositioning_project_id").references(() => projects.id),
+  phase: integer("phase").notNull(),
+  measurementDate: timestamp("measurement_date").notNull(),
+  metrics: jsonb("metrics").notNull(),
+  status: perceptionTrackingStatusEnum("status").default("on_track").notNull(),
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+}, (table) => [
+  index("perception_tracking_client_id_idx").on(table.clientId),
+  index("perception_tracking_project_id_idx").on(table.repositioningProjectId),
 ]);
 
 // ── Waitlist ──
