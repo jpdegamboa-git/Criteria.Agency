@@ -98,10 +98,22 @@ export default function ClientHome() {
                     </p>
                   </div>
                 </div>
-                <div className="flex gap-1.5">
-                  {brand.colors.map((c) => (
-                    <div key={c.hex} className="w-4 h-4 rounded" style={{ backgroundColor: c.hex, opacity: isSelected ? 0.7 : 1 }} />
-                  ))}
+                <div className="flex items-center justify-between mt-2">
+                  <div className="flex gap-1.5">
+                    {brand.colors.map((c) => (
+                      <div key={c.hex} className="w-4 h-4 rounded" style={{ backgroundColor: c.hex, opacity: isSelected ? 0.7 : 1 }} />
+                    ))}
+                  </div>
+                  <Link
+                    href="/client/brand"
+                    onClick={(e) => e.stopPropagation()}
+                    className={cn(
+                      "flex items-center gap-1 text-[10px] font-medium transition-colors",
+                      isSelected ? "text-white/60 hover:text-white" : "text-portal-text-dim hover:text-portal-accent"
+                    )}
+                  >
+                    <Pencil size={10} /> Editar
+                  </Link>
                 </div>
               </button>
             );
@@ -127,6 +139,51 @@ export default function ClientHome() {
           </div>
         )}
       </div>
+
+      {/* ── Brand Score Ideas (contextual to selected brand) ── */}
+      <PortalCard>
+        <div className="flex items-start gap-4">
+          {/* Score ring */}
+          <div className="shrink-0">
+            <div className="relative w-14 h-14">
+              <svg viewBox="0 0 36 36" className="w-14 h-14 -rotate-90">
+                <circle cx="18" cy="18" r="15.91" fill="none" stroke="#f0f0f0" strokeWidth="3" />
+                <circle cx="18" cy="18" r="15.91" fill="none" stroke="#f5a623" strokeWidth="3"
+                  strokeDasharray={`${activeBrand?.score || 78} ${100 - (activeBrand?.score || 78)}`}
+                  strokeLinecap="round" />
+              </svg>
+              <span className="absolute inset-0 flex items-center justify-center text-sm font-[800] text-portal-text">
+                {activeBrand?.score || 78}
+              </span>
+            </div>
+            <p className="text-[9px] text-portal-text-dim text-center mt-1">Brand Score</p>
+          </div>
+
+          {/* Ideas to improve */}
+          <div className="flex-1 min-w-0">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.5px] text-portal-text-muted mb-2">
+              Ideas para mejorar tu score
+            </p>
+            <div className="space-y-2">
+              {[
+                { text: "Definir guía de tono de voz para redes sociales", impact: "+8pts", area: "Tono", color: "#7c5cfc" },
+                { text: "Agregar variaciones de logo para fondos oscuros", impact: "+5pts", area: "Visual", color: "#00c2a8" },
+                { text: "Crear documento de propuesta de valor diferenciada", impact: "+4pts", area: "Mensaje", color: "#f5a623" },
+              ].map((idea) => (
+                <div key={idea.text} className="flex items-center gap-3">
+                  <div className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: idea.color }} />
+                  <p className="text-[11px] text-portal-text flex-1">{idea.text}</p>
+                  <span className="text-[9px] font-medium px-1.5 py-0.5 rounded" style={{ backgroundColor: idea.color + "12", color: idea.color }}>
+                    {idea.area}
+                  </span>
+                  <span className="text-[10px] font-semibold text-[#00c2a8]">{idea.impact}</span>
+                  <PortalButton variant="secondary" size="sm">Aplicar</PortalButton>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </PortalCard>
 
       {/* ── Quick stats (compact inline instead of 4 big cards) ── */}
       <div className="flex items-center gap-6">
