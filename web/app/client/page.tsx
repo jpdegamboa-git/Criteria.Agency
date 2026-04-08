@@ -140,50 +140,72 @@ export default function ClientHome() {
         )}
       </div>
 
-      {/* ── Brand Score Ideas (contextual to selected brand) ── */}
-      <PortalCard>
-        <div className="flex items-start gap-4">
-          {/* Score ring */}
-          <div className="shrink-0">
-            <div className="relative w-14 h-14">
-              <svg viewBox="0 0 36 36" className="w-14 h-14 -rotate-90">
-                <circle cx="18" cy="18" r="15.91" fill="none" stroke="#f0f0f0" strokeWidth="3" />
-                <circle cx="18" cy="18" r="15.91" fill="none" stroke="#f5a623" strokeWidth="3"
-                  strokeDasharray={`${activeBrand?.score || 78} ${100 - (activeBrand?.score || 78)}`}
-                  strokeLinecap="round" />
-              </svg>
-              <span className="absolute inset-0 flex items-center justify-center text-sm font-[800] text-portal-text">
-                {activeBrand?.score || 78}
-              </span>
-            </div>
-            <p className="text-[9px] text-portal-text-dim text-center mt-1">Brand Score</p>
-          </div>
-
-          {/* Ideas to improve */}
-          <div className="flex-1 min-w-0">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.5px] text-portal-text-muted mb-2">
-              Ideas para mejorar tu score
+      {/* ── Brand Score + Sparkline + Quick Ideas ── */}
+      <div className="flex gap-4 items-stretch">
+        {/* Score + Trend chart */}
+        <PortalCard className="flex items-center gap-4 w-auto shrink-0">
+          <div className="text-center shrink-0">
+            <p className="text-[28px] font-[800] tracking-[-1px] text-portal-text leading-none">
+              {activeBrand?.score || 78}
             </p>
-            <div className="space-y-2">
-              {[
-                { text: "Definir guía de tono de voz para redes sociales", impact: "+8pts", area: "Tono", color: "#7c5cfc" },
-                { text: "Agregar variaciones de logo para fondos oscuros", impact: "+5pts", area: "Visual", color: "#00c2a8" },
-                { text: "Crear documento de propuesta de valor diferenciada", impact: "+4pts", area: "Mensaje", color: "#f5a623" },
-              ].map((idea) => (
-                <div key={idea.text} className="flex items-center gap-3">
-                  <div className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: idea.color }} />
-                  <p className="text-[11px] text-portal-text flex-1">{idea.text}</p>
-                  <span className="text-[9px] font-medium px-1.5 py-0.5 rounded" style={{ backgroundColor: idea.color + "12", color: idea.color }}>
-                    {idea.area}
-                  </span>
-                  <span className="text-[10px] font-semibold text-[#00c2a8]">{idea.impact}</span>
-                  <PortalButton variant="secondary" size="sm">Aplicar</PortalButton>
-                </div>
-              ))}
+            <p className="text-[9px] text-portal-text-dim mt-0.5">Brand Score</p>
+          </div>
+          {/* Sparkline SVG — 6 month trend */}
+          <div className="shrink-0">
+            <svg width="100" height="36" viewBox="0 0 100 36">
+              {/* Grid lines */}
+              <line x1="0" y1="9" x2="100" y2="9" stroke="#f0f0f0" strokeWidth="0.5" />
+              <line x1="0" y1="18" x2="100" y2="18" stroke="#f0f0f0" strokeWidth="0.5" />
+              <line x1="0" y1="27" x2="100" y2="27" stroke="#f0f0f0" strokeWidth="0.5" />
+              {/* Area fill */}
+              <path d="M0,30 L17,26 L34,24 L51,22 L68,16 L85,10 L100,7 L100,36 L0,36 Z"
+                fill="url(#scoreGrad)" opacity="0.15" />
+              {/* Line */}
+              <path d="M0,30 L17,26 L34,24 L51,22 L68,16 L85,10 L100,7"
+                fill="none" stroke="#f5a623" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              {/* Current dot */}
+              <circle cx="100" cy="7" r="3" fill="#f5a623" />
+              <defs>
+                <linearGradient id="scoreGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#f5a623" />
+                  <stop offset="100%" stopColor="#f5a623" stopOpacity="0" />
+                </linearGradient>
+              </defs>
+            </svg>
+            <div className="flex justify-between mt-0.5">
+              <span className="text-[8px] text-portal-text-dim">Oct</span>
+              <span className="text-[8px] text-portal-text-dim">Ene</span>
+              <span className="text-[8px] text-portal-text-dim font-semibold text-portal-accent">Abr</span>
             </div>
           </div>
-        </div>
-      </PortalCard>
+          <div className="flex items-center gap-1 text-[10px] font-semibold text-[#00c2a8]">
+            <TrendingUp size={12} /> +12pts
+          </div>
+        </PortalCard>
+
+        {/* Quick ideas to improve */}
+        <PortalCard className="flex-1">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.5px] text-portal-text-muted mb-2">
+            Para mejorar tu score
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {[
+              { text: "Guía de tono de voz", impact: "+8", area: "Tono", color: "#7c5cfc" },
+              { text: "Logo para fondos oscuros", impact: "+5", area: "Visual", color: "#00c2a8" },
+              { text: "Propuesta de valor", impact: "+4", area: "Mensaje", color: "#f5a623" },
+            ].map((idea) => (
+              <button
+                key={idea.text}
+                className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[#f8f8fa] hover:shadow-[0_2px_8px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 transition-all text-left"
+              >
+                <div className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: idea.color }} />
+                <span className="text-[10px] text-portal-text">{idea.text}</span>
+                <span className="text-[9px] font-bold text-[#00c2a8]">+{idea.impact}</span>
+              </button>
+            ))}
+          </div>
+        </PortalCard>
+      </div>
 
       {/* ── Quick stats (compact inline instead of 4 big cards) ── */}
       <div className="flex items-center gap-6">
