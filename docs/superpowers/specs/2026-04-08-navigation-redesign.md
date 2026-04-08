@@ -1,7 +1,7 @@
 # Navigation Redesign — Sidebar + Reorganized Spaces
 
 > Date: 2026-04-08
-> Status: Approved design, pending implementation
+> Status: Implemented
 > Replaces: Horizontal tab nav with 6 Spaces (Crear, Comunicar, Entender, Vender, Mi Marca, Cuenta)
 
 ---
@@ -26,36 +26,62 @@ The new structure groups spaces by **role** (what they represent) and uses a sid
 ### Sidebar Structure
 
 ```
-criteria.                         ← logo
+criteria.                         ← logo (collapsible toggle)
 
-🏠  Home                          ← always first
+🏠  Home                          ← same level as categories
 
-── FUNDAMENTOS ──                 ← group label (not clickable)
-📐  Business Model
+── FUNDAMENTOS ── (collapsible group with icon)
+📐  Business                      ← was "Business Model"
 🎨  Brand
 📦  Productos y Servicios
 💵  Revenue Streams
 
-── INTELIGENCIA ──
+── INTELIGENCIA ── (collapsible group with icon)
 🌍  Mercado
 🔍  Competencia
 
-── EJECUCIÓN ──
+── EJECUCIÓN ── (collapsible group with icon)
 📣  Campaigns
 💰  Sales
+
+── TOOLS ── (pinned to bottom, separate section)
+🎬  Studio
+🛍  Marketplace
+📒  Directorio
+💾  Drive
+📊  Reportes
 ```
 
-**Group labels** ("Fundamentos", "Inteligencia", "Ejecución") are non-interactive text dividers. They provide a mental model:
+**Group labels** ("Fundamentos", "Inteligencia", "Ejecución") are collapsible/expandable with chevrons. They provide a mental model:
 
 - **Fundamentos** = who you are, what you sell, how you make money
 - **Inteligencia** = what's happening outside your business
 - **Ejecución** = what you're doing about it
+- **Tools** = pinned to bottom, separated by a border divider
 
 **Setup/Cuenta** stays in the avatar dropdown menu (not in sidebar).
 
+### Collapsible Sidebar
+
+- Expanded: **220px** — icon + label
+- Collapsed: **60px** icon rail — icon only, tooltips on hover
+- Logo click toggles collapse state
+
+### Collapsible Groups
+
+- Groups are collapsed by default
+- Auto-expand when navigating into any item within them
+- Each group has a **color-tinted background** when expanded:
+  - Fundamentos: `#7c5cfc`
+  - Inteligencia: `#00c2a8`
+  - Ejecución: `#f5a623`
+  - Tools: `#ff6b6b`
+- Home and categories share the same visual hierarchy (icon + label)
+- Tools pinned to bottom with border separator
+
 ### Responsive Behavior
 
-On mobile, the sidebar collapses to a bottom tab bar with the 9 items (no group labels). Icons only, label below.
+On mobile, the sidebar collapses to a bottom tab bar with the main items (no group labels). Icons only, label below.
 
 ---
 
@@ -66,19 +92,23 @@ On mobile, the sidebar collapses to a bottom tab bar with the 9 items (no group 
 **Internal tabs:** None — single view
 **Content:**
 - KPIs ejecutivos (aggregated from all spaces)
-- Copilot conversacional (primary interaction point)
+- Copilot conversacional (primary interaction point, now a floating draggable window)
 - Quick actions (e.g., "Crear video", "Nuevo brief") — secondary access to create content without a campaign
 - Recent activity feed
 
-### Business Model (previously Blueprint)
+### Business (previously Business Model, previously Blueprint)
 **Route:** `/client/business-model`
 **Internal tabs:**
-- **Canvas** — Business Model Canvas + Value Proposition Canvas
-- **Unit Economics** — LTV, CAC, LTV:CAC, Payback, Gross Margin, Retention
+- **Propuesta de Valor** (default) — Value Proposition Canvas and core value prop definition
+- **Nichos** — target niche segments and market fit
+- **Productos y Servicios** — editable catalog of products and services
+- **Canales** — distribution and acquisition channels
 
-**What moved out:**
-- Productos y Servicios → own sidebar item
-- Revenue Streams → own sidebar item
+Each tab shows relevant workshops at the bottom.
+
+**What moved out / removed:**
+- Unit Economics → removed from this space
+- Operación → not included
 
 ### Brand
 **Route:** `/client/brand`
@@ -91,7 +121,7 @@ On mobile, the sidebar collapses to a bottom tab bar with the 9 items (no group 
 
 **What moved out:**
 - Audiencias → Mercado > Audiencias
-- Productos y Servicios → own sidebar item
+- Productos y Servicios → own sidebar item (also reflected inside Business > Productos y Servicios tab)
 
 ### Productos y Servicios
 **Route:** `/client/productos`
@@ -146,11 +176,12 @@ Below all views: Best Customers Origin (attribution table) + Copilot Insights.
 
 | Content | From | To |
 |---------|------|----|
-| Business Model Canvas | Blueprint | Business Model > Canvas |
-| Value Proposition Canvas | Blueprint | Business Model > Canvas |
-| Unit Economics | Blueprint | Business Model > Unit Economics |
+| Business Model Canvas | Blueprint | Business > Propuesta de Valor |
+| Value Proposition Canvas | Blueprint | Business > Propuesta de Valor |
+| Unit Economics | Blueprint | Removed |
+| Operación | Blueprint | Removed |
 | Revenue Streams | Blueprint | Revenue Streams (own space) |
-| Productos y Servicios | Brand | Productos y Servicios (own space) |
+| Productos y Servicios | Brand | Productos y Servicios (own space) + Business > Productos y Servicios tab |
 | Brand DNA | Brand | Brand > DNA |
 | Identity (logo, colors, type) | Brand | Brand > Identidad |
 | Audiences / Personas | Brand | Mercado > Audiencias |
@@ -163,6 +194,8 @@ Below all views: Best Customers Origin (attribution table) + Copilot Insights.
 | Markets / Industry data | Plan > Mercados | Mercado > Industria |
 | Opportunities feed | Plan > Oportunidades | Mercado > Oportunidades |
 | Studies / Research | Plan > Estudios | Mercado > Estudios |
+| Nichos | — | Business > Nichos (new) |
+| Canales | — | Business > Canales (new) |
 
 ---
 
@@ -173,7 +206,7 @@ Below all views: Best Customers Origin (attribution table) + Copilot Insights.
 - **Sales page content:** Pipeline, Leads, Proposals views are unchanged.
 - **Home content:** KPIs, activity feed, charts remain. Copilot integration enhanced but layout preserved.
 - **Setup/Cuenta:** Stays in avatar dropdown, not affected.
-- **Copilot FAB:** Stays bottom-right on all pages.
+- **Copilot FAB:** Stays bottom-right on all pages. Opens a **floating draggable window** (not a side panel drawer).
 - **Brand selector:** Stays in page headers where applicable.
 - **Design tokens:** `portal-bg`, `portal-text`, `portal-accent`, media type colors, state colors — all untouched.
 
@@ -184,7 +217,7 @@ Below all views: Best Customers Origin (attribution table) + Copilot Insights.
 | Old Route | New Route | Notes |
 |-----------|-----------|-------|
 | `/client` | `/client` | Unchanged |
-| `/client/blueprint` | `/client/business-model` | Renamed |
+| `/client/blueprint` | `/client/business-model` | Renamed; tabs changed (Propuesta de Valor, Nichos, Productos y Servicios, Canales) |
 | `/client/brand` | `/client/brand` | Unchanged |
 | — | `/client/productos` | New route |
 | — | `/client/revenue` | New route |
@@ -199,24 +232,40 @@ Below all views: Best Customers Origin (attribution table) + Copilot Insights.
 
 ## 7. Sidebar Component Spec
 
-The sidebar replaces `portal-nav.tsx` with a new `portal-sidebar.tsx` component.
+The sidebar is implemented in `portal-nav.tsx` (updated in-place; no separate `portal-sidebar.tsx` was created).
 
 **Behavior:**
 - Fixed left position, full viewport height
 - Background: `bg-white` with `border-r border-portal-border` (consistent with current header)
-- Active item highlighted (same visual language as current active tab — text-portal-text with bottom-border equivalent adapted to vertical)
-- Group labels are `text-[10px] uppercase tracking-wider text-portal-text-dim font-semibold`
+- **Collapsible:** toggles between 220px (expanded, icon + label) and 60px (icon rail, icon only)
+- Active item highlighted (same visual language as current active tab — text-portal-text with left-border equivalent adapted to vertical)
+- Group labels are collapsible with chevron icons; `text-[10px] uppercase tracking-wider text-portal-text-dim font-semibold`
 - Items use existing icon sizes (16px) and text styles (`text-sm font-medium`)
 - Inactive items: `text-portal-text-muted hover:text-portal-text`
-- Sidebar width: ~220px
+- Groups collapsed by default; auto-expand when active item is inside
+- Group color tints applied to expanded group backgrounds
+- Tools section pinned to bottom with `border-t border-portal-border` separator
 - On mobile (< 768px): collapses to bottom tab bar, icons only with small label
 
 **No new design tokens needed.** Uses existing `portal-text`, `portal-text-muted`, `portal-bg`, `portal-border`, `portal-accent` variables.
 
 ---
 
-## 8. Impact on PROJECT_VISION.md
+## 8. Copilot — Floating Draggable Window
 
-The 6 outcome-based Spaces (Crear, Comunicar, Entender, Vender, Mi Marca, Cuenta) defined in PROJECT_VISION.md §99-109 are **superseded** by this navigation structure for all tiers. PROJECT_VISION.md should be updated to reflect the new 3-group model (Fundamentos, Inteligencia, Ejecución) with 9 spaces.
+The Copilot interaction model changed from a **side panel drawer** to a **floating draggable window**.
+
+- Opened via the FAB button (bottom-right, all pages)
+- Window is draggable anywhere on screen
+- Resizable (min/max bounds)
+- Persists position during session
+- Does not push or overlay the sidebar or main content in a fixed way
+- Z-index above main content, below modals
+
+---
+
+## 9. Impact on PROJECT_VISION.md
+
+The 6 outcome-based Spaces (Crear, Comunicar, Entender, Vender, Mi Marca, Cuenta) defined in PROJECT_VISION.md §99-109 are **superseded** by this navigation structure for all tiers. PROJECT_VISION.md should be updated to reflect the new 3-group model (Fundamentos, Inteligencia, Ejecución) with Tools pinned at bottom, and 9+ spaces.
 
 The capability-to-motor mapping remains valid — only the client-facing navigation layer changes.
