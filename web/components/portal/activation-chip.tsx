@@ -18,11 +18,8 @@ const mediaColors: Record<string, string> = {
   earned: "#ff6b6b",
 };
 
-const mediaBg: Record<string, string> = {
-  paid: "rgba(124, 92, 252, 0.04)",
-  owned: "rgba(0, 194, 168, 0.04)",
-  earned: "rgba(255, 107, 107, 0.04)",
-};
+// Chip background: near-white gray for all types
+const chipBg = "#f8f8fa";
 
 const channelIcons: Record<Channel, typeof Search> = {
   sem: Search,
@@ -42,8 +39,8 @@ export function ActivationChip({ activation }: { activation: Activation }) {
   return (
     <Link
       href={`/client/campaigns/${activation.campaignId}`}
-      className="block rounded-xl p-3 portal-shadow hover:-translate-y-0.5 hover:shadow-[0_2px_8px_rgba(0,0,0,0.08)] transition-all"
-      style={{ backgroundColor: mediaBg[activation.mediaType] }}
+      className="block rounded-xl p-3 shadow-[0_1px_3px_rgba(0,0,0,0.06)] hover:-translate-y-0.5 hover:shadow-[0_2px_8px_rgba(0,0,0,0.1)] transition-all"
+      style={{ backgroundColor: chipBg }}
     >
       <div className="flex items-start gap-2">
         {/* Channel icon */}

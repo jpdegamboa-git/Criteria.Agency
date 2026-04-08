@@ -107,7 +107,7 @@ export function FunnelMatrix({ activations }: FunnelMatrixProps) {
               return (
                 <div
                   key={`${channel}-${stage}`}
-                  className="p-2 bg-[#fafafa] flex flex-col gap-1.5"
+                  className="p-2 flex flex-col gap-1.5"
                   style={{
                     borderBottom: rowIdx < channelOrder.length - 1 ? "1px solid #f0f0f0" : "none",
                     borderRight: colIdx < funnelOrder.length - 1 ? "1px solid #f0f0f0" : "none",
