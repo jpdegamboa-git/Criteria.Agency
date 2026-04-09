@@ -38,9 +38,6 @@ importers:
 
   packages/db:
     dependencies:
-      dotenv:
-        specifier: ^16.4.0
-        version: 16.6.1
       drizzle-orm:
         specifier: ^0.39.0
         version: 0.39.3(postgres@3.4.9)
@@ -51,6 +48,9 @@ importers:
       '@types/node':
         specifier: ^22.0.0
         version: 22.19.17
+      dotenv:
+        specifier: ^16.4.0
+        version: 16.6.1
       drizzle-kit:
         specifier: ^0.30.0
         version: 0.30.6

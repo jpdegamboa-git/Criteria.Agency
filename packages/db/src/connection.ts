@@ -12,7 +12,10 @@ export function createDb(connectionString?: string) {
     throw new Error('DATABASE_URL environment variable is required');
   }
   const client = postgres(url);
-  return drizzle(client, { schema });
+  const db = drizzle(client, { schema });
+  return Object.assign(db, {
+    close: () => client.end(),
+  });
 }
 
 export type Database = ReturnType<typeof createDb>;

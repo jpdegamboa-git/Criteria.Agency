@@ -21,7 +21,7 @@ export const organizations = pgTable('organizations', {
   plan: varchar('plan', { length: 20 }).notNull().default('starter'),
   settings: jsonb('settings').notNull().default({}),
   createdAt: timestamp('created_at').notNull().defaultNow(),
-  updatedAt: timestamp('updated_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow().$onUpdate(() => new Date()),
 });
 
 // motors — motor configurations per tenant
@@ -84,7 +84,7 @@ export const promptRegistry = pgTable('prompt_registry', {
   approvedProviders: jsonb('approved_providers').notNull().default(['anthropic']),
   active: boolean('active').notNull().default(true),
   createdAt: timestamp('created_at').notNull().defaultNow(),
-  updatedAt: timestamp('updated_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow().$onUpdate(() => new Date()),
 }, (table) => [
   uniqueIndex('prompt_reg_agent_skill_ver_idx').on(table.agentId, table.skillId, table.version),
   index('prompt_reg_agent_skill_active_idx').on(table.agentId, table.skillId, table.active),

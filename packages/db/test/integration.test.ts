@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { eq, sql } from 'drizzle-orm';
 import { createDb } from '../src/connection.js';
-import { organizations, motors, motorExecutions, agentPermissions, promptRegistry, outputRegistry } from '../src/schema.js';
+import { organizations, motors, promptRegistry } from '../src/schema.js';
 import postgres from 'postgres';
 
 const DATABASE_URL = process.env.DATABASE_URL;
@@ -16,6 +16,7 @@ describe.skipIf(!DATABASE_URL)('database integration', () => {
   });
 
   afterAll(async () => {
+    await db.close();
     await rawClient.end();
   });
 
@@ -37,13 +38,14 @@ describe.skipIf(!DATABASE_URL)('database integration', () => {
       plan: 'starter',
     }).returning();
 
-    expect(org.id).toBeDefined();
-    expect(org.name).toBe('Test Org');
-    expect(org.slug).toBe('test-org-integration');
-    expect(org.plan).toBe('starter');
-
-    // Cleanup
-    await db.delete(organizations).where(eq(organizations.id, org.id));
+    try {
+      expect(org.id).toBeDefined();
+      expect(org.name).toBe('Test Org');
+      expect(org.slug).toBe('test-org-integration');
+      expect(org.plan).toBe('starter');
+    } finally {
+      await db.delete(organizations).where(eq(organizations.id, org.id));
+    }
   });
 
   it('motors table enforces org FK and unique constraint', async () => {
@@ -52,18 +54,20 @@ describe.skipIf(!DATABASE_URL)('database integration', () => {
       slug: 'motor-test-org',
     }).returning();
 
-    const [motor] = await db.insert(motors).values({
-      organizationId: org.id,
-      motor: 'video',
-      autonomyMode: 'ai_recommends',
-    }).returning();
+    try {
+      const [motor] = await db.insert(motors).values({
+        organizationId: org.id,
+        motor: 'video',
+        autonomyMode: 'ai_recommends',
+      }).returning();
 
-    expect(motor.motor).toBe('video');
-    expect(motor.enabled).toBe(true);
+      expect(motor.motor).toBe('video');
+      expect(motor.enabled).toBe(true);
 
-    // Cleanup
-    await db.delete(motors).where(eq(motors.id, motor.id));
-    await db.delete(organizations).where(eq(organizations.id, org.id));
+      await db.delete(motors).where(eq(motors.id, motor.id));
+    } finally {
+      await db.delete(organizations).where(eq(organizations.id, org.id));
+    }
   });
 
   it('prompt_registry table accepts inserts with DEC-149 fields', async () => {
@@ -79,11 +83,12 @@ describe.skipIf(!DATABASE_URL)('database integration', () => {
       active: true,
     }).returning();
 
-    expect(prompt.agentId).toBe('brand-strategist');
-    expect(prompt.dataSensitivity).toBe('A');
-
-    // Cleanup
-    await db.delete(promptRegistry).where(eq(promptRegistry.id, prompt.id));
+    try {
+      expect(prompt.agentId).toBe('brand-strategist');
+      expect(prompt.dataSensitivity).toBe('A');
+    } finally {
+      await db.delete(promptRegistry).where(eq(promptRegistry.id, prompt.id));
+    }
   });
 
   it('output_registry table has vector column', async () => {
