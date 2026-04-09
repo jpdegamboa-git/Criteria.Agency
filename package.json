@@ -1,45 +1,15 @@
 {
-  "name": "criteriafilms",
-  "version": "0.1.0",
-  "type": "module",
+  "name": "criteria-agency",
+  "private": true,
+  "packageManager": "pnpm@9.15.9",
   "scripts": {
-    "dev": "tsx src/api/server.ts",
-    "cli": "tsx src/cli/index.ts",
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "tsx src/db/migrate.ts",
-    "db:seed": "tsx src/db/seed.ts",
-    "db:seed-admin": "tsx src/scripts/seed-admin.ts",
-    "stripe:setup": "tsx src/scripts/setup-stripe.ts",
-    "test": "vitest run"
+    "dev": "pnpm --filter @criteria/api dev",
+    "test": "pnpm --filter @criteria/api test",
+    "test:watch": "pnpm --filter @criteria/api test:watch",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "pnpm -r lint"
   },
-  "bin": {
-    "criteriafilms": "./src/cli/index.ts"
-  },
-  "dependencies": {
-    "@anthropic-ai/sdk": "^0.82.0",
-    "@google/genai": "^1.48.0",
-    "@hono/node-server": "^1.13.0",
-    "@opentelemetry/api": "^1.9.1",
-    "better-auth": "^1.6.0",
-    "commander": "^13.1.0",
-    "dotenv": "^16.4.0",
-    "drizzle-orm": "^0.45.2",
-    "hono": "^4.7.0",
-    "node-cron": "^4.2.1",
-    "pino": "^10.3.1",
-    "postgres": "^3.4.0",
-    "resend": "^6.10.0",
-    "stripe": "^22.0.0",
-    "uuid": "^11.1.0",
-    "zod": "^3.24.0"
-  },
-  "devDependencies": {
-    "@types/node": "^22.0.0",
-    "@types/node-cron": "^3.0.11",
-    "@types/uuid": "^10.0.0",
-    "drizzle-kit": "^0.30.0",
-    "tsx": "^4.19.0",
-    "typescript": "^5.7.0",
-    "vitest": "^4.1.2"
+  "engines": {
+    "node": ">=22.0.0"
   }
 }
