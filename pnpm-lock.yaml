@@ -10,6 +10,9 @@ importers:
 
   apps/api:
     dependencies:
+      '@criteria/db':
+        specifier: workspace:*
+        version: link:../../packages/db
       '@hono/node-server':
         specifier: ^1.13.0
         version: 1.19.13(hono@4.12.12)

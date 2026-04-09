@@ -4,10 +4,13 @@
   "packageManager": "pnpm@9.15.9",
   "scripts": {
     "dev": "pnpm --filter @criteria/api dev",
-    "test": "pnpm --filter @criteria/api test",
+    "test": "pnpm -r test",
     "test:watch": "pnpm --filter @criteria/api test:watch",
     "typecheck": "pnpm -r typecheck",
-    "lint": "pnpm -r lint"
+    "lint": "pnpm -r lint",
+    "db:generate": "pnpm --filter @criteria/db db:generate",
+    "db:migrate": "pnpm --filter @criteria/db db:migrate",
+    "db:studio": "pnpm --filter @criteria/db db:studio"
   },
   "engines": {
     "node": ">=22.0.0"
