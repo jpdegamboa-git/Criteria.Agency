@@ -1,0 +1,66 @@
+{
+  "pages": {
+    "/_not-found/page": [
+      "static/chunks/webpack-3291a53e61cae185.js",
+      "static/chunks/01882e81-70c44395530ad919.js",
+      "static/chunks/457-095cbc3f99a92657.js",
+      "static/chunks/main-app-c840a55d0f8d39c2.js",
+      "static/chunks/app/_not-found/page-bbb78e8fc6fa732a.js"
+    ],
+    "/layout": [
+      "static/chunks/webpack-3291a53e61cae185.js",
+      "static/chunks/01882e81-70c44395530ad919.js",
+      "static/chunks/457-095cbc3f99a92657.js",
+      "static/chunks/main-app-c840a55d0f8d39c2.js",
+      "static/css/e162e9251a3fd96b.css",
+      "static/chunks/app/layout-d4b36b105c435d08.js"
+    ],
+    "/login/page": [
+      "static/chunks/webpack-3291a53e61cae185.js",
+      "static/chunks/01882e81-70c44395530ad919.js",
+      "static/chunks/457-095cbc3f99a92657.js",
+      "static/chunks/main-app-c840a55d0f8d39c2.js",
+      "static/chunks/806-dd124e86569ac17f.js",
+      "static/chunks/app/login/page-061dd4804c500801.js"
+    ],
+    "/page": [
+      "static/chunks/webpack-3291a53e61cae185.js",
+      "static/chunks/01882e81-70c44395530ad919.js",
+      "static/chunks/457-095cbc3f99a92657.js",
+      "static/chunks/main-app-c840a55d0f8d39c2.js",
+      "static/chunks/app/page-dda6ed9358e7afaf.js"
+    ],
+    "/portal/layout": [
+      "static/chunks/webpack-3291a53e61cae185.js",
+      "static/chunks/01882e81-70c44395530ad919.js",
+      "static/chunks/457-095cbc3f99a92657.js",
+      "static/chunks/main-app-c840a55d0f8d39c2.js",
+      "static/chunks/479-61f11c429ff721a6.js",
+      "static/chunks/806-dd124e86569ac17f.js",
+      "static/chunks/app/portal/layout-29fb6322035f849f.js"
+    ],
+    "/portal/page": [
+      "static/chunks/webpack-3291a53e61cae185.js",
+      "static/chunks/01882e81-70c44395530ad919.js",
+      "static/chunks/457-095cbc3f99a92657.js",
+      "static/chunks/main-app-c840a55d0f8d39c2.js",
+      "static/chunks/app/portal/page-5720d21ddb174c43.js"
+    ],
+    "/portal/brand-health/page": [
+      "static/chunks/webpack-3291a53e61cae185.js",
+      "static/chunks/01882e81-70c44395530ad919.js",
+      "static/chunks/457-095cbc3f99a92657.js",
+      "static/chunks/main-app-c840a55d0f8d39c2.js",
+      "static/chunks/479-61f11c429ff721a6.js",
+      "static/chunks/app/portal/brand-health/page-9b4fb12a31f1174d.js"
+    ],
+    "/portal/mi-negocio/page": [
+      "static/chunks/webpack-3291a53e61cae185.js",
+      "static/chunks/01882e81-70c44395530ad919.js",
+      "static/chunks/457-095cbc3f99a92657.js",
+      "static/chunks/main-app-c840a55d0f8d39c2.js",
+      "static/chunks/479-61f11c429ff721a6.js",
+      "static/chunks/app/portal/mi-negocio/page-9b4fb12a31f1174d.js"
+    ]
+  }
+}

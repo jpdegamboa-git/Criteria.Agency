@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>criteria.agency — Landing v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', -apple-system, sans-serif; background: #fafafa; color: #1a1a1a; overflow-x: hidden; }
+
+  :root {
+    --gold: #ffd053;
+    --coral: #e86b73;
+    --turquoise: #55c9ca;
+    --orange: #ed854b;
+    --dark: #585758;
+    --muted: #9d9a9c;
+    --border: #e8e8e8;
+  }
+
+  /* ── Noise texture overlay ── */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ── Subtle grid pattern ── */
+  .hero-bg {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(0,0,0,0.03) 1px, transparent 0);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  /* ── Micro-interactions ── */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  @keyframes gate-reveal {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  /* ── Nav ── */
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+    animation: fadeIn 0.6s ease;
+  }
+  .logo-text {
+    font-size: 20px;
+    font-weight: 700;
+    color: #585758;
+    letter-spacing: -0.02em;
+  }
+  .logo-text span { color: #9d9a9c; }
+  nav .links { display: flex; gap: 32px; align-items: center; font-size: 14px; }
+  nav .links a {
+    text-decoration: none;
+    color: var(--muted);
+    position: relative;
+    transition: color 0.2s;
+  }
+  nav .links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 0;
+    width: 0; height: 2px;
+    background: var(--gold);
+    transition: width 0.3s ease;
+  }
+  nav .links a:hover { color: var(--dark); }
+  nav .links a:hover::after { width: 100%; }
+  .btn-waitlist {
+    background: #1a1a1a;
+    color: white;
+    padding: 8px 24px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-waitlist:hover {
+    background: #333;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+
+  /* ── Hero ── */
+  .hero {
+    text-align: center;
+    padding: 80px 40px 60px;
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  /* Decorative diamonds floating */
+  .hero-diamonds {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .diamond {
+    position: absolute;
+    width: 12px; height: 12px;
+    border-radius: 3px;
+    transform: rotate(45deg);
+    opacity: 0.15;
+    animation: float 6s ease-in-out infinite;
+  }
+  .diamond:nth-child(1) { background: var(--gold); top: 15%; left: 8%; animation-delay: 0s; }
+  .diamond:nth-child(2) { background: var(--coral); top: 30%; right: 12%; animation-delay: 1.5s; width: 8px; height: 8px; }
+  .diamond:nth-child(3) { background: var(--turquoise); bottom: 25%; left: 15%; animation-delay: 3s; width: 10px; height: 10px; }
+  .diamond:nth-child(4) { background: var(--orange); bottom: 35%; right: 8%; animation-delay: 4.5s; width: 6px; height: 6px; }
+  .diamond:nth-child(5) { background: var(--gold); top: 50%; left: 5%; animation-delay: 2s; width: 5px; height: 5px; }
+  .diamond:nth-child(6) { background: var(--coral); top: 20%; right: 5%; animation-delay: 3.5s; width: 7px; height: 7px; }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 6px 20px;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 32px;
+    animation: fadeInUp 0.6s ease 0.2s both;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .hero-badge:hover {
+    border-color: var(--turquoise);
+    box-shadow: 0 0 0 3px rgba(85,201,202,0.1);
+  }
+  .hero-badge .dot {
+    width: 6px; height: 6px;
+    background: var(--turquoise);
+    border-radius: 50%;
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+  .hero h1 {
+    font-size: 58px;
+    font-weight: 800;
+    line-height: 1.08;
+    letter-spacing: -0.035em;
+    color: #1a1a1a;
+    margin-bottom: 24px;
+    animation: fadeInUp 0.6s ease 0.3s both;
+  }
+  .hero h1 .accent {
+    background: linear-gradient(135deg, var(--gold), var(--orange));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 200% auto;
+    animation: shimmer 3s ease-in-out infinite;
+  }
+  .hero p {
+    font-size: 20px;
+    line-height: 1.6;
+    color: var(--muted);
+    max-width: 520px;
+    margin: 0 auto 40px;
+    animation: fadeInUp 0.6s ease 0.4s both;
+  }
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    animation: fadeInUp 0.6s ease 0.5s both;
+  }
+  .btn-primary {
+    background: #1a1a1a;
+    color: white;
+    padding: 16px 40px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 0; height: 0;
+    background: rgba(255,208,83,0.15);
+    border-radius: 50%;
+    transition: all 0.5s ease;
+    transform: translate(-50%, -50%);
+  }
+  .btn-primary:hover {
+    background: #333;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  }
+  .btn-primary:hover::after { width: 300px; height: 300px; }
+  .btn-primary:active { transform: translateY(0); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--dark);
+    padding: 16px 32px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 500;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .btn-secondary:hover {
+    border-color: var(--dark);
+    background: rgba(0,0,0,0.02);
+    transform: translateY(-1px);
+  }
+  .hero-note {
+    margin-top: 20px;
+    font-size: 13px;
+    color: #ccc;
+    animation: fadeInUp 0.6s ease 0.6s both;
+  }
+
+  /* ── Trust bar ── */
+  .trust {
+    text-align: center;
+    padding: 48px 40px;
+    border-top: 1px solid var(--border);
+    animation: fadeIn 0.6s ease 0.8s both;
+  }
+  .trust p {
+    font-size: 11px;
+    color: #ccc;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 24px;
+  }
+  .trust-logos {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    align-items: center;
+  }
+  .trust-logos span {
+    font-size: 15px;
+    font-weight: 600;
+    color: #d4d4d4;
+    letter-spacing: 0.5px;
+    transition: color 0.3s;
+  }
+  .trust-logos span:hover { color: var(--dark); }
+
+  /* ── How it works ── */
+  .how-it-works {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 100px 40px;
+    position: relative;
+  }
+  .how-it-works h2 {
+    text-align: center;
+    font-size: 40px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    letter-spacing: -0.03em;
+  }
+  .how-it-works .subtitle {
+    text-align: center;
+    color: var(--muted);
+    font-size: 18px;
+    margin-bottom: 64px;
+  }
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .step {
+    text-align: center;
+    padding: 48px 28px 40px;
+    background: white;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .step::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .step:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+    border-color: transparent;
+  }
+  .step:hover::before { opacity: 1; }
+  .step-icon {
+    width: 56px; height: 56px;
+    border-radius: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-bottom: 24px;
+    transition: transform 0.3s;
+  }
+  .step:hover .step-icon { transform: scale(1.1); }
+  .step h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+  .step p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+  /* ── Quality Gates ── */
+  .quality {
+    background: #1a1a1a;
+    color: white;
+    padding: 100px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  /* Subtle radial glow */
+  .quality::before {
+    content: '';
+    position: absolute;
+    top: -200px; left: 50%;
+    transform: translateX(-50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(255,208,83,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .quality h2 {
+    font-size: 40px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    letter-spacing: -0.03em;
+    position: relative;
+  }
+  .quality .subtitle {
+    color: #777;
+    font-size: 18px;
+    margin-bottom: 56px;
+    position: relative;
+  }
+  .gates {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+  }
+  .gate {
+    flex: 1;
+    padding: 28px 16px;
+    border-radius: 16px;
+    border: 1px solid #2a2a2a;
+    text-align: center;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+  }
+  .gate::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    transition: all 0.3s;
+    opacity: 0;
+  }
+  .gate:nth-child(1)::after { background: var(--turquoise); }
+  .gate:nth-child(2)::after { background: var(--gold); }
+  .gate:nth-child(3)::after { background: var(--orange); }
+  .gate:nth-child(4)::after { background: var(--coral); }
+  .gate:nth-child(5)::after { background: var(--turquoise); }
+  .gate:hover {
+    border-color: #444;
+    transform: translateY(-2px);
+    background: rgba(255,255,255,0.02);
+  }
+  .gate:hover::after { opacity: 1; }
+  .gate .label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+  .gate .name { font-size: 14px; font-weight: 500; color: #aaa; }
+  .gate .desc { font-size: 11px; color: #555; margin-top: 8px; line-height: 1.4; }
+
+  /* Connection line between gates */
+  .gates-connector {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    max-width: 900px;
+    margin: -8px auto 0;
+    position: relative;
+  }
+  .connector-dot {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+  .connector-dot::after {
+    content: '';
+    width: 6px; height: 6px;
+    background: #333;
+    border-radius: 50%;
+  }
+
+  /* ── Pricing ── */
+  .pricing {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 100px 40px;
+    text-align: center;
+  }
+  .pricing h2 {
+    font-size: 40px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    letter-spacing: -0.03em;
+  }
+  .pricing .subtitle { color: var(--muted); font-size: 18px; margin-bottom: 56px; }
+  .pricing-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .pricing-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 40px 28px;
+    text-align: left;
+    transition: all 0.4s ease;
+    position: relative;
+  }
+  .pricing-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.08);
+  }
+  .pricing-card.featured {
+    border: 2px solid var(--gold);
+    box-shadow: 0 8px 32px rgba(255,208,83,0.12);
+  }
+  .pricing-card.featured::before {
+    content: "Mas popular";
+    position: absolute;
+    top: -13px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--gold);
+    color: #1a1a1a;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 20px;
+    border-radius: 100px;
+    letter-spacing: 0.5px;
+  }
+  .pricing-card h3 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+  .pricing-card .desc { color: var(--muted); font-size: 14px; margin-bottom: 20px; }
+  .pricing-card .price {
+    font-size: 40px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 4px;
+  }
+  .pricing-card .price span { font-size: 16px; font-weight: 400; color: var(--muted); }
+  .pricing-card .early {
+    font-size: 13px;
+    color: var(--coral);
+    margin-bottom: 24px;
+    text-decoration: line-through;
+    text-decoration-color: var(--coral);
+  }
+  .pricing-card ul { list-style: none; padding: 0; margin: 0 0 28px; }
+  .pricing-card li {
+    font-size: 14px;
+    color: var(--dark);
+    padding: 8px 0;
+    border-bottom: 1px solid #f5f5f5;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .pricing-card li .check { color: var(--turquoise); font-weight: 700; font-size: 16px; }
+  .pricing-card li .coming { color: #ccc; font-size: 11px; }
+  .pricing-card .card-btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: none;
+  }
+  .pricing-card .card-btn.primary {
+    background: #1a1a1a;
+    color: white;
+  }
+  .pricing-card .card-btn.primary:hover {
+    background: #333;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  .pricing-card .card-btn.outline {
+    background: white;
+    color: var(--dark);
+    border: 1px solid var(--border);
+  }
+  .pricing-card .card-btn.outline:hover { border-color: var(--dark); }
+
+  /* ── CTA Section ── */
+  .cta-section {
+    background: linear-gradient(135deg, #ffd053 0%, #ed854b 100%);
+    padding: 80px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(255,255,255,0.1) 1px, transparent 0);
+    background-size: 32px 32px;
+  }
+  .cta-section h2 {
+    font-size: 36px;
+    font-weight: 800;
+    color: #1a1a1a;
+    margin-bottom: 16px;
+    position: relative;
+    letter-spacing: -0.02em;
+  }
+  .cta-section p {
+    font-size: 18px;
+    color: rgba(0,0,0,0.6);
+    margin-bottom: 32px;
+    position: relative;
+  }
+  .btn-cta-white {
+    background: #1a1a1a;
+    color: white;
+    padding: 16px 48px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s;
+  }
+  .btn-cta-white:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    padding: 48px 40px;
+    border-top: 1px solid var(--border);
+  }
+  .footer .brand { font-size: 16px; font-weight: 700; color: var(--dark); margin-bottom: 8px; }
+  .footer .brand span { color: var(--muted); }
+  .footer .tagline { font-size: 14px; color: #ccc; margin-bottom: 16px; font-style: italic; }
+  .footer .copy { font-size: 12px; color: #ddd; }
+</style>
+</head>
+<body>
+
+<!-- Floating diamonds decoration -->
+<div class="hero-bg"></div>
+
+<!-- Nav -->
+<nav>
+  <div class="logo-text">criteria<span>.agency</span></div>
+  <div class="links">
+    <a href="#how">Como funciona</a>
+    <a href="#quality">Calidad</a>
+    <a href="#pricing">Planes</a>
+    <a href="#" class="btn-waitlist">Unirme al waitlist</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-diamonds">
+    <div class="diamond"></div>
+    <div class="diamond"></div>
+    <div class="diamond"></div>
+    <div class="diamond"></div>
+    <div class="diamond"></div>
+    <div class="diamond"></div>
+  </div>
+
+  <div class="hero-badge">
+    <span class="dot"></span>
+    Plazas limitadas — Beta privada Q3 2026
+  </div>
+
+  <h1>
+    Video profesional con IA.<br>
+    <span class="accent">Con criterio.</span>
+  </h1>
+
+  <p>
+    20 anos de experiencia en produccion codificados en un sistema que exige calidad profesional antes de entregar.
+  </p>
+
+  <div class="hero-cta">
+    <button class="btn-primary">Empezar gratis — 30 dias</button>
+    <button class="btn-secondary">Ver como funciona ↓</button>
+  </div>
+
+  <p class="hero-note">Sin tarjeta de credito · Cancela cuando quieras</p>
+</section>
+
+<!-- Trust -->
+<section class="trust">
+  <p>Clientes en 4 paises</p>
+  <div class="trust-logos">
+    <span>Washington DC</span>
+    <span>New York</span>
+    <span>Madrid</span>
+    <span>Bogota</span>
+  </div>
+</section>
+
+<!-- How it works -->
+<section class="how-it-works" id="how">
+  <h2>Como funciona</h2>
+  <p class="subtitle">Tres pasos. Sin complicaciones.</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-icon" style="background:rgba(85,201,202,0.12);">
+        <span style="color:var(--turquoise);">💬</span>
+      </div>
+      <h3>Describe tu proyecto</h3>
+      <p>Nuestro copiloto IA te guia con preguntas simples para crear el brief perfecto. No necesitas saber de video.</p>
+    </div>
+    <div class="step">
+      <div class="step-icon" style="background:rgba(255,208,83,0.12);">
+        <span style="color:var(--gold);">⚡</span>
+      </div>
+      <h3>La IA produce, el criterio evalua</h3>
+      <p>20 agentes especializados crean tu video. 5 puntos de control de calidad garantizan resultado profesional.</p>
+    </div>
+    <div class="step">
+      <div class="step-icon" style="background:rgba(232,107,115,0.12);">
+        <span style="color:var(--coral);">✓</span>
+      </div>
+      <h3>Revisa y aprueba</h3>
+      <p>Recibe tu video en tu portal privado. Deja comentarios y aprueba cuando estes 100% satisfecho.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Quality Gates -->
+<section class="quality" id="quality">
+  <h2>5 puntos de criterio</h2>
+  <p class="subtitle">Cada video pasa por 5 evaluaciones de calidad antes de llegar a ti</p>
+  <div class="gates">
+    <div class="gate">
+      <div class="label" style="color:var(--turquoise);">G1</div>
+      <div class="name">Concepto</div>
+      <div class="desc">Vision clara y ejecutable</div>
+    </div>
+    <div class="gate">
+      <div class="label" style="color:var(--gold);">G2</div>
+      <div class="name">Guion</div>
+      <div class="desc">Cada segundo cuenta</div>
+    </div>
+    <div class="gate">
+      <div class="label" style="color:var(--orange);">G3</div>
+      <div class="name">Storyboard</div>
+      <div class="desc">Visual sirve narrativa</div>
+    </div>
+    <div class="gate">
+      <div class="label" style="color:var(--coral);">G4</div>
+      <div class="name">Primer corte</div>
+      <div class="desc">Funciona emocionalmente</div>
+    </div>
+    <div class="gate">
+      <div class="label" style="color:var(--turquoise);">G5</div>
+      <div class="name">Corte final</div>
+      <div class="desc">Orgullosos de entregar</div>
+    </div>
+  </div>
+</section>
+
+<!-- Pricing -->
+<section class="pricing" id="pricing">
+  <h2>Elige tu plan</h2>
+  <p class="subtitle">Prueba gratis por 30 dias. Sin tarjeta de credito.</p>
+  <div class="pricing-cards">
+    <div class="pricing-card">
+      <h3>Starter</h3>
+      <p class="desc">Para fundadores y empresas pequenas</p>
+      <div class="price">$300<span>/mes</span></div>
+      <div class="early">$500/mes despues de 3 meses</div>
+      <ul>
+        <li><span class="check">✓</span> 1 video profesional/mes</li>
+        <li><span class="check">✓</span> 5 quality gates</li>
+        <li><span class="check">✓</span> Portal de revision</li>
+        <li><span class="check">✓</span> AI Copilot para briefs</li>
+        <li><span class="check">—</span> Brand Builder <span class="coming">pronto</span></li>
+      </ul>
+      <button class="card-btn primary">Empezar gratis</button>
+    </div>
+    <div class="pricing-card featured">
+      <h3>Pro</h3>
+      <p class="desc">Para equipos de marketing</p>
+      <div class="price">$1,200<span>/mes</span></div>
+      <div class="early">$2,000/mes despues de 3 meses</div>
+      <ul>
+        <li><span class="check">✓</span> 4 videos profesionales/mes</li>
+        <li><span class="check">✓</span> 5 quality gates</li>
+        <li><span class="check">✓</span> Portal de revision</li>
+        <li><span class="check">✓</span> AI Copilot para briefs</li>
+        <li><span class="check">✓</span> Soporte prioritario</li>
+      </ul>
+      <button class="card-btn primary">Empezar gratis</button>
+    </div>
+    <div class="pricing-card">
+      <h3>Enterprise</h3>
+      <p class="desc">Multi-mercado, operacion completa</p>
+      <div class="price" style="font-size:32px;">Custom</div>
+      <div class="early" style="color:var(--muted);text-decoration:none;">Account Executive dedicado</div>
+      <ul>
+        <li><span class="check">✓</span> Videos ilimitados</li>
+        <li><span class="check">✓</span> Formatos premium</li>
+        <li><span class="check">✓</span> Multi-marca + Guardian</li>
+        <li><span class="check">✓</span> Pauta gestionada</li>
+        <li><span class="check">✓</span> Integraciones custom</li>
+      </ul>
+      <button class="card-btn outline">Contactar ventas</button>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2>La IA genera. El criterio decide.</h2>
+  <p>Unete a la lista de espera y se de los primeros en probarlo.</p>
+  <button class="btn-cta-white">Reservar mi lugar →</button>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="brand">criteria<span>.agency</span></div>
+  <p class="tagline">La IA genera. El criterio decide.</p>
+  <p class="copy">&copy; 2026 criteria.agency — Panama</p>
+</footer>
+
+</body>
+</html>

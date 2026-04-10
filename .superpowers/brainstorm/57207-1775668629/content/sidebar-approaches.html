@@ -1,0 +1,157 @@
+<h2>3 enfoques para la sidebar</h2>
+<p class="subtitle">Cómo organizar Home, Blueprint, Brand, Context, Campaigns y Sales en un sidebar izquierdo</p>
+
+<div class="cards" style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; margin-top: 32px;">
+
+  <!-- Approach A -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)" style="cursor:pointer; border: 2px solid transparent; border-radius: 16px; padding: 0; overflow: hidden; background: #fff;">
+    <div style="padding: 16px 20px; background: #7c5cfc; color: white;">
+      <div style="font-size: 13px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; opacity: 0.8;">Enfoque A</div>
+      <h3 style="margin: 4px 0 0; color: white; font-size: 20px;">Flat + Expandible</h3>
+    </div>
+    <div style="padding: 20px;">
+      <!-- Mockup sidebar -->
+      <div style="background: #1a1a2e; border-radius: 12px; padding: 16px; font-family: system-ui; font-size: 13px; color: #ccc;">
+        <div style="color: #7c5cfc; font-weight: 700; font-size: 15px; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid #2a2a4a;">criteria.</div>
+
+        <div style="padding: 10px 12px; background: #2a2a4a; border-radius: 8px; color: white; margin-bottom: 4px; display:flex; align-items:center; gap:8px;">
+          <span>🏠</span> Home
+        </div>
+        <div style="padding: 10px 12px; border-radius: 8px; margin-bottom: 4px; display:flex; align-items:center; gap:8px;">
+          <span>📐</span> Blueprint
+        </div>
+        <div style="padding: 10px 12px; border-radius: 8px; margin-bottom: 4px; display:flex; align-items:center; gap:8px;">
+          <span>🎨</span> Brand
+        </div>
+        <div style="padding: 10px 12px; border-radius: 8px; margin-bottom: 4px; display:flex; align-items:center; gap:8px;">
+          <span>🌍</span> Context
+        </div>
+        <div style="padding: 10px 12px; border-radius: 8px; margin-bottom: 4px; display:flex; align-items:center; gap:8px;">
+          <span>📣</span> Campaigns
+        </div>
+        <div style="padding: 10px 12px; border-radius: 8px; margin-bottom: 4px; display:flex; align-items:center; gap:8px;">
+          <span>💰</span> Sales
+        </div>
+
+        <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #2a2a4a; font-size: 11px; color: #666;">
+          Click expande sub-items inline
+        </div>
+      </div>
+
+      <div style="margin-top: 16px; font-size: 13px; line-height: 1.6;">
+        <strong>6 items planos.</strong> Click en cualquiera expande sus sub-secciones debajo (accordion). Simple y limpio. La sub-nav aparece solo cuando la necesitas.
+      </div>
+
+      <div style="margin-top: 12px;">
+        <div style="display:flex; gap: 6px; flex-wrap:wrap;">
+          <span style="background:#e8f5e9; color:#2e7d32; padding: 3px 10px; border-radius: 20px; font-size: 11px;">Mínimo espacio</span>
+          <span style="background:#e8f5e9; color:#2e7d32; padding: 3px 10px; border-radius: 20px; font-size: 11px;">Limpio</span>
+          <span style="background:#fff3e0; color:#e65100; padding: 3px 10px; border-radius: 20px; font-size: 11px;">Sub-nav oculta</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Approach B -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)" style="cursor:pointer; border: 2px solid transparent; border-radius: 16px; padding: 0; overflow: hidden; background: #fff;">
+    <div style="padding: 16px 20px; background: #00c2a8; color: white;">
+      <div style="font-size: 13px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; opacity: 0.8;">Enfoque B — Recomendado</div>
+      <h3 style="margin: 4px 0 0; color: white; font-size: 20px;">Agrupado por rol</h3>
+    </div>
+    <div style="padding: 20px;">
+      <!-- Mockup sidebar -->
+      <div style="background: #1a1a2e; border-radius: 12px; padding: 16px; font-family: system-ui; font-size: 13px; color: #ccc;">
+        <div style="color: #7c5cfc; font-weight: 700; font-size: 15px; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid #2a2a4a;">criteria.</div>
+
+        <div style="padding: 10px 12px; background: #2a2a4a; border-radius: 8px; color: white; margin-bottom: 8px; display:flex; align-items:center; gap:8px;">
+          <span>🏠</span> Home
+        </div>
+
+        <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #555; padding: 12px 12px 6px; font-weight: 600;">Fundamentos</div>
+        <div style="padding: 8px 12px; border-radius: 8px; margin-bottom: 2px; display:flex; align-items:center; gap:8px;">
+          <span>📐</span> Blueprint
+        </div>
+        <div style="padding: 8px 12px; border-radius: 8px; margin-bottom: 2px; display:flex; align-items:center; gap:8px;">
+          <span>🎨</span> Brand
+        </div>
+
+        <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #555; padding: 12px 12px 6px; font-weight: 600;">Inteligencia</div>
+        <div style="padding: 8px 12px; border-radius: 8px; margin-bottom: 2px; display:flex; align-items:center; gap:8px;">
+          <span>🌍</span> Context
+        </div>
+
+        <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #555; padding: 12px 12px 6px; font-weight: 600;">Ejecución</div>
+        <div style="padding: 8px 12px; border-radius: 8px; margin-bottom: 2px; display:flex; align-items:center; gap:8px;">
+          <span>📣</span> Campaigns
+        </div>
+        <div style="padding: 8px 12px; border-radius: 8px; margin-bottom: 2px; display:flex; align-items:center; gap:8px;">
+          <span>💰</span> Sales
+        </div>
+      </div>
+
+      <div style="margin-top: 16px; font-size: 13px; line-height: 1.6;">
+        <strong>3 grupos semánticos.</strong> Fundamentos (quién eres), Inteligencia (qué pasa afuera), Ejecución (qué haces). Le da estructura mental al cliente sin agregar clicks.
+      </div>
+
+      <div style="margin-top: 12px;">
+        <div style="display:flex; gap: 6px; flex-wrap:wrap;">
+          <span style="background:#e8f5e9; color:#2e7d32; padding: 3px 10px; border-radius: 20px; font-size: 11px;">Modelo mental claro</span>
+          <span style="background:#e8f5e9; color:#2e7d32; padding: 3px 10px; border-radius: 20px; font-size: 11px;">Todo visible</span>
+          <span style="background:#e8f5e9; color:#2e7d32; padding: 3px 10px; border-radius: 20px; font-size: 11px;">Escalable</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Approach C -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)" style="cursor:pointer; border: 2px solid transparent; border-radius: 16px; padding: 0; overflow: hidden; background: #fff;">
+    <div style="padding: 16px 20px; background: #f5a623; color: white;">
+      <div style="font-size: 13px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; opacity: 0.8;">Enfoque C</div>
+      <h3 style="margin: 4px 0 0; color: white; font-size: 20px;">Icons-only + Panel</h3>
+    </div>
+    <div style="padding: 20px;">
+      <!-- Mockup sidebar -->
+      <div style="background: #1a1a2e; border-radius: 12px; padding: 16px; font-family: system-ui; font-size: 13px; color: #ccc; display: flex; gap: 0;">
+        <!-- Icon rail -->
+        <div style="width: 48px; display:flex; flex-direction:column; align-items:center; gap: 8px; padding-right: 12px; border-right: 1px solid #2a2a4a;">
+          <div style="color: #7c5cfc; font-weight: 700; font-size: 18px; margin-bottom: 8px;">c.</div>
+          <div style="width: 36px; height: 36px; background: #2a2a4a; border-radius: 8px; display:flex; align-items:center; justify-content:center; font-size: 16px;">🏠</div>
+          <div style="width: 36px; height: 36px; border-radius: 8px; display:flex; align-items:center; justify-content:center; font-size: 16px;">📐</div>
+          <div style="width: 36px; height: 36px; border-radius: 8px; display:flex; align-items:center; justify-content:center; font-size: 16px;">🎨</div>
+          <div style="width: 36px; height: 36px; border-radius: 8px; display:flex; align-items:center; justify-content:center; font-size: 16px; background: #2a2a4a;">🌍</div>
+          <div style="width: 36px; height: 36px; border-radius: 8px; display:flex; align-items:center; justify-content:center; font-size: 16px;">📣</div>
+          <div style="width: 36px; height: 36px; border-radius: 8px; display:flex; align-items:center; justify-content:center; font-size: 16px;">💰</div>
+        </div>
+        <!-- Expanded panel -->
+        <div style="flex:1; padding-left: 12px;">
+          <div style="font-weight: 600; color: white; margin-bottom: 12px;">Context</div>
+          <div style="padding: 6px 8px; font-size: 12px; color: white; background: #2a2a4a; border-radius: 6px; margin-bottom: 4px;">Mercados</div>
+          <div style="padding: 6px 8px; font-size: 12px; margin-bottom: 4px;">Competencia</div>
+          <div style="padding: 6px 8px; font-size: 12px; margin-bottom: 4px;">Tendencias</div>
+          <div style="padding: 6px 8px; font-size: 12px; margin-bottom: 4px;">Oportunidades</div>
+          <div style="padding: 6px 8px; font-size: 12px;">Estudios</div>
+        </div>
+      </div>
+
+      <div style="margin-top: 16px; font-size: 13px; line-height: 1.6;">
+        <strong>Rail de iconos + panel expandible.</strong> Máximo espacio para contenido. Click en icono abre panel con sub-secciones. Similar a Linear/Notion. Más sofisticado pero requiere familiaridad.
+      </div>
+
+      <div style="margin-top: 12px;">
+        <div style="display:flex; gap: 6px; flex-wrap:wrap;">
+          <span style="background:#e8f5e9; color:#2e7d32; padding: 3px 10px; border-radius: 20px; font-size: 11px;">Max contenido</span>
+          <span style="background:#e8f5e9; color:#2e7d32; padding: 3px 10px; border-radius: 20px; font-size: 11px;">Pro feel</span>
+          <span style="background:#fff3e0; color:#e65100; padding: 3px 10px; border-radius: 20px; font-size: 11px;">Curva de aprendizaje</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div style="margin-top: 32px; padding: 20px; background: #f0faf8; border-radius: 12px; border-left: 4px solid #00c2a8;">
+  <strong>Mi recomendación: Enfoque B (Agrupado por rol)</strong>
+  <p style="margin: 8px 0 0; color: #555; font-size: 14px;">
+    El cliente PyME necesita un modelo mental claro: "Primero defino quién soy (Fundamentos), luego entiendo mi entorno (Inteligencia), luego actúo (Ejecución)." Los grupos semánticos dan esa estructura sin agregar clicks ni ocultar nada. Además escala bien cuando se agreguen más secciones por tier.
+  </p>
+</div>

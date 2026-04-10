@@ -16,6 +16,14 @@
       "env": { "PATH": "/Users/juanpa/.nvm/versions/node/v22.22.2/bin:/usr/local/bin:/usr/bin:/bin" },
       "port": 3001,
       "cwd": "web"
+    },
+    {
+      "name": "admin",
+      "runtimeExecutable": "/Users/juanpa/.nvm/versions/node/v22.22.2/bin/pnpm",
+      "runtimeArgs": ["run", "dev"],
+      "env": { "PATH": "/Users/juanpa/.nvm/versions/node/v22.22.2/bin:/usr/local/bin:/usr/bin:/bin" },
+      "port": 3000,
+      "cwd": "apps/admin"
     }
   ]
 }

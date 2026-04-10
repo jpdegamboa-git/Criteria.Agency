@@ -1,5 +1,10 @@
 # criteria.agency — Project Status
 
+> ⚠️ **Historical snapshot — April 7, 2026**
+> This file describes the state of the prototype BEFORE the BUILD_ORDER was created.
+> For current execution status, see `BUILD_TRACKER.md`.
+> This file is kept as reference for what code exists from the prototype era.
+
 > Last updated: April 7, 2026
 
 ---
@@ -197,6 +202,8 @@
 | `docs/superpowers/specs/2026-04-06-security-framework-design.md` | Security Framework | Spec complete, P0 fixes pending |
 | `docs/superpowers/specs/2026-04-06-schema-api-design.md` | Schema & API | Spec complete |
 | `docs/superpowers/specs/2026-04-07-capabilities-map-design.md` | **Capabilities Map** | **62 pain points → 49 capabilities → 24 motors** |
+| `docs/superpowers/specs/2026-04-08-client-portal-navigation-design.md` | **Client Portal Navigation** | **Dual view (Grid+Funnel), no sidebar, campaign hierarchy, Brand Health Score** |
+| `docs/superpowers/specs/2026-04-08-business-model-design.md` | **Business Model** | **3 tiers ($99/$249/$599), token economy, ad intermediation, white-label, unit economics** |
 | `docs/superpowers/plans/2026-04-06-business-agents.md` | Business Agents Plan | ✅ Executed (11 tasks) |
 | `docs/superpowers/plans/2026-04-06-real-agents.md` | Real Agents Plan | ✅ Executed (11 tasks) |
 | `docs/superpowers/plans/2026-04-06-csv-import-dashboard.md` | CSV Import Plan | ✅ Executed (10 tasks) |

@@ -9,11 +9,21 @@
 
 ## 1. Context
 
-criteria.agency was originally conceived as "4 engines" (Video, Marketing, Sales, Design). Through this brainstorming session, we discovered the platform is much larger: **24 motors/components organized into 23 teams + 9 transversal agents + 1 security team (~6 agents)**, totaling ~125 agents.
+criteria.agency was originally conceived as "4 engines" (Video, Marketing, Sales, Design). Through brainstorming sessions, we discovered the platform is much larger: **24 motors/components with ~28 agents + skills + system functions**.
 
 This spec redefines criteria.agency from "4 engines" to a **platform of N specialized motors** sharing a common orchestration framework. Each motor defines its own pipeline, agents, gates, and escalation rules on top of the shared infrastructure.
 
-The Video Production engine (47 agents, 9 teams, 5 gates) is already fully designed and serves as the structural reference for all other motors.
+### Agent vs Skill vs System Function (DEC-064)
+
+Not everything that "does work" is an agent. The platform distinguishes three levels:
+
+- **Agent:** Takes autonomous decisions, maintains context, iterates on its own work. Has judgment. (~28 across the platform)
+- **Skill:** A set of instructions/expertise an agent loads for a specific task type. Same agent, different skill. (Unlimited — each agent can have many skills)
+- **System function:** Automated processes that don't require judgment. Validation rules, format conversions, API integrations, model routing, monitoring. (Infrastructure)
+
+**Example:** The Video motor's Writer agent loads a "documentary" skill or a "explainer" skill depending on the project type. RGB→CMYK conversion in Print is a system function. The Editor agent decides the cutting rhythm — that's an agent decision.
+
+> **Note:** The original Video Production engine was designed with 47 agents and 9 teams for full cinematic production (CriteriaFilms). For criteria.agency's marketing context, the same pipeline operates with ~7 agents using skills. See TEAM_STRUCTURE.md for the revised architecture.
 
 ### Key decisions made
 
@@ -24,7 +34,7 @@ The Video Production engine (47 agents, 9 teams, 5 gates) is already fully desig
 | Cross-engine integration | Bidirectional automatic | Marketing can trigger Video orders and vice versa |
 | Funnel Matrix | Central organizing concept | Awareness/Consideration/Conversion/Retention x Paid/Owned/Earned |
 | Channel architecture | Single Channel Manager + skill registry | One agent loads skills per channel — adding a channel = adding a skill |
-| Agent count | Design what's needed, no artificial limits | Bottom-up analysis yielded ~125 agents across 23 teams + 9 transversals + 6 security |
+| Agent count | ~28 agents + skills + system functions | Reduced from ~125 by distinguishing agents (judgment) from skills (expertise) and system functions (automation). See DEC-064 |
 | Channels scope | Full Paid/Owned/Earned including traditional + custom | Extensible registry, not hardcoded list |
 | Strategist knowledge base | Harvard Digital Marketing Strategy (6 modules) | `docs/brain/M1-M6_Summary.pdf` — academic frameworks for funnel, media, metrics, budget |
 
@@ -34,72 +44,74 @@ The Video Production engine (47 agents, 9 teams, 5 gates) is already fully desig
 
 ### 2.1 CREATION motors — produce tangible assets
 
-| Motor | Input | Output | Mode | Team size (est.) |
-|-------|-------|--------|------|-----------------|
-| **Video Production** | Brief | Finished video | Project | 47 agents, 9 teams (designed) |
-| **Graphic Design** | Brief | Visual pieces, brand identity | Project | ~5 agents |
-| **Web** | Brief | Landing pages, sites, microsites | Project | ~4 agents |
-| **Audio** | Brief | Podcasts, jingles, spots, voiceovers | Project | ~4 agents |
-| **Events** | Brief | Physical experiences | Project | ~6 agents |
-| **Print Production** | Final art + specs | Printed physical pieces | Project | ~3 agents |
+| Motor | Input | Output | Mode | Agents | Key skills |
+|-------|-------|--------|------|--------|------------|
+| **Video Production** | Brief | Finished video | Project | 6: Writer, DP, Visual Designer, Audio, Editor, Quality Reviewer | Fiction/doc/explainer writing, color grading, motion graphics, VFX, foley, sound design, subtitling |
+| **Graphic Design** | Brief | Visual pieces, brand identity | Project | 1: Designer | Social media, branding, print, presentations, infographics |
+| **Web** | Brief | Landing pages, sites, microsites | Project | 1: Web Developer | Landing pages, microsites, UI, responsive, CMS |
+| **Audio** | Brief | Podcasts, jingles, spots, voiceovers | Project | 1: Audio Producer | Podcasts, jingles, spots, voiceover, mixing |
+| **Events** | Brief | Physical experiences | Project | 2: Event Planner + Event Coordinator | Logistics, suppliers, rundown, coverage, post-event |
+| **Print Production** | Final art + specs | Printed physical pieces | Project | 1: Production Manager | Prepress, supplier management, proofing, delivery |
 
-> **Note:** Graphic Design, Web, and Audio motors are listed here for completeness but their detailed pipelines and agent cards will be defined in separate specs. Their structure will follow the same pattern as Video Production (teams, gates, 3+3 rule).
+> **Note:** Each motor follows the shared orchestration framework (pipeline, gates, 3+3 rule). Agent count is lean — specialization lives in skills, not in separate agents.
 
 ### 2.2 STRATEGY motors — define direction and control coherence
 
-| Motor | Input | Output | Mode | Team size (est.) |
-|-------|-------|--------|------|-----------------|
-| **Brand Builder** | Workshop/Onboarding | Brand DNA Document | Project (one-time per brand) | ~5 agents |
-| **Strategist** | Brand DNA + Harvard frameworks + market data | Marketing Plan, Campaign Briefs | Hybrid | ~4 agents |
+| Motor | Input | Output | Mode | Agents | Key skills |
+|-------|-------|--------|------|--------|------------|
+| **Brand Builder** | Workshop/Onboarding | Brand DNA Document | Project (one-time per brand) | 1: Brand Strategist | Discovery workshops, audience research, positioning, identity systems |
+| **Strategist** | Brand DNA + Harvard frameworks + market data | Marketing Plan, Campaign Briefs | Hybrid | (Transversal — see §2.6) | Diagnostic, objectives, media planning, budget allocation |
 
 ### 2.3 INTELLIGENCE motors — listen and detect
 
-| Motor | Input | Output | Mode | Type |
-|-------|-------|--------|------|------|
-| **Brand Listening** | Social mentions, reviews, press | Sentiment, brand health, crisis alerts | Continuous | Transversal agent |
-| **Culture Listening** | Trends, news, social signals | Cultural insights, trending topics | Continuous | Transversal agent |
-| **Industry Listening** | Publications, reports, patents | Innovation signals, market shifts | Continuous | Transversal agent |
-| **Competitive Listening** | Competitor activity | Benchmarks, moves, gaps | Continuous | Transversal agent |
-| **Opportunity Agent** | Listener outputs + audiences | Opportunity Briefs (moment + audience + action) | Continuous | Transversal agent |
+| Motor | Input | Output | Mode | Agents |
+|-------|-------|--------|------|--------|
+| **Listeners (Brand, Culture, Industry, Competitive)** | Social mentions, trends, publications, competitor activity | Insights, alerts, dashboards | Continuous | 1: Listener (1 agent design, 4 instances by source type). Skills: sentiment analysis, trend detection, competitive benchmarking, innovation scanning |
+| **Opportunity Agent** | Listener outputs + audiences + Brand DNA | Opportunity Briefs (moment + audience + action) | Continuous | 1: Opportunity Agent. Crosses all Listener data with client context |
 
 ### 2.4 DISTRIBUTION motors — execute on channels
 
-| Motor | Input | Output | Mode | Team size (est.) |
-|-------|-------|--------|------|-----------------|
-| **Ads (Pauta)** | Assets + budget + targeting | Live campaigns on platforms | Hybrid | ~5 agents |
-| **Community Management** | Brand voice + content calendar | Posts, responses, engagement | Continuous | ~5 agents |
-| **Email Marketing** | Segments + content | Sequences, newsletters, automations | Hybrid | ~4 agents |
-| **SEO/Content** | Keywords + Brand DNA | Blog posts, articles, optimizations | Hybrid | ~4 agents |
+| Motor | Input | Output | Mode | Agents | Key skills |
+|-------|-------|--------|------|--------|------------|
+| **Paid Media** (Ads/Pauta) | Assets + budget + targeting | Live campaigns on platforms | Hybrid | 1: Paid Media Operator | Platform setup (Meta, Google, TikTok, LinkedIn, programmatic), bidding, A/B testing, real-time optimization, traditional media buying |
+| **Owned Channels** (Community, Email, SEO) | Brand voice + content + segments | Posts, emails, organic content | Hybrid/Continuous | 1: Owned Channels Operator | Social publishing, community response, email flows, A/B testing, SEO optimization, content scheduling |
+
+> **Note:** Distribution was originally 4 separate motors (Ads, Community Management, Email Marketing, SEO/Content) each with ~5 agents. Consolidated into 2 agents grouped by channel nature: paid (real-time bidding, budget) vs owned (content, engagement). The Channel Manager (transversal) provides platform-specific specs to both.
 
 ### 2.5 OPERATION motors — manage the business
 
-| Motor | Input | Output | Mode | Team size (est.) |
-|-------|-------|--------|------|-----------------|
-| **Sales/CRM** | Leads + scoring rules | Managed pipeline, follow-ups | Continuous | ~5 agents |
-| **Analytics** | Data from all channels via API | Unified dashboards, reports, attribution | Continuous | ~5 agents |
+| Motor | Input | Output | Mode | Agents | Key skills |
+|-------|-------|--------|------|--------|------------|
+| **Sales/CRM** | Leads + scoring rules | Managed pipeline, follow-ups | Continuous | 2: Prospector + Closer | Lead enrichment, scoring, outreach, nurture, proposal generation, negotiation, follow-up |
+| **Analytics** | Data from all channels via API | Unified dashboards, reports, attribution | Continuous | 1: Analyst | Dashboard building, attribution modeling, anomaly detection, reporting, KPI tracking |
 
 ### 2.6 TRANSVERSAL components — shared infrastructure
 
 | Component | Type | Purpose |
 |-----------|------|---------|
+| **Creative Director** | Transversal agent | Proposes creative versions at campaign level, defines visual/narrative direction across all motors |
+| **Showrunner** | Transversal agent | Validates campaign-level coherence and quality, feeds Campaign Score |
+| **Strategist** | Transversal agent | Continuous motor: evaluate → design → execute → measure → adjust. Defines objectives, distributes activations, optimizes |
 | **Brand Guardian** | Transversal agent | Validates brand consistency across all outputs |
 | **Financial Agent** | Transversal agent | Budget control, allocation, forecasting, ROI validation |
 | **Channel Manager** | Transversal agent + skill registry | Expert knowledge of each channel (API, specs, pricing, limits, risks) |
 | **Media Scout** | Transversal agent | Discovers media opportunities, channels, partnerships |
-| **Marketplace** | Transversal infrastructure | Registry of agentic (AI) and human providers for any need |
+| **Marketplace** | Infrastructure (not agent) | Registry of agentic (AI) and human providers for any need |
+| **Security** | 1 agent: Security Analyst | Interprets security signals, prioritizes risks. Scanning, monitoring, compliance are system functions |
 
 ### 2.7 Agent count summary
 
-| Category | Teams | Estimated agents |
-|----------|-------|-----------------|
-| Video Production | 9 teams (designed) | 47 |
-| Creation (Design, Web, Audio, Events, Print) | 5 teams | ~25 |
-| Strategy (Brand Builder, Strategist) | 2 teams | ~10 |
-| Distribution (Ads, Community, Email, SEO) | 4 teams | ~18 |
-| Operation (Sales, Analytics) | 2 teams | ~10 |
-| Transversal agents | — | ~9 |
-| Security team | 1 team | ~6 |
-| **Total** | **23 teams + 9 transversals** | **~125 agents** |
+| Category | Agents | Notes |
+|----------|--------|-------|
+| Video Production | 6 | Writer, DP, Visual Designer, Audio, Editor, Quality Reviewer |
+| Other Creation (Design, Web, Audio, Events, Print) | 6 | 1 per motor except Events (2) |
+| Strategy (Brand Builder) | 1 | Brand Strategist. Strategist counted as transversal |
+| Intelligence (Listeners, Opportunity) | 2 | Listener is 1 agent design × 4 instances |
+| Distribution (Paid + Owned) | 2 | Paid Media Operator + Owned Channels Operator |
+| Operation (Sales, Analytics) | 3 | Prospector + Closer + Analyst |
+| Transversal | 7 | Creative Director, Showrunner, Strategist, Brand Guardian, Financial Agent, Channel Manager, Media Scout |
+| Security | 1 | Security Analyst (rest is system functions) |
+| **Total** | **~28 agents** | **Down from ~125. Difference absorbed by skills and system functions** |
 
 ---
 

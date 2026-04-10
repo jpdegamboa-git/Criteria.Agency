@@ -1,0 +1,9 @@
+{
+  "/login/page": "app/login/page.js",
+  "/admin/alerts/page": "app/admin/alerts/page.js",
+  "/admin/mission-control/page": "app/admin/mission-control/page.js",
+  "/admin/agents/page": "app/admin/agents/page.js",
+  "/admin/strategist/page": "app/admin/strategist/page.js",
+  "/admin/brand-builder/page": "app/admin/brand-builder/page.js",
+  "/admin/organizations/page": "app/admin/organizations/page.js"
+}

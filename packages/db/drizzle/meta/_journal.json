@@ -5,8 +5,57 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1775747862551,
-      "tag": "0000_milky_nova",
+      "when": 1775752776280,
+      "tag": "0000_amused_bedlam",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1775762337739,
+      "tag": "0001_brand_builder_phase1",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1775772244617,
+      "tag": "0002_modern_gorilla_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1775773549222,
+      "tag": "0003_fase3_analyst_campaigns",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1775777255599,
+      "tag": "0004_elite_hellion",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1775794945391,
+      "tag": "0005_rainy_abomination",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1775828000000,
+      "tag": "0006_output_registry_embedding_768",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1775900000000,
+      "tag": "0007_mara_client_portal",
       "breakpoints": true
     }
   ]

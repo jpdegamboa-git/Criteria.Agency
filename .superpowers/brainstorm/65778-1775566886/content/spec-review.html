@@ -1,0 +1,166 @@
+<h2>Agent Canvas — Design Spec</h2>
+<p class="subtitle">Revisa el spec completo. Haz click en las secciones que quieras modificar.</p>
+
+<!-- Overview -->
+<div class="section">
+  <div class="option" data-choice="overview" onclick="toggleSelect(this)">
+    <div class="letter">1</div>
+    <div class="content">
+      <h3>Overview & Stack</h3>
+      <p>Canvas visual inmersivo estilo weavy.ai para 20 agentes. React Flow + Monaco Editor + SSE sobre Next.js 16 / React 19 / Tailwind v4 / Hono / Drizzle.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Architecture -->
+<div class="section">
+  <div class="option" data-choice="architecture" onclick="toggleSelect(this)">
+    <div class="letter">2</div>
+    <div class="content">
+      <h3>Architecture</h3>
+      <p style="font-family:monospace;font-size:12px;color:#999;line-height:1.6;">
+        canvas/<br>
+        &nbsp;&nbsp;page.tsx — Server component (fetch)<br>
+        &nbsp;&nbsp;canvas-view.tsx — Client (React Flow + SSE)<br>
+        &nbsp;&nbsp;components/<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;agent-node.tsx, animated-edge.tsx, toolbar.tsx<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;filter-pills.tsx, command-palette.tsx, minimap.tsx<br>
+        &nbsp;&nbsp;sidepanel/<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;agent-drawer.tsx, agent-info.tsx, agent-editor.tsx, agent-executions.tsx
+      </p>
+      <p style="margin-top:8px;">Data flow: page fetch → props → React Flow nodes/edges → SSE real-time → sidepanel lazy fetch</p>
+    </div>
+  </div>
+</div>
+
+<!-- Components -->
+<div class="section">
+  <div class="option" data-choice="components" onclick="toggleSelect(this)">
+    <div class="letter">3</div>
+    <div class="content">
+      <h3>Components</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px;">
+        <div>
+          <p style="color:#ffd053;font-size:11px;font-weight:600;margin-bottom:4px;">Agent Node</p>
+          <p style="font-size:12px;color:#999;">120x44px, borde por estado (idle/running/done/error), glow al ejecutar, nombre + id</p>
+        </div>
+        <div>
+          <p style="color:#3b82f6;font-size:11px;font-weight:600;margin-bottom:4px;">Animated Edge</p>
+          <p style="font-size:12px;color:#999;">Bezier SVG, particula animada en ejecucion, solido=pipeline, dashed=manual</p>
+        </div>
+        <div>
+          <p style="color:#22c55e;font-size:11px;font-weight:600;margin-bottom:4px;">Layout</p>
+          <p style="font-size:12px;color:#999;">Dagre top-to-bottom, team clusters con borde dashed, posiciones drag persistidas en DB</p>
+        </div>
+        <div>
+          <p style="color:#a855f7;font-size:11px;font-weight:600;margin-bottom:4px;">Toolbar</p>
+          <p style="font-size:12px;color:#999;">Vertical izquierda: zoom, fit, layout reset, replay (play/pause/speed/scrubber)</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Filtering -->
+<div class="section">
+  <div class="option" data-choice="filtering" onclick="toggleSelect(this)">
+    <div class="letter">4</div>
+    <div class="content">
+      <h3>Filtering & Search</h3>
+      <div style="display:flex;gap:16px;margin-top:8px;">
+        <div style="flex:1;">
+          <p style="color:#ffd053;font-size:11px;font-weight:600;margin-bottom:4px;">Filter Pills (flotantes)</p>
+          <p style="font-size:12px;color:#999;">Teams, Status, Live toggle. No-match baja a opacity 0.15. Estado en URL params.</p>
+        </div>
+        <div style="flex:1;">
+          <p style="color:#ffd053;font-size:11px;font-weight:600;margin-bottom:4px;">Command Palette (⌘K)</p>
+          <p style="font-size:12px;color:#999;">Busca nombre, id, team, step, gate, modelo. Prefijos: team: step: gate: status:</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Sidepanel -->
+<div class="section">
+  <div class="option" data-choice="sidepanel" onclick="toggleSelect(this)">
+    <div class="letter">5</div>
+    <div class="content">
+      <h3>Sidepanel (Agent Drawer)</h3>
+      <p style="font-size:12px;color:#999;margin-bottom:8px;">420px, slide-in derecha, canvas interactivo detras. Cerrar: X / click fuera / Escape.</p>
+      <div style="display:flex;gap:8px;margin-top:8px;">
+        <div style="flex:1;background:#1a1a1a;border-radius:6px;padding:8px;">
+          <p style="color:#ffd053;font-size:10px;font-weight:600;">Tab 1: Info</p>
+          <p style="font-size:11px;color:#999;">Config, stats, conexiones (add/remove), modelo, params</p>
+        </div>
+        <div style="flex:1;background:#1a1a1a;border-radius:6px;padding:8px;">
+          <p style="color:#3b82f6;font-size:10px;font-weight:600;">Tab 2: Editor</p>
+          <p style="font-size:11px;color:#999;">Monaco Editor, markdown, save to filesystem, unsaved indicator</p>
+        </div>
+        <div style="flex:1;background:#1a1a1a;border-radius:6px;padding:8px;">
+          <p style="color:#22c55e;font-size:10px;font-weight:600;">Tab 3: Executions</p>
+          <p style="font-size:11px;color:#999;">Historial, logs expandibles, stats agregados</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Real-time -->
+<div class="section">
+  <div class="option" data-choice="realtime" onclick="toggleSelect(this)">
+    <div class="letter">6</div>
+    <div class="content">
+      <h3>Real-Time & Replay</h3>
+      <div style="display:flex;gap:16px;margin-top:8px;">
+        <div style="flex:1;">
+          <p style="color:#22c55e;font-size:11px;font-weight:600;margin-bottom:4px;">Live (SSE)</p>
+          <p style="font-size:12px;color:#999;">Endpoint /api/canvas/events. Eventos: agent:started/completed/failed/output. Pill "Live" verde.</p>
+        </div>
+        <div style="flex:1;">
+          <p style="color:#3b82f6;font-size:11px;font-weight:600;margin-bottom:4px;">Replay</p>
+          <p style="font-size:12px;color:#999;">Selector de proyecto, play/pause/speed, nodos cambian progresivamente, scrubber timeline.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Database & API -->
+<div class="section">
+  <div class="option" data-choice="database" onclick="toggleSelect(this)">
+    <div class="letter">7</div>
+    <div class="content">
+      <h3>Database & API</h3>
+      <div style="display:flex;gap:16px;margin-top:8px;">
+        <div style="flex:1;">
+          <p style="color:#ffd053;font-size:11px;font-weight:600;margin-bottom:4px;">Tablas nuevas</p>
+          <p style="font-size:12px;color:#999;font-family:monospace;">agent_connections (source, target, type)<br>agent_node_positions (agent, x, y)</p>
+        </div>
+        <div style="flex:1;">
+          <p style="color:#ffd053;font-size:11px;font-weight:600;margin-bottom:4px;">8 endpoints</p>
+          <p style="font-size:12px;color:#999;font-family:monospace;">GET graph, PUT positions<br>POST/DEL connections<br>GET events (SSE), GET replay<br>GET/PUT agent file</p>
+        </div>
+      </div>
+      <p style="font-size:12px;color:#999;margin-top:8px;">Seed: pipeline order (brief→concept→script→...→delivery) genera conexiones automaticas.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Dependencies -->
+<div class="section">
+  <div class="option" data-choice="deps" onclick="toggleSelect(this)">
+    <div class="letter">8</div>
+    <div class="content">
+      <h3>Dependencies & Navigation</h3>
+      <p style="font-size:12px;color:#999;">
+        <strong style="color:#fff;">Nuevas deps:</strong> @xyflow/react, @monaco-editor/react, dagre<br>
+        <strong style="color:#fff;">Nav:</strong> Nuevo item "Canvas" despues de "Agentes". Layout inmersivo full-viewport (sale del max-w-7xl). Top nav se mantiene.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div style="margin-top:24px;padding:16px;background:#141414;border:1px solid #2a2a2a;border-radius:8px;text-align:center;">
+  <p style="color:#9d9a9c;font-size:13px;">Haz click en cualquier seccion que quieras modificar.<br>Si todo se ve bien, responde en la terminal.</p>
+</div>

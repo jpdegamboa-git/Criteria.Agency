@@ -13,8 +13,8 @@ export const AGENT_REGISTRY: Record<string, AgentRegistryEntry> = {
   },
   "TL-002": {
     id: "TL-002",
-    name: "Showrunner",
-    skillFile: "agents/TL-002_showrunner.md",
+    name: "Director",
+    skillFile: "agents/TL-002_director.md",
     team: 0,
     level: "top",
     steps: [],

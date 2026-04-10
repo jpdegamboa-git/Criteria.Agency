@@ -1,0 +1,3 @@
+Okay, T2-L, I have thoroughly reviewed the approved AV script (`T2-002_script.md`), the Script Doctor's notes (`T2-006_script.md`), and T1-L's creative direction, particularly Concept 1: "The Symphony of Foresight." The script is strong, with clear visual cues for data flow and system transformation.
+
+As the Director of Photography, I will now define the complete visual language for the project in **Mode 1: Visual Look Definition**. This includes the global visual direction, detailed per-shot technical specifications (framing, lens, lighting, color temperature, composition), and movement specifications. I've also integrated Phase 1 responsibilities for color direction and movement, and considered potential AI generation challenges.

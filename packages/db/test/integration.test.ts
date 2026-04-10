@@ -1,7 +1,8 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { eq, sql } from 'drizzle-orm';
 import { createDb } from '../src/connection.js';
-import { organizations, motors, promptRegistry } from '../src/schema.js';
+import { motors, promptRegistry, campaigns } from '../src/schema.js';
+import { organization as authOrganization } from '../src/auth-schema.js';
 import postgres from 'postgres';
 
 const DATABASE_URL = process.env.DATABASE_URL;
@@ -31,27 +32,29 @@ describe.skipIf(!DATABASE_URL)('database integration', () => {
     expect(result[0].extname).toBe('vector');
   });
 
-  it('organizations table exists and accepts inserts', async () => {
-    const [org] = await db.insert(organizations).values({
+  it('organization (Better Auth) table exists', async () => {
+    const [org] = await db.insert(authOrganization).values({
+      id: `test-org-${Date.now()}`,
       name: 'Test Org',
-      slug: 'test-org-integration',
-      plan: 'starter',
+      slug: `test-org-integration-${Date.now()}`,
+      createdAt: new Date(),
     }).returning();
 
     try {
       expect(org.id).toBeDefined();
       expect(org.name).toBe('Test Org');
-      expect(org.slug).toBe('test-org-integration');
-      expect(org.plan).toBe('starter');
     } finally {
-      await db.delete(organizations).where(eq(organizations.id, org.id));
+      await db.delete(authOrganization).where(eq(authOrganization.id, org.id));
     }
   });
 
   it('motors table enforces org FK and unique constraint', async () => {
-    const [org] = await db.insert(organizations).values({
+    const orgId = `test-motor-org-${Date.now()}`;
+    const [org] = await db.insert(authOrganization).values({
+      id: orgId,
       name: 'Motor Test Org',
-      slug: 'motor-test-org',
+      slug: `motor-test-org-${Date.now()}`,
+      createdAt: new Date(),
     }).returning();
 
     try {
@@ -66,15 +69,17 @@ describe.skipIf(!DATABASE_URL)('database integration', () => {
 
       await db.delete(motors).where(eq(motors.id, motor.id));
     } finally {
-      await db.delete(organizations).where(eq(organizations.id, org.id));
+      await db.delete(authOrganization).where(eq(authOrganization.id, org.id));
     }
   });
 
   it('prompt_registry table accepts inserts with DEC-149 fields', async () => {
+    // Use a unique version to avoid the unique constraint conflict
+    const uniqueVersion = Date.now() % 10000;
     const [prompt] = await db.insert(promptRegistry).values({
-      agentId: 'brand-strategist',
+      agentId: `brand-strategist-test-${Date.now()}`,
       skillId: 'discovery',
-      version: 1,
+      version: uniqueVersion,
       systemPrompt: 'You are a brand strategist...',
       model: 'claude-sonnet-4-20250514',
       provider: 'anthropic',
@@ -84,7 +89,7 @@ describe.skipIf(!DATABASE_URL)('database integration', () => {
     }).returning();
 
     try {
-      expect(prompt.agentId).toBe('brand-strategist');
+      expect(prompt.agentId).toContain('brand-strategist-test');
       expect(prompt.dataSensitivity).toBe('A');
     } finally {
       await db.delete(promptRegistry).where(eq(promptRegistry.id, prompt.id));
@@ -101,21 +106,53 @@ describe.skipIf(!DATABASE_URL)('database integration', () => {
     expect(columns[0].udt_name).toBe('vector');
   });
 
-  it('all 6 tables exist', async () => {
+  it('core platform tables exist in public schema', async () => {
     const tables = await rawClient`
       SELECT table_name FROM information_schema.tables
       WHERE table_schema = 'public'
-      AND table_name IN ('organizations', 'motors', 'motor_executions', 'agent_permissions', 'prompt_registry', 'output_registry')
+      AND table_name IN (
+        'organization_settings', 'motors', 'motor_executions',
+        'agent_permissions', 'prompt_registry', 'output_registry',
+        'brand_dna', 'brand_dna_artifacts', 'brand_health_scores',
+        'video_projects', 'video_artifacts', 'video_gate_reviews',
+        'campaigns', 'campaign_kpis', 'threshold_alerts', 'campaign_scores'
+      )
       ORDER BY table_name
     `;
     const tableNames = tables.map((t: { table_name: string }) => t.table_name);
-    expect(tableNames).toEqual([
-      'agent_permissions',
-      'motor_executions',
-      'motors',
-      'organizations',
-      'output_registry',
-      'prompt_registry',
-    ]);
+    // All 16 platform tables should exist
+    expect(tableNames.length).toBe(16);
+    expect(tableNames).toContain('campaigns');
+    expect(tableNames).toContain('campaign_kpis');
+    expect(tableNames).toContain('threshold_alerts');
+    expect(tableNames).toContain('campaign_scores');
+  });
+
+  it('campaigns table exists and accepts inserts', async () => {
+    const orgId = `test-campaign-org-${Date.now()}`;
+    const [org] = await db.insert(authOrganization).values({
+      id: orgId,
+      name: 'Campaign Test Org',
+      slug: `campaign-test-org-${Date.now()}`,
+      createdAt: new Date(),
+    }).returning();
+
+    try {
+      const [campaign] = await db.insert(campaigns).values({
+        organizationId: org.id,
+        name: 'Test Campaign',
+        funnelStage: 'awareness',
+        channelType: 'paid',
+        objectives: { goal: 'reach 10k impressions' },
+      }).returning();
+
+      expect(campaign.id).toBeDefined();
+      expect(campaign.name).toBe('Test Campaign');
+      expect(campaign.funnelStage).toBe('awareness');
+      expect(campaign.channelType).toBe('paid');
+      expect(campaign.status).toBe('definition');
+    } finally {
+      await db.delete(authOrganization).where(eq(authOrganization.id, org.id));
+    }
   });
 });

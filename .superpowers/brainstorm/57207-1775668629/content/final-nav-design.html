@@ -1,0 +1,165 @@
+<h2>Diseño final — Navegación del portal</h2>
+<p class="subtitle">Sidebar agrupado por rol + sub-navegación interna por espacio</p>
+
+<div style="display: grid; grid-template-columns: 240px 1fr; gap: 32px; margin-top: 24px;">
+
+  <!-- SIDEBAR -->
+  <div style="background: #1a1a2e; border-radius: 16px; padding: 20px 16px; font-family: system-ui; font-size: 13px; color: #aaa; min-height: 600px; display: flex; flex-direction: column;">
+    <div style="color: #7c5cfc; font-weight: 700; font-size: 17px; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #2a2a4a;">criteria.</div>
+
+    <div style="padding: 10px 12px; background: #2a2a4a; border-radius: 8px; color: white; margin-bottom: 12px; display:flex; align-items:center; gap:10px; font-weight: 500;">
+      <span style="font-size:15px;">🏠</span> Home
+    </div>
+
+    <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #555; padding: 8px 12px 6px; font-weight: 600;">Fundamentos</div>
+    <div style="padding: 8px 12px; border-radius: 8px; margin-bottom: 2px; display:flex; align-items:center; gap:10px; cursor:pointer;" onmouseover="this.style.background='#2a2a4a22'" onmouseout="this.style.background='transparent'">
+      <span style="font-size:15px;">📐</span> Business Model
+    </div>
+    <div style="padding: 8px 12px; border-radius: 8px; margin-bottom: 2px; display:flex; align-items:center; gap:10px;">
+      <span style="font-size:15px;">🎨</span> Brand
+    </div>
+    <div style="padding: 8px 12px; border-radius: 8px; margin-bottom: 2px; display:flex; align-items:center; gap:10px;">
+      <span style="font-size:15px;">📦</span> Productos y Servicios
+    </div>
+    <div style="padding: 8px 12px; border-radius: 8px; margin-bottom: 2px; display:flex; align-items:center; gap:10px;">
+      <span style="font-size:15px;">💵</span> Revenue Streams
+    </div>
+
+    <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #555; padding: 12px 12px 6px; font-weight: 600;">Inteligencia</div>
+    <div style="padding: 8px 12px; border-radius: 8px; margin-bottom: 2px; display:flex; align-items:center; gap:10px;">
+      <span style="font-size:15px;">🌍</span> Mercado
+    </div>
+    <div style="padding: 8px 12px; border-radius: 8px; margin-bottom: 2px; display:flex; align-items:center; gap:10px;">
+      <span style="font-size:15px;">🔍</span> Competencia
+    </div>
+
+    <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #555; padding: 12px 12px 6px; font-weight: 600;">Ejecución</div>
+    <div style="padding: 8px 12px; border-radius: 8px; margin-bottom: 2px; display:flex; align-items:center; gap:10px;">
+      <span style="font-size:15px;">📣</span> Campaigns
+    </div>
+    <div style="padding: 8px 12px; border-radius: 8px; margin-bottom: 2px; display:flex; align-items:center; gap:10px;">
+      <span style="font-size:15px;">💰</span> Sales
+    </div>
+
+    <div style="flex:1;"></div>
+    <div style="border-top: 1px solid #2a2a4a; padding-top: 12px; margin-top: 12px; font-size: 11px; color: #444;">
+      Setup/Cuenta → avatar dropdown
+    </div>
+  </div>
+
+  <!-- CONTENT: Sub-navigation per space -->
+  <div style="font-family: system-ui; font-size: 14px;">
+
+    <!-- Home -->
+    <div style="margin-bottom: 28px; padding: 20px; background: #fff; border-radius: 12px; border: 1px solid #eee;">
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom: 8px;">
+        <span style="font-size:18px;">🏠</span>
+        <h3 style="margin:0; font-size: 16px;">Home</h3>
+      </div>
+      <div style="color: #666; font-size: 13px;">Centro de comando. KPIs ejecutivos + Copilot conversacional + quick actions (ej. "Crear video") + actividad reciente. Sin tabs.</div>
+    </div>
+
+    <!-- Business Model -->
+    <div style="margin-bottom: 28px; padding: 20px; background: #fff; border-radius: 12px; border: 1px solid #eee;">
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom: 12px;">
+        <span style="font-size:18px;">📐</span>
+        <h3 style="margin:0; font-size: 16px;">Business Model</h3>
+      </div>
+      <div style="display:flex; gap: 8px; margin-bottom: 8px;">
+        <span style="background: #7c5cfc; color:white; padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight:500;">Canvas</span>
+        <span style="background: #f0f0f0; color:#333; padding: 5px 14px; border-radius: 20px; font-size: 12px;">Unit Economics</span>
+      </div>
+      <div style="color: #888; font-size: 12px;">Canvas = BMC + Value Proposition Canvas</div>
+    </div>
+
+    <!-- Brand -->
+    <div style="margin-bottom: 28px; padding: 20px; background: #fff; border-radius: 12px; border: 1px solid #eee;">
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom: 12px;">
+        <span style="font-size:18px;">🎨</span>
+        <h3 style="margin:0; font-size: 16px;">Brand</h3>
+      </div>
+      <div style="display:flex; gap: 8px; flex-wrap:wrap; margin-bottom: 8px;">
+        <span style="background: #7c5cfc; color:white; padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight:500;">DNA</span>
+        <span style="background: #f0f0f0; color:#333; padding: 5px 14px; border-radius: 20px; font-size: 12px;">Identidad</span>
+        <span style="background: #f0f0f0; color:#333; padding: 5px 14px; border-radius: 20px; font-size: 12px;">Voz</span>
+        <span style="background: #f0f0f0; color:#333; padding: 5px 14px; border-radius: 20px; font-size: 12px;">Guardian</span>
+        <span style="background: #f0f0f0; color:#333; padding: 5px 14px; border-radius: 20px; font-size: 12px;">Marketplace</span>
+      </div>
+    </div>
+
+    <!-- Productos -->
+    <div style="margin-bottom: 28px; padding: 20px; background: #fff; border-radius: 12px; border: 1px solid #eee;">
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom: 8px;">
+        <span style="font-size:18px;">📦</span>
+        <h3 style="margin:0; font-size: 16px;">Productos y Servicios</h3>
+      </div>
+      <div style="color: #666; font-size: 13px;">Vista única. Catálogo editable de productos/servicios. Sin tabs.</div>
+    </div>
+
+    <!-- Revenue Streams -->
+    <div style="margin-bottom: 28px; padding: 20px; background: #fff; border-radius: 12px; border: 1px solid #eee;">
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom: 8px;">
+        <span style="font-size:18px;">💵</span>
+        <h3 style="margin:0; font-size: 16px;">Revenue Streams</h3>
+      </div>
+      <div style="color: #666; font-size: 13px;">Vista única. Streams detallados con montos, trends, progress bars + total. Sin tabs.</div>
+    </div>
+
+    <!-- Mercado -->
+    <div style="margin-bottom: 28px; padding: 20px; background: #fff; border-radius: 12px; border: 1px solid #eee;">
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom: 12px;">
+        <span style="font-size:18px;">🌍</span>
+        <h3 style="margin:0; font-size: 16px;">Mercado</h3>
+      </div>
+      <div style="display:flex; gap: 8px; flex-wrap:wrap; margin-bottom: 8px;">
+        <span style="background: #7c5cfc; color:white; padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight:500;">Industria</span>
+        <span style="background: #f0f0f0; color:#333; padding: 5px 14px; border-radius: 20px; font-size: 12px;">Tendencias</span>
+        <span style="background: #f0f0f0; color:#333; padding: 5px 14px; border-radius: 20px; font-size: 12px;">Oportunidades</span>
+        <span style="background: #f0f0f0; color:#333; padding: 5px 14px; border-radius: 20px; font-size: 12px;">Estudios</span>
+        <span style="background: #f0f0f0; color:#333; padding: 5px 14px; border-radius: 20px; font-size: 12px;">Audiencias</span>
+      </div>
+    </div>
+
+    <!-- Competencia -->
+    <div style="margin-bottom: 28px; padding: 20px; background: #fff; border-radius: 12px; border: 1px solid #eee;">
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom: 12px;">
+        <span style="font-size:18px;">🔍</span>
+        <h3 style="margin:0; font-size: 16px;">Competencia</h3>
+      </div>
+      <div style="display:flex; gap: 8px; margin-bottom: 8px;">
+        <span style="background: #7c5cfc; color:white; padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight:500;">Landscape</span>
+        <span style="background: #f0f0f0; color:#333; padding: 5px 14px; border-radius: 20px; font-size: 12px;">Monitor</span>
+      </div>
+      <div style="color: #888; font-size: 12px;">Landscape = análisis estático. Monitor = feed en tiempo real.</div>
+    </div>
+
+    <!-- Campaigns -->
+    <div style="margin-bottom: 28px; padding: 20px; background: #fff; border-radius: 12px; border: 1px solid #eee;">
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom: 12px;">
+        <span style="font-size:18px;">📣</span>
+        <h3 style="margin:0; font-size: 16px;">Campaigns</h3>
+      </div>
+      <div style="display:flex; gap: 8px; flex-wrap:wrap; margin-bottom: 8px;">
+        <span style="background: #7c5cfc; color:white; padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight:500;">Estrategia</span>
+        <span style="background: #f0f0f0; color:#333; padding: 5px 14px; border-radius: 20px; font-size: 12px;">Budget</span>
+        <span style="background: #f0f0f0; color:#333; padding: 5px 14px; border-radius: 20px; font-size: 12px;">Matrix</span>
+        <span style="background: #f0f0f0; color:#333; padding: 5px 14px; border-radius: 20px; font-size: 12px;">Calendar</span>
+        <span style="background: #f0f0f0; color:#333; padding: 5px 14px; border-radius: 20px; font-size: 12px;">Lista</span>
+      </div>
+    </div>
+
+    <!-- Sales -->
+    <div style="margin-bottom: 28px; padding: 20px; background: #fff; border-radius: 12px; border: 1px solid #eee;">
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom: 12px;">
+        <span style="font-size:18px;">💰</span>
+        <h3 style="margin:0; font-size: 16px;">Sales</h3>
+      </div>
+      <div style="display:flex; gap: 8px; flex-wrap:wrap;">
+        <span style="background: #7c5cfc; color:white; padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight:500;">Pipeline</span>
+        <span style="background: #f0f0f0; color:#333; padding: 5px 14px; border-radius: 20px; font-size: 12px;">Leads</span>
+        <span style="background: #f0f0f0; color:#333; padding: 5px 14px; border-radius: 20px; font-size: 12px;">Proposals</span>
+      </div>
+    </div>
+
+  </div>
+</div>

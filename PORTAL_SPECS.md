@@ -1,9 +1,9 @@
 # criteria.agency — Portal Specifications
 
-> Last updated: April 6, 2026
+> Last updated: April 9, 2026
 > Portals: 3 (public, client, admin)
-> Motors: 24 | Teams: 23 | Transversal agents: 9 | Security team: 6 | Total: ~125 agents
-> Status: Active — Specification phase
+> Motors: 24 | Agents: ~29 (DEC-064, DEC-128) | Transversal: 8 (3 active in MVP — DEC-174 to DEC-179)
+> Status: Active — §3 (Client Portal) superseded by `client-portal-navigation-design.md`
 
 ---
 
@@ -95,7 +95,7 @@ When the admin portal loads with zero data (fresh install or new org):
 |------|---------|-------------|
 | Landing | First impression, value proposition | Hero showcasing the platform, 24-motor overview, social proof, CTA to signup |
 | Engines | Detail each motor category | Creation, Strategy, Intelligence, Distribution, Operation — what each does, how AI agents work |
-| Pricing | Subscription plans | By Space bundles (Free/Pro/Enterprise), feature comparison table, module-level detail for Enterprise |
+| Pricing | Subscription plans | Token-based tiers: Starter ($99), Pro ($249), Agency ($599). Feature comparison table. See `business-model-design.md` DEC-067 to DEC-073. |
 | Portfolio | Showcase client work | Filterable by motor type (video, design, campaigns, events), case studies with metrics |
 | School | Education portal | AI marketing courses, tutorials, workshops (business model 3) |
 | Blog | Content marketing | Articles, industry insights, product updates (fed by SEO/Content motor) |
@@ -122,11 +122,13 @@ Visitor → Landing → Pricing → Signup
 
 **Previous flow (still valid as alternative):**
 ```
-Visitor → Landing → Engines/Pricing → Signup (Free tier)
+Visitor → Landing → Engines/Pricing → Signup (Starter tier)
     → Brand Builder wizard (create Brand DNA)
     → Dashboard (Client Portal)
     → First campaign or project brief
 ```
+
+> **Note:** The pain-based onboarding references capability codes (C-001, C-009, etc.) from `capabilities-map-design.md`, which is superseded. The pain-based onboarding concept is valid, but capability routing will be simplified for MVP to: Brand Builder → Video Motor → Strategist (the 3 operational motors). Full capability routing is post-MVP when more motors exist.
 
 ### Technical notes
 
@@ -135,19 +137,23 @@ Visitor → Landing → Engines/Pricing → Signup (Free tier)
 - Portfolio media on CDN (Bunny Stream / R2)
 - Contact form feeds Sales/CRM motor directly
 
-### Pricing structure (by capability group)
+### Pricing structure (token-based — DEC-067 to DEC-073)
 
-| Group | Free | Pro | Enterprise |
-|-------|------|-----|-----------|
-| **Fundamentos** | Business + Brand (read-only after setup) | Full edit, all tabs | Unlimited brands, white-label |
-| **Ejecución — Campaigns** | 2 channels, 10 posts/month | All channels, unlimited campaigns | Custom channels, advanced optimization |
-| **Ejecución — Sales** | 50 leads | Unlimited leads, automation | Custom scoring, API integrations |
-| **Inteligencia** | Basic reports | Full analytics, all listeners | Custom dashboards, API access |
-| **Studio** | 1 project/month, watermark | Unlimited projects, no watermark | Priority processing, dedicated agents |
+> **⚠️ SUPERSEDED:** The capability-group pricing below was replaced by the token-based model defined in `docs/superpowers/specs/2026-04-08-business-model-design.md`. The authoritative pricing is:
+>
+> | Plan | Price | Token budget | Key features |
+> |------|-------|-------------|--------------|
+> | **Starter** | $99/mo | ~$250 in tokens | Brand Builder, Video Motor, basic MARA, 1 custom CD |
+> | **Pro** | $249/mo | ~$700 in tokens | Full MARA, Premium CDs, deeper PI access, 3 custom CDs |
+> | **Agency** | $599/mo | ~$2,000 in tokens | All CDs, unlimited custom CDs, multi-brand (no white-label in MVP) |
+>
+> Observe is free, think costs tokens, produce costs tokens (DEC-100). See business model spec for full details.
 
 ---
 
 ## 3. Client Portal
+
+> **⚠️ SUPERSEDED:** This entire section (§3) has been replaced by `docs/superpowers/specs/2026-04-08-client-portal-navigation-design.md` (April 8, 2026). The new design eliminates the sidebar, uses dual view (Grid de Campanas + Funnel Matrix), campaign hierarchy (Campana → Version → Activacion → Pieza), and moves all access to header dropdowns. See DEC-046 through DEC-063. The content below is preserved for historical reference only.
 
 **Purpose:** Self-service management platform where clients operate their marketing, create content, monitor performance, and manage their brand — guided by AI agents at every step.
 
@@ -314,9 +320,11 @@ Enterprise clients have a dedicated Account Executive (human). The AE uses the *
 
 ## 4. Admin Portal
 
-**Purpose:** Full operational control of criteria.agency platform. Real structure visibility: motors, teams, agents, pipelines, gates, costs.
+**Purpose:** Full operational control of criteria.agency platform. Real structure visibility: motors, agents, pipelines, gates, costs.
 
-**Access:** Internal team. Modules visible by role.
+**Access:** Internal team (founder in MVP). Modules visible by role.
+
+> **MVP scope note:** The sidebar shows ALL 24 motors for design completeness, but only MVP motors (Brand Builder, Video, Analyst system functions, Strategist) have real backend data. Non-MVP motors appear with "Próximamente" badge (§4.1). This is by design — the founder sees the full vision while operating what exists.
 
 ### 4.1 Layout
 
@@ -387,7 +395,7 @@ TRANSVERSAL
   └── Security Center          Risk score, vulnerabilities, compliance
 
 SYSTEM
-  ├── Agent Dashboard          All ~125 agents, status, performance, costs
+  ├── Agent Dashboard          All ~29 agents, status, performance, costs
   ├── Model Dashboard          AI models, usage, costs, benchmarks
   ├── Pipeline Definitions     Pipeline steps, gates, agents per motor (read-only view of pipelineDefinitions table)
   ├── Organizations            Tenant orgs, plans, members, motors
@@ -495,47 +503,47 @@ Accessed from any gate in any motor's pipeline:
 |---------|---------|
 | **Gate info** | Gate type, gate-specific question (e.g., "Is the vision clear, inspiring, and executable?"), motor, project |
 | **Evaluation** | Structured assessment per gate criteria. Score per criterion. Overall recommendation. |
-| **Cross-reports** | Reports from other agents/teams relevant to this gate (e.g., Brand Guardian consistency check, Financial Agent budget validation) |
+| **Cross-reports** | Reports from other evaluators relevant to this gate (e.g., Brand Guardian consistency check, Showrunner quality evaluation, budget validation from financial tracking) |
 | **Iteration history** | Previous attempts at this gate: what was submitted, what feedback was given, what changed |
 | **Actions** | **Approve** (advance to next step) / **Reject** (return with feedback — enters 3+3 count) / **Escalate** (bypass to human) |
 | **3+3 Status** | Visual indicator: 6 dots showing attempt progress. Dots 1-3 green (normal), 4-6 amber (leader adjustment). If all 6 fail → human escalation required. |
 
 ### 4.8 Agent Dashboard
 
-**Purpose:** Monitor ALL ~125 agents across the entire platform.
+**Purpose:** Monitor ALL ~29 agents across the entire platform (DEC-064, DEC-128).
 
 **Views:**
 
 | View | Content |
 |------|---------|
-| **Grid** | All agents in cards, grouped by team/motor. Each card: name, team, status (active/idle/error), current task, 3+3 progress, cost today. Color-coded by motor category. |
-| **Table** | Sortable/filterable table: agent, motor, team, status, current task, project, execution time, cost, escalations, success rate. |
+| **Grid** | All agents in cards, grouped by motor. Each card: name, motor, status (active/idle/error), current task, 3+3 progress, cost today. Color-coded by motor category. |
+| **Table** | Sortable/filterable table: agent, motor, status, current task, project, execution time, cost, escalations, success rate. |
 | **Performance** | Aggregate stats: total active, avg execution time, total cost today/week/month, escalation rate, success rate. Charts over time. |
 
-**Filters:** By motor, by team, by status (active/idle/error/escalated), by cost range.
+**Filters:** By motor, by status (active/idle/error/escalated), by model (Opus/Sonnet/Haiku), by cost range.
 
 **Agent detail (click any agent):**
 
 | Section | Content |
 |---------|---------|
-| **Profile** | Name, team, motor, role, autonomy level, skills, description |
+| **Profile** | Name, motor, role, model (DEC-174), data tier (DEC-149), skills, description |
 | **Current** | Current task, project, execution time, input artifacts, output artifacts (in progress) |
 | **3+3 Status** | Current attempt number, history of attempts on current task |
 | **History** | Last 50 executions: task, project, duration, cost, result (success/fail), artifacts produced |
 | **Performance** | Success rate, avg execution time, avg cost, escalation rate. Trends over time. |
 | **Costs** | Cost breakdown by AI model used. Total cost this day/week/month. |
 
-### 4.9 Model Dashboard
+### 4.9 Model Dashboard (Prompt Registry UI — DEC-145)
 
-**Purpose:** Monitor AI model usage, costs, and quality across the platform. Team 9 (AI Model Intelligence) transversal view.
+**Purpose:** Monitor AI model usage, costs, and quality. Manage prompt_registry entries (system prompts, model assignments, data sensitivity per agent × skill).
 
 | Section | Content |
 |---------|---------|
+| **Prompt Registry** | Table: agent × skill, system prompt (editable), model assigned (Opus/Sonnet/Haiku), data_sensitivity (Tier A/B/C), approved_providers. Edit prompt → next invocation uses new version without redeploy. |
 | **Models in use** | Table: model name, provider, tasks assigned, usage count, total cost, avg quality score, status |
-| **Cost analysis** | Cost per model over time. Cost per task type. Projected monthly cost at current rate. |
+| **Cost analysis** | Cost per model over time. Cost per agent × skill. Projected monthly cost at current rate. Helicone data (DEC-147). |
 | **Benchmark** | Quality comparison chart across models for same task types. Latency comparison. |
-| **Selection history** | Log of model selection decisions: which model was chosen for which task and why |
-| **Alerts** | New model releases detected. Performance degradation alerts. Cost anomalies. |
+| **Alerts** | Performance degradation alerts. Cost anomalies. Tier A provider unavailability. |
 
 ### 4.10 Security Center
 
@@ -555,7 +563,7 @@ Accessed from any gate in any motor's pipeline:
 
 | Section | Content |
 |---------|---------|
-| **Organization list** | All tenant organizations: name, slug, plan (Free/Pro/Enterprise), MRR, active projects, active campaigns, health score, motors enabled, members count |
+| **Organization list** | All tenant organizations: name, slug, plan (Starter/Pro/Agency), MRR, active projects, active campaigns, health score, motors enabled, members count |
 | **Organization detail** | Account info, plan history, Brand DNA (active version), enabled motors with autonomy settings, project history, campaign history, usage metrics, team members with roles |
 | **Subscriptions** | Active subscriptions by plan. Upgrades/downgrades trend. Churn tracking. |
 | **Members & Roles** | User management across all orgs: who has access to what, role assignments (owner/admin/editor/viewer), invitation management |
@@ -636,7 +644,7 @@ Alerts are global and surface across both portals (admin sees all, client sees o
 | **Agent** | 3+3 attempt 4 triggered (leader adjustment) | warning | Any motor with 3+3 |
 | **Agent** | 3+3 attempt 6 failed (human escalation needed) | critical | Any motor with 3+3 |
 | **Gate** | Gate failed 2+ times on same project | error | Any motor with gates |
-| **Budget** | Budget exceeded threshold (80%, 100%) | warning / critical | Financial Agent |
+| **Budget** | Budget exceeded threshold (80%, 100%) | warning / critical | Financial tracking system function (DEC-178) |
 | **Performance** | KPI below target for 3+ consecutive days | warning | Analytics |
 | **Performance** | Anomaly detected (sudden drop/spike) | warning | Analytics |
 | **Model** | New model release detected | info | Model Dashboard |
