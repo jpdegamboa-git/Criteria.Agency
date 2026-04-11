@@ -1,26 +1,26 @@
-# criteria.agency — Hono API Backend
+# criteria.agency — Hono API Backend (pnpm monorepo)
 # Build: docker build -t criteria-api .
 # Run:   docker run -p 3000:3000 --env-file .env criteria-api
 
 FROM node:22-alpine AS base
+RUN npm install -g pnpm@9.15.9
 WORKDIR /app
 
-# Install dependencies
-COPY package.json package-lock.json* ./
-RUN npm ci --omit=dev
+# Copy workspace config
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml tsconfig.base.json ./
 
-# Copy source
-COPY src/ src/
-COPY agents/ agents/
-COPY tsconfig.json ./
-COPY drizzle.config.ts ./
+# Copy workspace packages needed by api
+COPY packages/db/ ./packages/db/
+COPY packages/shared/ ./packages/shared/
 
-# Install tsx for runtime TS execution
-RUN npm install tsx
+# Copy api app
+COPY apps/api/ ./apps/api/
 
-# Create storage directory
-RUN mkdir -p storage
+# Install all dependencies from monorepo root
+RUN pnpm install --frozen-lockfile
+
+WORKDIR /app/apps/api
 
 EXPOSE 3000
 
-CMD ["node_modules/.bin/tsx", "src/api/server.ts"]
+CMD ["node", "--import", "tsx", "src/server.ts"]
